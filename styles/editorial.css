@@ -1,0 +1,192 @@
+/* ==========================================================================
+   styles/editorial.css — Editorial-specific styles
+   
+   Anything that doesn't fit neatly in Tailwind or globals.css goes here.
+   These are CSS classes used by the editorial components (Hero, Making,
+   Collection, etc.) that are too complex or specific for utility classes.
+   ========================================================================== */
+
+/* ── Photo placeholder gradients (used when images haven't loaded) ── */
+.ph {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.ph .label-tag {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  background: rgba(26, 24, 23, 0.6);
+  color: var(--color-canvas);
+  padding: 8px 12px;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  z-index: 3;
+}
+
+/* ── Making frame photo backgrounds ── */
+.ph-1 { background: linear-gradient(135deg, #2a2421 0%, #4a3e35 50%, #6b5a4a 100%); }
+.ph-2 { background: linear-gradient(120deg, #8a3a2a 0%, #c47d4a 50%, #e8b878 100%); }
+.ph-3 { background: linear-gradient(160deg, #c9b89a 0%, #a89472 50%, #6b5a3f 100%); }
+.ph-4 { background: linear-gradient(135deg, #2a2421 0%, #5c2f2a 50%, #8a3a2a 100%); }
+.ph-5 { background: linear-gradient(140deg, #d4a574 0%, #b08458 40%, #6e4a2a 100%); }
+.ph-6 { background: linear-gradient(135deg, #1f1d1c 0%, #3a3531 50%, #6b5a4a 100%); }
+.ph-7 { background: linear-gradient(150deg, #8b7355 0%, #c9b89a 50%, #e8d9b8 100%); }
+.ph-8 { background: linear-gradient(180deg, #f5f1ea 0%, #c9b89a 50%, #8b7355 100%); }
+
+/* ── Collection piece backgrounds ── */
+.piece-1 { background: linear-gradient(135deg, #8a3a2a 0%, #4a2018 50%, #2a1410 100%); }
+.piece-2 { background: linear-gradient(140deg, #c9b89a 0%, #8b7355 50%, #4a3e2e 100%); }
+.piece-3 { background: linear-gradient(135deg, #2a3a5c 0%, #1a2540 50%, #0e1828 100%); }
+.piece-4 { background: linear-gradient(150deg, #d4a574 0%, #8a5a2e 50%, #4a2e14 100%); }
+.piece-5 { background: linear-gradient(135deg, #5a4028 0%, #3a2818 50%, #1f140a 100%); }
+.piece-6 { background: linear-gradient(135deg, #e8d4b0 0%, #c9b89a 50%, #8b7355 100%); }
+
+/* ── Material swatch backgrounds ── */
+.swatch-wool { background: linear-gradient(135deg, #e8dcc4 0%, #c9b89a 50%, #8b7355 100%); }
+.swatch-silk { background: linear-gradient(135deg, #f5e9d8 0%, #e8d4b0 50%, #c4a878 100%); }
+.swatch-cotton { background: linear-gradient(135deg, #f5f1ea 0%, #ebe5d8 50%, #c9b89a 100%); }
+
+/* ── Dye swatch backgrounds ── */
+.dye-madder { background: linear-gradient(135deg, #8a2d31 0%, #5a1a1f 100%); }
+.dye-indigo { background: linear-gradient(135deg, #2a3a5c 0%, #14202e 100%); }
+.dye-walnut { background: linear-gradient(135deg, #5a4028 0%, #2e2014 100%); }
+
+/* ── World gallery backgrounds ── */
+.world-1 { background: linear-gradient(135deg, #2a2421 0%, #6b5a4a 100%); }
+.world-2 { background: linear-gradient(135deg, #f5f1ea 0%, #c9b89a 100%); }
+.world-3 { background: linear-gradient(135deg, #5a3a2a 0%, #c4a878 100%); }
+.world-4 { background: linear-gradient(135deg, #8a3a2a 0%, #c9b89a 100%); }
+.world-5 { background: linear-gradient(135deg, #1f1d1c 0%, #8b7355 100%); }
+
+/* ── Heritage archive backgrounds ── */
+.archive-1 { aspect-ratio: 4 / 3; background: linear-gradient(135deg, #d4c4a4 0%, #8b7355 50%, #4a3e2e 100%); }
+.archive-2 { aspect-ratio: 4 / 5; background: linear-gradient(135deg, #b09478 0%, #6b5a3f 50%, #2e2418 100%); }
+.archive-3 { aspect-ratio: 5 / 3; background: linear-gradient(135deg, #c9b89a 0%, #8a7858 50%, #4a3e28 100%); }
+
+/* ── Skein (color story) backgrounds ── */
+.skein {
+  position: absolute;
+  border-radius: 100% / 80%;
+  filter: blur(0.3px);
+  will-change: transform;
+}
+
+.skein::before {
+  content: '';
+  position: absolute;
+  inset: 18%;
+  border-radius: inherit;
+  background: inherit;
+  filter: brightness(0.85);
+  opacity: 0.7;
+}
+
+.skein-1 { width: 280px; height: 180px; left: 4%; top: 8%;
+  background: radial-gradient(ellipse at 30% 30%, #b53338 0%, #6E1F23 60%, #3a0e10 100%); }
+.skein-2 { width: 220px; height: 140px; left: 30%; top: 55%;
+  background: radial-gradient(ellipse at 30% 30%, #3a4c75 0%, #1d2a4a 60%, #0c1428 100%); }
+.skein-3 { width: 320px; height: 200px; right: 6%; top: 12%;
+  background: radial-gradient(ellipse at 30% 30%, #7a5530 0%, #4a341e 60%, #1f140a 100%); }
+.skein-4 { width: 180px; height: 120px; left: 14%; top: 70%;
+  background: radial-gradient(ellipse at 30% 30%, #e8c478 0%, #b89048 60%, #6e5018 100%); }
+.skein-5 { width: 260px; height: 170px; right: 22%; top: 60%;
+  background: radial-gradient(ellipse at 30% 30%, #d4a574 0%, #8a5a2e 60%, #4a2e14 100%); }
+.skein-6 { width: 200px; height: 130px; left: 55%; top: 20%;
+  background: radial-gradient(ellipse at 30% 30%, #c98090 0%, #8a3a4a 60%, #4a1820 100%); }
+
+/* ── Hero SVG keyframes (ported from HTML) ── */
+@keyframes drawFrame { to { stroke-dashoffset: 0; } }
+@keyframes fadeRug { to { opacity: 1; } }
+@keyframes medallionIn {
+  0% { opacity: 0; transform: scale(0.85); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes shimmerWarp { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+@keyframes breatheWeft { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }
+@keyframes sunDrift {
+  0%   { opacity: 0.4; transform: translateX(-8%); }
+  50%  { opacity: 1;   transform: translateX(8%); }
+  100% { opacity: 0.4; transform: translateX(-8%); }
+}
+@keyframes medallionBreathe {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.012); }
+}
+
+/* Dust mote keyframes */
+@keyframes mote1 { 0% { transform: translate(220px, 180px); opacity: 0; } 10% { opacity: 0.5; } 90% { opacity: 0.5; } 100% { transform: translate(980px, 240px); opacity: 0; } }
+@keyframes mote2 { 0% { transform: translate(960px, 500px); opacity: 0; } 10% { opacity: 0.45; } 90% { opacity: 0.45; } 100% { transform: translate(260px, 380px); opacity: 0; } }
+@keyframes mote3 { 0% { transform: translate(440px, 540px); opacity: 0; } 15% { opacity: 0.55; } 85% { opacity: 0.55; } 100% { transform: translate(820px, 160px); opacity: 0; } }
+@keyframes mote4 { 0% { transform: translate(740px, 200px); opacity: 0; } 12% { opacity: 0.4; } 88% { opacity: 0.4; } 100% { transform: translate(300px, 520px); opacity: 0; } }
+@keyframes mote5 { 0% { transform: translate(180px, 420px); opacity: 0; } 10% { opacity: 0.35; } 90% { opacity: 0.35; } 100% { transform: translate(1020px, 320px); opacity: 0; } }
+@keyframes mote6 { 0% { transform: translate(880px, 480px); opacity: 0; } 15% { opacity: 0.5; } 85% { opacity: 0.5; } 100% { transform: translate(340px, 200px); opacity: 0; } }
+
+/* ── Dot grid animations (knot section) ── */
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  40% { transform: scale(1.18); }
+  55% { transform: scale(1); }
+  70% { transform: scale(1.08); }
+}
+
+@keyframes dotShimmer {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; box-shadow: 0 0 0 4px rgba(110, 31, 35, 0.08); }
+  100% { opacity: 1; box-shadow: 0 0 0 0 rgba(110, 31, 35, 0); }
+}
+
+/* ── Number glow (knot final count) ── */
+@keyframes numGlow {
+  0% { text-shadow: 0 0 0 rgba(110, 31, 35, 0); }
+  50% { text-shadow: 0 0 30px rgba(110, 31, 35, 0.35); }
+  100% { text-shadow: 0 0 0 rgba(110, 31, 35, 0); }
+}
+
+.num-glow {
+  animation: numGlow 2s var(--ease) 1;
+}
+/* ── Marquee ── */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ── Testimonials vertical scroll ── */
+@keyframes scrollY {
+  from { transform: translateY(0); }
+  to { transform: translateY(-50%); }
+}
+
+/* ── Border beam ── */
+@keyframes beamTravel {
+  0%   { offset-distance: 0%; }
+  100% { offset-distance: 100%; }
+}
+
+/* ── Scroll cue pulse ── */
+@keyframes pulse-line {
+  0%, 100% { transform: scaleY(1); opacity: 0.5; }
+  50% { transform: scaleY(1.2); opacity: 1; }
+}
+
+/* ── Marquee continuous scroll ── */
+.marquee-content {
+  animation: marquee 40s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-content {
+    animation: none;
+  }
+}
+
+/* ── Hero headline rule draw ── */
+.hero-rule {
+  width: 0;
+}
+
+@keyframes drawRule { to { width: 220px; } }

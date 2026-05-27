@@ -1,0 +1,10 @@
+@import "tailwindcss/theme";
+@import "tailwindcss/utilities";
+@import "./editorial.css";
+
+/* Only keep the global tailwind directives and let editorial.css handle everything else. */
+
+@theme {
+  --color-background: var(--canvas);
+  --color-primary: var(--ink);
+}
