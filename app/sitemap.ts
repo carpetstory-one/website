@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 import { routing } from '@/i18n/routing';
-import { allPieces } from '@/lib/pieces';
+import { collections } from '@/lib/collections';
 import { getAllPosts } from '@/lib/mdx';
 
 const SITE_URL =
@@ -24,13 +24,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/journal', changeFrequency: 'weekly', priority: 0.7 },
     { path: '/trade', changeFrequency: 'monthly', priority: 0.6 },
     { path: '/inquiry', changeFrequency: 'monthly', priority: 0.6 },
+    { path: '/about', changeFrequency: 'monthly', priority: 0.6 },
+    { path: '/contact', changeFrequency: 'monthly', priority: 0.5 },
   ];
 
-  const pieceRoutes: RouteSpec[] = allPieces.map((p) => ({
-    path: `/collection/${p.slug}`,
-    changeFrequency: 'monthly',
-    priority: 0.8,
+  // Collection-level routes
+  const collectionRoutes: RouteSpec[] = collections.map((c) => ({
+    path: `/collection/${c.slug}`,
+    changeFrequency: 'weekly',
+    priority: 0.85,
   }));
+
+  // Rug-level routes
+  const rugRoutes: RouteSpec[] = collections.flatMap((c) =>
+    c.rugs.map((r) => ({
+      path: `/collection/${c.slug}/${r.slug}`,
+      changeFrequency: 'monthly',
+      priority: 0.75,
+    }))
+  );
 
   let journalRoutes: RouteSpec[] = [];
   try {
@@ -44,7 +56,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // Journal directory may not exist yet — safe to skip.
   }
 
-  const all: RouteSpec[] = [...staticRoutes, ...pieceRoutes, ...journalRoutes];
+  const all: RouteSpec[] = [
+    ...staticRoutes,
+    ...collectionRoutes,
+    ...rugRoutes,
+    ...journalRoutes,
+  ];
 
   return all.map((route) => {
     const languages = Object.fromEntries(

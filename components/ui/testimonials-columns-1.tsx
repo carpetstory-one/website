@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Image from "next/image";
 import { motion } from "motion/react";
 
 export const TestimonialsColumn = (props: {
@@ -28,11 +29,13 @@ export const TestimonialsColumn = (props: {
                 <div className="p-10 rounded-none border border-ink/10 max-w-xs w-full bg-canvas-warm/30" key={i}>
                   <div className="text-[15px] leading-[1.6] text-ink">{text}</div>
                   <div className="flex items-center gap-4 mt-8">
-                    <img
+                    <Image
                       width={40}
                       height={40}
                       src={image}
                       alt={name}
+                      loading="lazy"
+                      sizes="40px"
                       className="h-10 w-10 rounded-full object-cover grayscale"
                     />
                     <div className="flex flex-col">

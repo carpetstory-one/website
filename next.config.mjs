@@ -22,16 +22,38 @@ const nextConfig = {
 
   images: {
     formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 31536000,
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-      },
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: 'plus.unsplash.com' },
+      // Pinterest hotlinks — Pinterest may block the optimizer in production.
+      // If these 404/403 live, re-host the 9 i.pinimg.com images locally.
+      { protocol: 'https', hostname: 'i.pinimg.com' },
     ],
   },
 
   experimental: {
-    optimizePackageImports: ['lucide-react', 'framer-motion'],
+    optimizePackageImports: ['lucide-react', 'motion'],
+  },
+
+  async redirects() {
+    // 301 redirects from retired piece slugs → /collection (safest fallback)
+    const retiredSlugs = ['khwab', 'saanjh', 'mehfil', 'shubh', 'naqsh', 'aaraam'];
+    return retiredSlugs.flatMap((slug) => [
+      { source: `/collection/${slug}`, destination: '/collection', permanent: true },
+      { source: `/:locale/collection/${slug}`, destination: '/:locale/collection', permanent: true },
+    ]);
+  },
+
+  async headers() {
+    return [
+      {
+        source: '/videos/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+    ];
   },
 };
 

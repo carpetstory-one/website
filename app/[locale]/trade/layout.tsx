@@ -11,9 +11,9 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   return generatePageMetadata({
-    title: 'For Interior Designers & Architects',
+    title: 'Source With Us Or Partner With Carpetstory',
     description:
-      'Trade portal for interior designers and architects. Tear sheets, trade pricing, custom commissions, and a dedicated point of contact.',
+      'Carpetstory is a full spectrum carpet manufacturing and export house in Jaipur, partnering with designers, brands, importers, and showrooms globally.',
     path: '/trade',
     locale,
     keywords: [

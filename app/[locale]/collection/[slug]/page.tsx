@@ -1,18 +1,20 @@
+import Image from 'next/image';
 import { Nav } from '@/components/editorial/Nav';
 import { Footer } from '@/components/editorial/Footer';
-import { getPieceBySlug, allPieces } from '@/lib/pieces';
+import { getCollectionBySlug, collections } from '@/lib/collections';
+import { blurDataURL } from '@/lib/blur';
 import { notFound } from 'next/navigation';
 import { Reveal } from '@/components/editorial/Reveal';
 import { SlideIn } from '@/components/editorial/SlideIn';
 import { Link } from '@/i18n/routing';
-import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
 import {
   generatePageMetadata,
-  productSchema,
   breadcrumbSchema,
   jsonLd,
+  SITE_URL,
 } from '@/lib/seo';
+import { CollectionDetailContent } from './CollectionDetailContent';
 
 type Props = {
   params: Promise<{ slug: string; locale: string }>;
@@ -20,126 +22,184 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, locale } = await params;
-  const piece = getPieceBySlug(slug);
+  const col = getCollectionBySlug(slug);
 
-  if (!piece) return { title: 'Not Found', robots: { index: false, follow: false } };
+  if (!col) return { title: 'Not Found', robots: { index: false, follow: false } };
 
   return generatePageMetadata({
-    title: piece.name,
-    description: piece.description,
-    path: `/collection/${piece.slug}`,
+    title: `${col.name} Collection — Carpetstory`,
+    description: col.tagline + ' ' + col.description.slice(0, 100) + '…',
+    path: `/collection/${col.slug}`,
     locale,
-    ogImage: piece.image,
+    ogImage: col.heroImage,
     keywords: [
-      piece.name,
-      `${piece.name} rug`,
-      ...piece.materials,
+      col.name,
+      `${col.name} rugs`,
+      `${col.name} carpets`,
       'hand-knotted rug',
       'Jaipur rug',
+      'Carpetstory',
     ],
   });
 }
 
 export function generateStaticParams() {
-  return allPieces.map((piece) => ({ slug: piece.slug }));
+  return collections.map((col) => ({ slug: col.slug }));
 }
 
-export default async function PiecePage({ params }: Props) {
+export default async function CollectionDetailPage({ params }: Props) {
   const { slug, locale } = await params;
-  const piece = getPieceBySlug(slug);
+  const col = getCollectionBySlug(slug);
 
-  if (!piece) notFound();
+  if (!col) notFound();
 
-  const product = productSchema({
-    name: piece.name,
-    description: piece.description,
-    image: piece.image,
-    price: piece.priceUSD,
-    priceCurrency: 'USD',
-    url: `/${locale}/collection/${piece.slug}`,
-    sku: piece.slug,
-  });
+  const breadcrumb = breadcrumbSchema([
+    { name: 'Home', url: `/${locale}` },
+    { name: 'Collections', url: `/${locale}/collection` },
+    { name: col.name, url: `/${locale}/collection/${col.slug}` },
+  ]);
 
-  const t = await getTranslations({ locale, namespace: 'PiecePage' });
+  const itemList = {
+    '@type': 'ItemList',
+    name: `${col.name} Collection`,
+    itemListOrder: 'https://schema.org/ItemListOrderAscending',
+    numberOfItems: col.rugs.length,
+    itemListElement: col.rugs.map((r, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `${SITE_URL}/${locale}/collection/${col.slug}/${r.slug}`,
+      name: r.name,
+    })),
+  };
+
+  // Other collections (for bottom strip)
+  const others = collections.filter((c) => c.slug !== col.slug);
 
   return (
     <div className="relative bg-canvas min-h-screen flex flex-col">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLd({ '@graph': [product] }) }}
+        dangerouslySetInnerHTML={{ __html: jsonLd({ '@graph': [breadcrumb, itemList] }) }}
       />
 
       <Nav />
 
-      <main className="flex-1 pt-28 sm:pt-32 pb-16 sm:pb-24 px-5 sm:px-7 lg:px-12">
+      {/* Breadcrumb — visible at top */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '90px',
+          left: 0,
+          right: 0,
+          zIndex: 20,
+          padding: '0 24px',
+          display: 'flex',
+          gap: '8px',
+          alignItems: 'center',
+          fontSize: '11px',
+          letterSpacing: '0.1em',
+          textTransform: 'uppercase',
+          color: 'rgba(255,255,255,0.7)',
+        }}
+      >
+        <Link href="/" style={{ color: 'inherit', textDecoration: 'none' }}>Home</Link>
+        <span>/</span>
+        <Link href="/collection" style={{ color: 'inherit', textDecoration: 'none' }}>Collections</Link>
+        <span>/</span>
+        <span style={{ color: '#fff' }}>{col.name}</span>
+      </div>
 
-        <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-24 items-center">
-          <div className="lg:col-span-7 h-[55vh] sm:h-[60vh] lg:h-[80vh] relative">
-            <SlideIn direction="u" className="w-full h-full">
-              <div
-                className="w-full h-full relative overflow-hidden"
-                style={{ background: piece.placeholderGradient }}
-              >
-                <img
-                  src={piece.image}
-                  alt={`${piece.name} — ${piece.description}`}
-                  className="absolute inset-0 w-full h-full object-cover"
-                  loading="eager"
-                />
-              </div>
-            </SlideIn>
-          </div>
-
-          <div className="lg:col-span-5 flex flex-col gap-8 lg:gap-10">
-            <Reveal>
-              <h1 className="font-display font-light text-[44px] sm:text-[56px] md:text-[72px] lg:text-[80px] leading-[1] tracking-[-0.02em] text-ink">
-                {piece.name}
-              </h1>
-            </Reveal>
-
-            <SlideIn direction="u" delay={100}>
-              <p className="body-lg text-ink-soft">{piece.description}</p>
-            </SlideIn>
-
-            <SlideIn direction="u" delay={200}>
-              <dl className="grid grid-cols-2 gap-y-6 gap-x-4 body-sm text-ink-soft border-t border-ink-faint pt-8">
-                <div>
-                  <dt className="text-[11px] uppercase tracking-[0.16em] mb-1">{t('dimensions')}</dt>
-                  <dd className="font-medium text-ink">{piece.dimensions}</dd>
-                </div>
-                <div>
-                  <dt className="text-[11px] uppercase tracking-[0.16em] mb-1">{t('materials')}</dt>
-                  <dd className="font-medium text-ink">{piece.materials.join(', ')}</dd>
-                </div>
-                <div>
-                  <dt className="text-[11px] uppercase tracking-[0.16em] mb-1">{t('density')}</dt>
-                  <dd className="font-medium text-ink">{piece.knotDensity}</dd>
-                </div>
-                <div>
-                  <dt className="text-[11px] uppercase tracking-[0.16em] mb-1">{t('weaveTime')}</dt>
-                  <dd className="font-medium text-ink">{piece.weaveTime}</dd>
-                </div>
-              </dl>
-            </SlideIn>
-
-            <SlideIn direction="u" delay={300}>
-              <div className="pt-8 border-t border-ink-faint flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div className="font-display text-[22px] sm:text-[24px] text-ink">
-                  {t('priceFrom')} ${piece.priceUSD.toLocaleString()}
-                </div>
-                <Link
-                  href="/inquiry"
-                  className="inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-4 bg-ink text-canvas text-[13px] uppercase tracking-[0.12em] font-medium hover:bg-accent transition-colors duration-500 min-h-[48px]"
-                >
-                  {t('inquire')}
-                </Link>
-              </div>
-            </SlideIn>
-          </div>
+      {/* Hero — 65vh full-bleed with Ken Burns */}
+      <div
+        style={{
+          position: 'relative',
+          height: '65vh',
+          minHeight: '480px',
+          overflow: 'hidden',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        {/* Ken Burns image */}
+        <div
+          className="coll-hero-img"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            animation: 'collHeroZoom 14s ease-out forwards',
+          }}
+        >
+          <Image
+            src={col.heroImage}
+            alt={`${col.name} collection`}
+            fill
+            priority
+            fetchPriority="high"
+            sizes="100vw"
+            placeholder="blur"
+            blurDataURL={blurDataURL()}
+            style={{ objectFit: 'cover' }}
+          />
         </div>
+        {/* Overlay */}
+        <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.32)' }} />
+
+        {/* Centered text */}
+        <div style={{ position: 'relative', zIndex: 10, textAlign: 'center', padding: '0 24px' }}>
+          <span
+            style={{
+              display: 'block',
+              fontSize: '11px',
+              letterSpacing: '0.22em',
+              textTransform: 'uppercase',
+              color: 'rgba(255,255,255,0.7)',
+              marginBottom: '16px',
+            }}
+          >
+            Collection — {col.name.toUpperCase()}
+          </span>
+          <h1
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontWeight: 300,
+              fontSize: 'clamp(52px, 9vw, 110px)',
+              lineHeight: 1,
+              letterSpacing: '-0.02em',
+              color: '#fff',
+              marginBottom: '18px',
+            }}
+          >
+            {col.name}
+          </h1>
+          <p
+            style={{
+              fontSize: 'clamp(15px, 2vw, 18px)',
+              color: 'rgba(255,255,255,0.8)',
+              maxWidth: '44ch',
+              margin: '0 auto',
+              lineHeight: 1.55,
+              fontFamily: 'var(--font-body)',
+            }}
+          >
+            {col.tagline}
+          </p>
+        </div>
+      </div>
+
+      <main className="flex-1">
+        <CollectionDetailContent col={col} locale={locale} others={others} />
       </main>
 
       <Footer />
+
+      {/* Ken Burns keyframe */}
+      <style>{`
+        @keyframes collHeroZoom {
+          from { transform: scale(1); }
+          to   { transform: scale(1.05); }
+        }
+      `}</style>
     </div>
   );
 }

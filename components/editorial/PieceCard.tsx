@@ -1,9 +1,11 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { type Piece } from '@/lib/pieces';
 import { formatPrice } from '@/lib/utils';
 import { SlideIn } from './SlideIn';
+import { blurDataURL } from '@/lib/blur';
 
 const UNSPLASH_BY_SLUG: Record<string, string> = {
   khwab: 'photo-1600166898405-da9535204843',
@@ -34,7 +36,7 @@ const UNSPLASH_BY_SLUG: Record<string, string> = {
 
 function unsplashUrl(slug: string, w = 800) {
   const id = UNSPLASH_BY_SLUG[slug] ?? 'photo-1600166898405-da9535204843';
-  return `https://images.unsplash.com/${id}?w=${w}&q=80&fm=webp&fit=crop`;
+  return `https://images.unsplash.com/${id}?w=${w}&q=75&auto=format&fit=crop`;
 }
 
 export function PieceCard({
@@ -53,10 +55,14 @@ export function PieceCard({
           className="aspect-[3/4] mb-6 relative overflow-hidden"
           style={{ background: piece.placeholderGradient }}
         >
-          <img
+          <Image
             src={unsplashUrl(piece.slug)}
             alt={`${piece.name} — ${piece.description}`}
+            fill
             loading="lazy"
+            sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
+            placeholder="blur"
+            blurDataURL={blurDataURL()}
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
           />
           <div className="absolute top-4 left-4 bg-ink/70 text-canvas px-3 py-1.5 text-[10px] tracking-[0.16em] uppercase z-[2]">

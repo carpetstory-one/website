@@ -7,4 +7,14 @@
 @theme {
   --color-background: var(--canvas);
   --color-primary: var(--ink);
+
+  /* Design-system tokens — make the Tailwind utility classes used across
+     the site (text-accent, bg-accent, text-ink-soft, font-display, …)
+     actually resolve to the editorial.css palette + fonts. Without these,
+     v4 generates no utility and headlines silently fall back to sans. */
+  --color-accent: var(--accent);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+
+  --font-display: var(--font-cormorant), 'Cormorant Garamond', serif;
 }

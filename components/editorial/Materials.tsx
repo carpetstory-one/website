@@ -1,7 +1,9 @@
 "use client";
 
+import Image from 'next/image';
 import { motion } from 'motion/react';
 import { useTranslations } from 'next-intl';
+import { blurDataURL } from '@/lib/blur';
 
 const slideUp = {
   hidden: { opacity: 0, y: 50 },
@@ -95,18 +97,15 @@ export function Materials() {
                 aria-label={`${mat.name} swatch`}
                 style={{ position: 'relative', overflow: 'hidden' }}
               >
-                <img
+                <Image
                   src={mat.imgSrc}
                   alt={mat.imgAlt}
+                  fill
                   loading="lazy"
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    display: 'block',
-                  }}
+                  sizes="(max-width: 768px) 90vw, 360px"
+                  placeholder="blur"
+                  blurDataURL={blurDataURL()}
+                  style={{ objectFit: 'cover' }}
                 />
               </motion.div>
               <h3 className="material-name">{mat.name}</h3>

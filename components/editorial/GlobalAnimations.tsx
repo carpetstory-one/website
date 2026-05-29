@@ -2,10 +2,10 @@
 
 import React, { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import Lenis from 'lenis';
 
 declare global {
   interface Window {
-    Lenis: any;
     __carpetstory_rebind?: () => void;
   }
 }
@@ -31,22 +31,7 @@ export function GlobalAnimations() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    const loadLenis = () => {
-      return new Promise<any>((resolve) => {
-        if (window.Lenis) {
-          resolve(window.Lenis);
-          return;
-        }
-        const script = document.createElement('script');
-        script.src = 'https://unpkg.com/lenis@1.1.13/dist/lenis.min.js';
-        script.onload = () => resolve(window.Lenis);
-        document.head.appendChild(script);
-      });
-    };
-
-    loadLenis().then(() => {
-      initAnimations();
-    });
+    initAnimations();
 
     function initAnimations() {
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -54,14 +39,16 @@ export function GlobalAnimations() {
       const isMobile = window.innerWidth < 768;
 
       let lenis: any = null;
-      if (!prefersReducedMotion && window.Lenis) {
-        lenis = new window.Lenis({
-          duration: 1.15,
+      if (!prefersReducedMotion) {
+        lenis = new Lenis({
+          duration: 1.2,
           easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
           smoothWheel: true,
-          smoothTouch: false,
+          // syncTouch:false === smoothTouch:false — keep native momentum on
+          // mobile, where smoothed touch scrolling feels worse than the OS.
+          syncTouch: false,
           wheelMultiplier: 1.0,
-          touchMultiplier: 1.5,
+          touchMultiplier: 2.0,
         });
 
         document.querySelectorAll('a[href^="#"]').forEach((a) => {
@@ -80,28 +67,38 @@ export function GlobalAnimations() {
       const scrollSubs: ((y: number) => void)[] = [];
       function onScroll(cb: (y: number) => void) { scrollSubs.push(cb); }
       let tickRaf: number | null = null;
+      let lastY = -1;
       function tick(time: number) {
         if (lenis) lenis.raf(time);
         const y = window.scrollY;
-        for (let i = 0; i < scrollSubs.length; i++) scrollSubs[i](y);
+        // Only run scroll subscribers when the position actually changed —
+        // avoids per-frame layout reads while the page is idle.
+        if (y !== lastY) {
+          lastY = y;
+          for (let i = 0; i < scrollSubs.length; i++) scrollSubs[i](y);
+        }
         tickRaf = requestAnimationFrame(tick);
       }
       tickRaf = requestAnimationFrame(tick);
 
-      // MAGNETIC BUTTONS
+      // MAGNETIC BUTTONS — rAF-throttled so layout reads/writes happen at
+      // most once per frame instead of on every mousemove event.
       if (!isCoarsePointer && !prefersReducedMotion) {
         const magnets = document.querySelectorAll('.magnetic');
         const RADIUS = 80;
         const MAX_TRANSLATE = 6;
+        let mx = 0, my = 0;
+        let magRaf: number | null = null;
 
-        document.addEventListener('mousemove', (e: MouseEvent) => {
+        const applyMagnets = () => {
+          magRaf = null;
           magnets.forEach((el) => {
             const htmlEl = el as HTMLElement;
             const rect = htmlEl.getBoundingClientRect();
             const cx = rect.left + rect.width / 2;
             const cy = rect.top + rect.height / 2;
-            const dx = e.clientX - cx;
-            const dy = e.clientY - cy;
+            const dx = mx - cx;
+            const dy = my - cy;
             const dist = Math.hypot(dx, dy);
             if (dist < RADIUS) {
               const strength = (1 - dist / RADIUS);
@@ -112,6 +109,12 @@ export function GlobalAnimations() {
               htmlEl.style.transform = 'translate(0, 0)';
             }
           });
+        };
+
+        document.addEventListener('mousemove', (e: MouseEvent) => {
+          mx = e.clientX;
+          my = e.clientY;
+          if (!magRaf) magRaf = requestAnimationFrame(applyMagnets);
         });
       }
 
@@ -312,14 +315,8 @@ export function GlobalAnimations() {
         threadRaf = requestAnimationFrame(threadLoop);
       }
 
-      // NAV SCROLL STATE
-      const navEl = document.getElementById('nav');
-      if (navEl) {
-        onScroll((y) => {
-          if (y > 80) navEl.classList.add('scrolled');
-          else navEl.classList.remove('scrolled');
-        });
-      }
+      // NAV SCROLL STATE is owned by the Nav component (React state), which
+      // knows whether it's over the dark hero (home) vs. a light page.
 
       // REVEAL / SLIDE / WEAVE-IMG OBSERVERS
       const revealObs = new IntersectionObserver((entries) => {

@@ -71,7 +71,7 @@ export function KnotCount() {
             <h2
               id="knot-heading"
               style={{
-                fontFamily: 'var(--font-fraunces), serif',
+                fontFamily: 'var(--font-cormorant), serif',
                 fontSize: 'clamp(56px, 10vw, 120px)',
                 fontWeight: 300,
                 lineHeight: 1,
@@ -81,7 +81,7 @@ export function KnotCount() {
             >
               <CountUp target={1152000} duration={2500} />
             </h2>
-            <p style={{ fontFamily: 'var(--font-fraunces), serif', fontSize: 'clamp(20px, 3vw, 28px)', fontStyle: 'italic', fontWeight: 300, color: 'var(--ink)', marginBottom: '16px' }}>
+            <p style={{ fontFamily: 'var(--font-cormorant), serif', fontSize: 'clamp(20px, 3vw, 28px)', fontStyle: 'italic', fontWeight: 300, color: 'var(--ink)', marginBottom: '16px' }}>
               {t('rugSub')}
             </p>
             <p style={{ fontSize: '13px', color: 'var(--ink-soft)', letterSpacing: '0.02em' }}>

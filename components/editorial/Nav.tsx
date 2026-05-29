@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Link } from '@/i18n/routing';
+import { Link, usePathname } from '@/i18n/routing';
 import { LocaleSwitcher } from './LocaleSwitcher';
 
 const WhatsAppIcon = ({ className = '' }: { className?: string }) => (
@@ -20,26 +20,41 @@ const WhatsAppIcon = ({ className = '' }: { className?: string }) => (
 
 export function Nav() {
   const t = useTranslations('Nav');
+  const pathname = usePathname();
+  const isHome = pathname === '/';
   const [scrolled, setScrolled] = useState(false);
 
+  // On the home page the nav stays transparent + light over the full-bleed
+  // dark hero, then turns solid (cream/ink) once the hero is nearly scrolled
+  // past. Elsewhere it goes solid almost immediately.
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 0);
+    const onScroll = () => {
+      const threshold = isHome ? Math.max(window.innerHeight - 100, 200) : 24;
+      setScrolled(window.scrollY > threshold);
+    };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, [isHome]);
 
   return (
     <nav
       id="nav"
       aria-label="Primary"
-      style={scrolled ? { backgroundColor: 'var(--canvas)', boxShadow: '0 1px 0 rgba(26,24,23,0.08)' } : undefined}
+      className={`${isHome ? 'nav--home' : ''}${scrolled ? ' scrolled' : ''}`}
     >
       <Link href="/" className="brand" aria-label={t('brand')}>
         {t('brand')}
       </Link>
 
       <div className="nav-right flex items-center gap-3 sm:gap-5 lg:gap-7">
+        <Link href="/collection" className="nav-trade link hidden sm:inline-block">
+          {t('collection')}
+        </Link>
         <Link href="/trade" className="nav-trade link hidden sm:inline-block">
           {t('trade')}
         </Link>

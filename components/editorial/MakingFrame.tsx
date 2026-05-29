@@ -1,7 +1,9 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { Reveal } from './Reveal';
+import { blurDataURL } from '@/lib/blur';
 
 export function MakingFrame({
   src,
@@ -20,14 +22,15 @@ export function MakingFrame({
     <Reveal className={`making-frame relative ${className}`}>
       <div className={`ph ${phClass}`}>
         <div className="label-tag">{caption}</div>
-        <img 
-          src={src} 
-          alt={alt} 
-          loading="lazy" 
-          className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000"
-          onLoad={(e) => {
-            (e.target as HTMLImageElement).style.opacity = '1';
-          }}
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          loading="lazy"
+          sizes="(max-width: 768px) 95vw, 90vw"
+          placeholder="blur"
+          blurDataURL={blurDataURL()}
+          className="absolute inset-0 w-full h-full object-cover"
         />
       </div>
     </Reveal>

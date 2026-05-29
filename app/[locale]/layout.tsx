@@ -2,7 +2,7 @@
  * app/[locale]/layout.tsx — Root layout for Carpetstory with i18n
  *
  * Responsibilities:
- * - Loads all three fonts (Fraunces, Inter Tight, Caveat) via next/font
+ * - Loads the four fonts (Cormorant Garamond, Poppins, Sacramento, Caveat) via next/font
  * - Applies font CSS variables to the <html> element with correct lang
  * - Sets base metadata for SEO
  * - Provides semantic HTML structure
@@ -11,10 +11,11 @@
  */
 
 import type { Metadata, Viewport } from 'next';
-import { fraunces, interTight, caveat } from '@/lib/fonts';
+import { cormorant, poppins, sacramento, caveat } from '@/lib/fonts';
 import '../globals.css';
 import { GlobalAnimations } from '@/components/editorial/GlobalAnimations';
 import { NextIntlClientProvider } from 'next-intl';
+import { MotionConfig } from 'motion/react';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
@@ -130,10 +131,15 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
-      className={`${fraunces.variable} ${interTight.variable} ${caveat.variable}`}
+      className={`${cormorant.variable} ${poppins.variable} ${sacramento.variable} ${caveat.variable}`}
     >
+      <head>
+        <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
+      </head>
       <body>
         <NextIntlClientProvider messages={messages}>
+          <MotionConfig reducedMotion="user">
             <script
               type="application/ld+json"
               dangerouslySetInnerHTML={{
@@ -157,6 +163,7 @@ export default async function RootLayout({
             <div style={{ position: 'absolute', pointerEvents: 'none' }}>
               <Toaster />
             </div>
+          </MotionConfig>
         </NextIntlClientProvider>
       </body>
     </html>

@@ -51,7 +51,7 @@ export function CookieConsent() {
       {consent === 'accepted' && clarityId && (
         <Script
           id="clarity-script"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${clarityId}");`,
           }}
@@ -78,7 +78,7 @@ export function CookieConsent() {
             gap: '16px',
             alignItems: 'center',
             flexWrap: 'wrap',
-            fontFamily: 'var(--font-inter-tight), sans-serif',
+            fontFamily: 'var(--font-poppins), sans-serif',
             fontSize: '13px',
             lineHeight: '1.5',
           }}

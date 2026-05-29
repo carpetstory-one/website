@@ -1,7 +1,9 @@
 "use client";
 
+import Image from 'next/image';
 import { motion } from 'motion/react';
 import { useTranslations } from 'next-intl';
+import { blurDataURL } from '@/lib/blur';
 
 const slideUp = {
   hidden: { opacity: 0, y: 50 },
@@ -19,17 +21,17 @@ export function World() {
     {
       cls: 'world-1',
       caption: t('caption1'),
-      src: 'https://images.unsplash.com/photo-1702675990996-bd9e01288488?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      src: 'https://images.unsplash.com/photo-1702675990996-bd9e01288488?q=75&w=1000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     },
     {
       cls: 'world-2',
       caption: t('caption2'),
-      src: 'https://images.unsplash.com/photo-1691071715735-cb7dcd31f9c6?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      src: 'https://images.unsplash.com/photo-1691071715735-cb7dcd31f9c6?q=75&w=1000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     },
     {
       cls: 'world-3',
       caption: t('caption3'),
-      src: 'https://images.unsplash.com/photo-1580229064033-d6cf020b2cf2?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      src: 'https://images.unsplash.com/photo-1580229064033-d6cf020b2cf2?q=75&w=1000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     },
     {
       cls: 'world-4',
@@ -77,10 +79,14 @@ export function World() {
                 className={`ph ${item.cls} w-full aspect-[16/10] mb-3 md:mb-4 group relative overflow-hidden`}
                 style={{ backgroundColor: 'var(--canvas-warmer)' }}
               >
-                <img
+                <Image
                   src={item.src}
                   alt={item.caption}
+                  fill
                   loading="lazy"
+                  sizes="(max-width: 768px) 80vw, 560px"
+                  placeholder="blur"
+                  blurDataURL={blurDataURL()}
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
                 />
               </div>

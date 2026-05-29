@@ -1,7 +1,9 @@
 "use client";
 
+import Image from 'next/image';
 import { motion } from 'motion/react';
 import { useTranslations } from 'next-intl';
+import { blurDataURL } from '@/lib/blur';
 
 export function Heritage() {
   const t = useTranslations('Heritage');
@@ -49,11 +51,15 @@ export function Heritage() {
                   className={`ph ${item.cls} ${item.beamHost ? 'beam-host' : ''}`}
                   style={{ ...(item.beamDelay ? { '--beam-delay': item.beamDelay } as React.CSSProperties : {}), position: 'relative', overflow: 'hidden' }}
                 >
-                  <img
+                  <Image
                     src={item.src}
                     alt={item.label}
+                    fill
                     loading="lazy"
-                    style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: item.filter }}
+                    sizes="(max-width: 768px) 90vw, 420px"
+                    placeholder="blur"
+                    blurDataURL={blurDataURL()}
+                    style={{ objectFit: 'cover', filter: item.filter }}
                   />
                 </div>
                 <div className="archive-label">{item.label}</div>

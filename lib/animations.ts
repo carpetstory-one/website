@@ -5,7 +5,7 @@
  * All animations respect prefers-reduced-motion via the MotionConfig provider.
  */
 
-import type { Variants, Transition } from 'framer-motion';
+import type { Variants, Transition } from 'motion/react';
 
 /** Standard easing curve from the design system */
 const EASE: [number, number, number, number] = [0.65, 0, 0.35, 1];

@@ -1,14 +1,29 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
+import { useSearchParams } from 'next/navigation';
+import { collections } from '@/lib/collections';
 
 type Errors = { name?: string; email?: string; message?: string };
 
 export function Inquiry() {
   const t = useTranslations('Inquiry');
+  const searchParams = useSearchParams();
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
+
+  // Prefill from query params (set when coming from a rug page)
+  const prefillMessage = searchParams?.get('message') ?? '';
+  const prefillCollection = searchParams?.get('collection') ?? '';
+
+  const [messageValue, setMessageValue] = useState(prefillMessage);
+  const [collectionValue, setCollectionValue] = useState(prefillCollection);
+
+  useEffect(() => {
+    if (prefillMessage) setMessageValue(decodeURIComponent(prefillMessage));
+    if (prefillCollection) setCollectionValue(decodeURIComponent(prefillCollection));
+  }, [prefillMessage, prefillCollection]);
 
   function validate(form: HTMLFormElement): Errors {
     const data = new FormData(form);
@@ -101,6 +116,22 @@ export function Inquiry() {
             </div>
           </div>
 
+          {/* Interested-in-collection dropdown */}
+          <div className="field">
+            <label htmlFor="inquiry-collection">Interested in collection</label>
+            <select
+              id="inquiry-collection"
+              name="collection"
+              value={collectionValue}
+              onChange={(e) => setCollectionValue(e.target.value)}
+            >
+              <option value="">Not sure yet</option>
+              {collections.map((c) => (
+                <option key={c.slug} value={c.name}>{c.name}</option>
+              ))}
+            </select>
+          </div>
+
           <div className="field">
             <label htmlFor="inquiry-message">{t('imagining')}</label>
             <textarea
@@ -110,7 +141,9 @@ export function Inquiry() {
               aria-required="true"
               aria-describedby={errors.message ? 'inquiry-message-error' : undefined}
               style={errors.message ? { borderBottomColor: 'var(--accent)' } : undefined}
-            ></textarea>
+              value={messageValue}
+              onChange={(e) => setMessageValue(e.target.value)}
+            />
             {errors.message && <span id="inquiry-message-error" role="alert" style={errorStyle}>{errors.message}</span>}
           </div>
 

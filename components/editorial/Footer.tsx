@@ -16,9 +16,9 @@ export function Footer() {
           <h2 className="footer-col-title">{t('explore')}</h2>
           <ul>
             <li><Link href="/collection">{t('exploreCollection')}</Link></li>
-            <li><Link href="/craft">{t('exploreCraft')}</Link></li>
-            <li><Link href="/heritage">{t('exploreHeritage')}</Link></li>
-            <li><Link href="/journal">{t('exploreJournal')}</Link></li>
+            <li><Link href="/trade">{t('exploreTrade')}</Link></li>
+            <li><Link href="/about">{t('exploreAbout')}</Link></li>
+            <li><Link href="/contact">{t('exploreContact')}</Link></li>
           </ul>
         </div>
         <div className="col">

@@ -1,40 +1,55 @@
 /**
  * lib/fonts.ts — Font configuration for Carpetstory
  *
- * Three fonts loaded via next/font/google for zero-CLS self-hosting:
- * - Fraunces: Display / headline face with variable optical size
- * - Inter Tight: Body copy
- * - Caveat: Founder's signature only
+ * Self-hosted via next/font/google for zero-CLS, no external requests:
+ * - Cormorant Garamond: display serif (headlines, quotes, display text)
+ * - Poppins: body sans (copy, nav, labels)
+ * - Sacramento: script wordmark ("Carpetstory" logo)
+ * - Caveat: founder's handwritten signature only (far below fold)
+ *
+ * Fraunces + Inter Tight were dropped entirely in the cinematic redesign.
  */
 
-import { Fraunces, Inter_Tight, Caveat } from 'next/font/google';
+import { Cormorant_Garamond, Poppins, Sacramento, Caveat } from 'next/font/google';
 
 /**
- * Fraunces — variable display serif
- * Used for all headlines, display text, testimonial quotes, form fields.
- * Variable font: axes include opsz (9–144), wght (300–900), italic + roman.
- * Weight set to 'variable' to enable the opsz axis.
+ * Cormorant Garamond — display serif (replaces Fraunces 1:1)
+ * High-contrast, elegant. Hero headlines use 400/500; italic 300/400 for
+ * editorial display lines. Non-variable, so weights are discrete files.
  */
-export const fraunces = Fraunces({
+export const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
   display: 'swap',
   preload: true,
-  variable: '--font-fraunces',
-  axes: ['opsz'],
+  variable: '--font-cormorant',
+  weight: ['300', '400', '500', '600'],
   style: ['normal', 'italic'],
 });
 
 /**
- * Inter Tight — body sans-serif
- * Used for body copy, labels, navigation, meta text.
+ * Poppins — body sans (replaces Inter Tight 1:1)
+ * 300 for body copy, 400 for nav + labels, 500 for emphasis/buttons.
  */
-export const interTight = Inter_Tight({
+export const poppins = Poppins({
   subsets: ['latin'],
   display: 'swap',
   preload: true,
-  variable: '--font-inter-tight',
-  weight: ['400', '500'],
+  variable: '--font-poppins',
+  weight: ['300', '400', '500'],
   style: ['normal'],
+});
+
+/**
+ * Sacramento — script wordmark
+ * Used for the "Carpetstory" logo in the nav + footer. Single weight.
+ * Preloaded since the wordmark sits at the top of every page.
+ */
+export const sacramento = Sacramento({
+  subsets: ['latin'],
+  display: 'swap',
+  preload: true,
+  variable: '--font-sacramento',
+  weight: ['400'],
 });
 
 /**

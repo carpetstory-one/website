@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { revealVariants, viewportOnce } from '@/lib/animations';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 
