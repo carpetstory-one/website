@@ -16,6 +16,8 @@ import '../globals.css';
 import { GlobalAnimations } from '@/components/editorial/GlobalAnimations';
 import { NextIntlClientProvider } from 'next-intl';
 import { MotionConfig } from 'motion/react';
+import { ShortlistProvider } from '@/components/shortlist/ShortlistProvider';
+import { ShortlistUI } from '@/components/shortlist/ShortlistUI';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
@@ -140,29 +142,32 @@ export default async function RootLayout({
       <body>
         <NextIntlClientProvider messages={messages}>
           <MotionConfig reducedMotion="user">
-            <script
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{
-                __html: JSON.stringify({
-                  '@context': 'https://schema.org',
-                  '@graph': [
-                    organizationSchema,
-                    websiteSchema,
-                    localBusinessSchema,
-                  ],
-                }),
-              }}
-            />
+            <ShortlistProvider>
+              <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                  __html: JSON.stringify({
+                    '@context': 'https://schema.org',
+                    '@graph': [
+                      organizationSchema,
+                      websiteSchema,
+                      localBusinessSchema,
+                    ],
+                  }),
+                }}
+              />
 
-            <GlobalAnimations />
-            <GeoBanner locale={locale} />
-            <CookieConsent />
-            <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-              {children}
-            </main>
-            <div style={{ position: 'absolute', pointerEvents: 'none' }}>
-              <Toaster />
-            </div>
+              <GlobalAnimations />
+              <GeoBanner locale={locale} />
+              <CookieConsent />
+              <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                {children}
+              </main>
+              <ShortlistUI />
+              <div style={{ position: 'absolute', pointerEvents: 'none' }}>
+                <Toaster />
+              </div>
+            </ShortlistProvider>
           </MotionConfig>
         </NextIntlClientProvider>
       </body>

@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Nav } from '@/components/editorial/Nav';
 import { Footer } from '@/components/editorial/Footer';
 import { Metadata } from 'next';
@@ -57,7 +58,9 @@ export default async function CollectionIndexPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: jsonLd({ '@graph': [breadcrumb, itemList] }) }}
       />
       <Nav />
-      <CollectionsGrid />
+      <Suspense fallback={<div className="flex-1" />}>
+        <CollectionsGrid />
+      </Suspense>
       <Footer />
     </div>
   );

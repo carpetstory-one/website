@@ -6,6 +6,7 @@ import { motion } from 'motion/react';
 import { Link } from '@/i18n/routing';
 import { blurDataURL } from '@/lib/blur';
 import type { Collection, Rug } from '@/lib/collections';
+import { ShortlistToggleButton } from '@/components/shortlist/ShortlistToggleButton';
 
 const slideUp = {
   hidden: { opacity: 0, y: 60 },
@@ -230,6 +231,14 @@ export function RugDetailContent({
             >
               Inquire about this piece →
             </Link>
+
+            <ShortlistToggleButton
+              variant="button"
+              collectionSlug={collectionSlug}
+              rugSlug={rug.slug}
+              rugName={`${collection.name} ${rug.name}`}
+            />
+
             <a
               href={`https://wa.me/919876543210?text=${inquiryMessage}`}
               target="_blank"
@@ -284,47 +293,53 @@ export function RugDetailContent({
               }}
             >
               {siblings.map((sib) => (
-                <Link
-                  key={sib.slug}
-                  href={`/collection/${collectionSlug}/${sib.slug}`}
-                  style={{ textDecoration: 'none', flexShrink: 0 }}
-                >
-                  <div
-                    style={{
-                      width: '220px',
-                      position: 'relative',
-                      aspectRatio: '4/5',
-                      overflow: 'hidden',
-                      marginBottom: '14px',
-                      background: 'var(--canvas-muted, #f0ece3)',
-                    }}
+                <div key={sib.slug} style={{ position: 'relative', flexShrink: 0 }}>
+                  <ShortlistToggleButton
+                    collectionSlug={collectionSlug}
+                    rugSlug={sib.slug}
+                    rugName={`${collection.name} ${sib.name}`}
+                  />
+                  <Link
+                    href={`/collection/${collectionSlug}/${sib.slug}`}
+                    style={{ textDecoration: 'none', display: 'block' }}
                   >
-                    <Image
-                      src={sib.image}
-                      alt={sib.name}
-                      fill
-                      loading="lazy"
-                      sizes="220px"
-                      placeholder="blur"
-                      blurDataURL={blurDataURL()}
-                      style={{ objectFit: 'cover' }}
-                    />
-                  </div>
-                  <span
-                    style={{
-                      display: 'block',
-                      fontFamily: 'var(--font-display)',
-                      fontSize: '18px',
-                      color: 'var(--ink)',
-                      marginBottom: '4px',
-                    }}
-                  >
-                    {sib.name}
-                  </span>
-                  {sib.price && (
-                    <span style={{ fontSize: '12px', color: 'var(--ink-soft)' }}>{sib.price}</span>
-                  )}
-                </Link>
+                    <div
+                      style={{
+                        width: '220px',
+                        position: 'relative',
+                        aspectRatio: '4/5',
+                        overflow: 'hidden',
+                        marginBottom: '14px',
+                        background: 'var(--canvas-muted, #f0ece3)',
+                      }}
+                    >
+                      <Image
+                        src={sib.image}
+                        alt={sib.name}
+                        fill
+                        loading="lazy"
+                        sizes="220px"
+                        placeholder="blur"
+                        blurDataURL={blurDataURL()}
+                        style={{ objectFit: 'cover' }}
+                      />
+                    </div>
+                    <span
+                      style={{
+                        display: 'block',
+                        fontFamily: 'var(--font-display)',
+                        fontSize: '18px',
+                        color: 'var(--ink)',
+                        marginBottom: '4px',
+                      }}
+                    >
+                      {sib.name}
+                    </span>
+                    {sib.price && (
+                      <span style={{ fontSize: '12px', color: 'var(--ink-soft)' }}>{sib.price}</span>
+                    )}
+                  </Link>
+                </div>
               ))}
             </div>
           </div>

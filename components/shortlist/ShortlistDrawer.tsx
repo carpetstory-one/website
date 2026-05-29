@@ -1,0 +1,294 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
+import { motion } from 'motion/react';
+import { X, Bookmark } from 'lucide-react';
+import { useRouter } from '@/i18n/routing';
+import { useShortlist } from './ShortlistProvider';
+import { analytics } from '@/lib/analytics';
+import { resolveShortlist, serializeShortlist } from '@/lib/shortlist';
+
+const EASE = [0.32, 0.72, 0, 1] as const;
+
+export function ShortlistDrawer() {
+  const router = useRouter();
+  const {
+    shortlist,
+    count,
+    remove,
+    clear,
+    closeDrawer,
+    notify,
+  } = useShortlist();
+
+  const [confirmClear, setConfirmClear] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const previouslyFocused = useRef<HTMLElement | null>(null);
+
+  const resolved = resolveShortlist(shortlist);
+
+  // ── Body scroll lock + focus management + ESC + focus trap.
+  useEffect(() => {
+    previouslyFocused.current = document.activeElement as HTMLElement | null;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    // Move focus into the drawer.
+    const focusFirst = () => {
+      const el = panelRef.current?.querySelector<HTMLElement>(
+        'button, a, [tabindex]:not([tabindex="-1"])'
+      );
+      el?.focus();
+    };
+    const raf = requestAnimationFrame(focusFirst);
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.stopPropagation();
+        closeDrawer();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const focusables = panelRef.current?.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusables || focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener('keydown', onKeyDown, true);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      document.removeEventListener('keydown', onKeyDown, true);
+      document.body.style.overflow = prevOverflow;
+      previouslyFocused.current?.focus?.();
+    };
+  }, [closeDrawer]);
+
+  const goToRug = (collectionSlug: string, rugSlug: string) => {
+    closeDrawer();
+    router.push(`/collection/${collectionSlug}/${rugSlug}`);
+  };
+
+  const handleShare = async () => {
+    // Build the share URL explicitly so it is correct even if the debounced
+    // URL sync hasn't flushed yet.
+    const url = new URL(window.location.href);
+    url.searchParams.set('shortlist', serializeShortlist(shortlist));
+    try {
+      await navigator.clipboard.writeText(url.toString());
+      notify('Link copied');
+      analytics.shortlistShareLinkCopied(count);
+    } catch {
+      notify('Could not copy link');
+    }
+  };
+
+  return (
+    <>
+      {/* Backdrop */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.25 }}
+        onClick={closeDrawer}
+        style={{ backgroundColor: 'rgba(26,24,23,0.5)' }}
+        className="fixed inset-0 z-[110]"
+        aria-hidden="true"
+      />
+
+      {/* Panel */}
+      <motion.div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Your shortlist"
+        initial={{ x: '100%' }}
+        animate={{ x: 0 }}
+        exit={{ x: '100%' }}
+        transition={{ duration: 0.35, ease: EASE }}
+        style={{ backgroundColor: 'var(--canvas)', color: 'var(--ink)' }}
+        className="fixed right-0 top-0 z-[120] flex h-full w-full flex-col sm:w-[380px]"
+      >
+        {/* Header */}
+        <div
+          className="flex items-start justify-between px-6 pt-7 pb-5"
+          style={{ borderBottom: '1px solid var(--ink-faint)' }}
+        >
+          <div>
+            <span
+              className="block text-[11px] uppercase"
+              style={{ letterSpacing: '0.18em', color: 'var(--ink-soft)' }}
+            >
+              Your shortlist
+            </span>
+            <h2
+              className="mt-2"
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontWeight: 300,
+                fontSize: '30px',
+                lineHeight: 1.05,
+                letterSpacing: '-0.01em',
+              }}
+            >
+              {count} {count === 1 ? 'piece' : 'pieces'} saved.
+            </h2>
+          </div>
+          <button
+            type="button"
+            onClick={closeDrawer}
+            aria-label="Close shortlist"
+            className="-mr-2 -mt-1 flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:text-accent"
+          >
+            <X className="h-5 w-5" aria-hidden="true" />
+          </button>
+        </div>
+
+        {/* List */}
+        <div className="flex-1 overflow-y-auto px-6 py-4">
+          {resolved.length === 0 ? (
+            <p
+              className="mt-6 italic"
+              style={{ fontSize: '14px', color: 'var(--ink-soft)', lineHeight: 1.6 }}
+            >
+              Your shortlist is empty. Start saving pieces by tapping the bookmark
+              icon on any rug.
+            </p>
+          ) : (
+            <ul className="flex flex-col">
+              {resolved.map(({ collection, rug }) => (
+                <li
+                  key={`${collection.slug}.${rug.slug}`}
+                  className="flex items-center gap-4 py-3"
+                  style={{ borderBottom: '1px solid var(--ink-faint)' }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => goToRug(collection.slug, rug.slug)}
+                    className="group flex flex-1 items-center gap-4 text-left"
+                  >
+                    <span
+                      className="relative block h-[60px] w-[60px] shrink-0 overflow-hidden"
+                      style={{ background: 'var(--canvas-muted, #f0ece3)' }}
+                    >
+                      <Image
+                        src={rug.image}
+                        alt={rug.name}
+                        fill
+                        sizes="60px"
+                        className="object-cover"
+                      />
+                    </span>
+                    <span className="min-w-0">
+                      <span
+                        className="block truncate"
+                        style={{
+                          fontFamily: 'var(--font-display)',
+                          fontSize: '18px',
+                          color: 'var(--ink)',
+                        }}
+                      >
+                        {rug.name}
+                      </span>
+                      <span
+                        className="mt-0.5 block text-[10px] uppercase"
+                        style={{ letterSpacing: '0.14em', color: 'var(--ink-soft)' }}
+                      >
+                        {collection.name}
+                      </span>
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => remove(collection.slug, rug.slug)}
+                    aria-label={`Remove ${rug.name} from shortlist`}
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors hover:text-accent"
+                    style={{ color: 'var(--ink-soft)' }}
+                  >
+                    <X className="h-4 w-4" aria-hidden="true" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        {/* Footer actions */}
+        {resolved.length > 0 && (
+          <div
+            className="flex flex-col gap-3 px-6 pt-4 pb-7"
+            style={{ borderTop: '1px solid var(--ink-faint)' }}
+          >
+            <button
+              type="button"
+              onClick={handleShare}
+              className="flex w-full items-center justify-center gap-2 px-6 py-3.5 text-[13px] uppercase tracking-[0.12em] transition-colors"
+              style={{ backgroundColor: 'var(--ink)', color: 'var(--canvas)' }}
+            >
+              <Bookmark className="h-4 w-4 fill-current" aria-hidden="true" />
+              Share this shortlist
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                analytics.shortlistInquiryInitiated(count);
+                closeDrawer();
+                router.push(`/contact?shortlist=${serializeShortlist(shortlist)}`);
+              }}
+              className="w-full px-6 py-3.5 text-center text-[13px] uppercase tracking-[0.12em] transition-colors hover:text-accent"
+              style={{ border: '1px solid var(--ink)', color: 'var(--ink)' }}
+            >
+              Inquire about these pieces →
+            </button>
+
+            {confirmClear ? (
+              <p className="text-center text-[12px]" style={{ color: 'var(--ink-soft)' }}>
+                Are you sure?{' '}
+                <button
+                  type="button"
+                  onClick={() => {
+                    clear();
+                    setConfirmClear(false);
+                  }}
+                  className="underline underline-offset-4 hover:text-accent"
+                  style={{ color: 'var(--ink)' }}
+                >
+                  Yes, clear
+                </button>{' '}
+                ·{' '}
+                <button
+                  type="button"
+                  onClick={() => setConfirmClear(false)}
+                  className="underline underline-offset-4"
+                >
+                  Cancel
+                </button>
+              </p>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setConfirmClear(true)}
+                className="text-center text-[12px] underline underline-offset-4 transition-colors hover:text-accent"
+                style={{ color: 'var(--ink-soft)' }}
+              >
+                Clear shortlist
+              </button>
+            )}
+          </div>
+        )}
+      </motion.div>
+    </>
+  );
+}

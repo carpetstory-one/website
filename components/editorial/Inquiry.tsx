@@ -1,9 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { collections } from '@/lib/collections';
+import { parseShortlistParam, resolveShortlist } from '@/lib/shortlist';
 
 type Errors = { name?: string; email?: string; message?: string };
 
@@ -16,14 +18,32 @@ export function Inquiry() {
   // Prefill from query params (set when coming from a rug page)
   const prefillMessage = searchParams?.get('message') ?? '';
   const prefillCollection = searchParams?.get('collection') ?? '';
+  const shortlistParam = searchParams?.get('shortlist') ?? '';
 
-  const [messageValue, setMessageValue] = useState(prefillMessage);
+  // Shortlist context (set when coming from the shortlist drawer)
+  const shortlistResolved = useMemo(
+    () => resolveShortlist(parseShortlistParam(shortlistParam)),
+    [shortlistParam]
+  );
+
+  const shortlistMessage = useMemo(() => {
+    if (shortlistResolved.length === 0) return '';
+    const lines = shortlistResolved
+      .map(({ collection, rug }) => ` - ${rug.name} (from ${collection.name})`)
+      .join('\n');
+    return `I'm interested in the following pieces from your collection:\n${lines}\n\nLooking forward to discussing these.`;
+  }, [shortlistResolved]);
+
+  const [messageValue, setMessageValue] = useState(
+    prefillMessage ? decodeURIComponent(prefillMessage) : shortlistMessage
+  );
   const [collectionValue, setCollectionValue] = useState(prefillCollection);
 
   useEffect(() => {
     if (prefillMessage) setMessageValue(decodeURIComponent(prefillMessage));
+    else if (shortlistMessage) setMessageValue(shortlistMessage);
     if (prefillCollection) setCollectionValue(decodeURIComponent(prefillCollection));
-  }, [prefillMessage, prefillCollection]);
+  }, [prefillMessage, prefillCollection, shortlistMessage]);
 
   function validate(form: HTMLFormElement): Errors {
     const data = new FormData(form);
@@ -60,6 +80,47 @@ export function Inquiry() {
           <h2 id="inquiry-heading">
             {t('headlineStart')} <span className="it">{t('headlineItalic')}</span>
           </h2>
+
+          {shortlistResolved.length > 0 && (
+            <div style={{ marginBottom: '28px' }}>
+              <span
+                style={{
+                  display: 'block',
+                  fontSize: '11px',
+                  letterSpacing: '0.16em',
+                  textTransform: 'uppercase',
+                  color: 'var(--ink-soft)',
+                  marginBottom: '12px',
+                }}
+              >
+                Inquiring about {shortlistResolved.length}{' '}
+                {shortlistResolved.length === 1 ? 'piece' : 'pieces'}
+              </span>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                {shortlistResolved.map(({ collection, rug }) => (
+                  <div
+                    key={`${collection.slug}.${rug.slug}`}
+                    title={`${rug.name} — ${collection.name}`}
+                    style={{
+                      position: 'relative',
+                      width: '64px',
+                      height: '64px',
+                      overflow: 'hidden',
+                      background: 'var(--canvas-muted, #f0ece3)',
+                    }}
+                  >
+                    <Image
+                      src={rug.image}
+                      alt={`${rug.name} — ${collection.name}`}
+                      fill
+                      sizes="64px"
+                      style={{ objectFit: 'cover' }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="row-2">
             <div className="field">

@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import Image from 'next/image';
 import { Nav } from '@/components/editorial/Nav';
 import { Footer } from '@/components/editorial/Footer';
@@ -188,7 +189,9 @@ export default async function CollectionDetailPage({ params }: Props) {
       </div>
 
       <main className="flex-1">
-        <CollectionDetailContent col={col} locale={locale} others={others} />
+        <Suspense fallback={<div className="flex-1" />}>
+          <CollectionDetailContent col={col} locale={locale} others={others} />
+        </Suspense>
       </main>
 
       <Footer />

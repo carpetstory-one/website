@@ -1,11 +1,15 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
+import { useSearchParams } from 'next/navigation';
 import { Link } from '@/i18n/routing';
 import { blurDataURL } from '@/lib/blur';
 import type { Collection, Rug } from '@/lib/collections';
+import { ShortlistToggleButton } from '@/components/shortlist/ShortlistToggleButton';
+import { analytics } from '@/lib/analytics';
+import { replaceUrlParam, debounce } from '@/lib/url';
 
 const slideUp = {
   hidden: { opacity: 0, y: 60 },
@@ -26,6 +30,28 @@ const rugSizeStyle: Record<RugSize, React.CSSProperties> = {
   small:  { gridColumn: 'span 1', aspectRatio: '1/1' },
 };
 
+// ── Helpers for rug filter URL state ──────────────────────────────────────────
+
+function parseRugFilter(raw: string | null, validSlugs: Set<string>): string[] {
+  if (!raw) return [];
+  return Array.from(
+    new Set(
+      raw
+        .split(',')
+        .map((s) => s.trim().toLowerCase())
+        .filter((s) => validSlugs.has(s))
+    )
+  );
+}
+
+function sameSet(a: string[], b: string[]): boolean {
+  if (a.length !== b.length) return false;
+  const set = new Set(a);
+  return b.every((x) => set.has(x));
+}
+
+// ── Component ────────────────────────────────────────────────────────────────
+
 export function CollectionDetailContent({
   col,
   locale,
@@ -35,6 +61,50 @@ export function CollectionDetailContent({
   locale: string;
   others: Collection[];
 }) {
+  const searchParams = useSearchParams();
+  const validSlugs = useMemo(() => new Set(col.rugs.map((r) => r.slug)), [col.rugs]);
+
+  // Local filter state — URL is kept in sync with a debounced replaceState.
+  const [active, setActive] = useState<string[]>(() =>
+    parseRugFilter(searchParams.get('rugs'), validSlugs)
+  );
+
+  // Adopt URL changes from outside (back/forward).
+  useEffect(() => {
+    const fromUrl = parseRugFilter(searchParams.get('rugs'), validSlugs);
+    setActive((prev) => (sameSet(prev, fromUrl) ? prev : fromUrl));
+  }, [searchParams, validSlugs]);
+
+  // Debounced shallow URL write (150ms, same as the collection index).
+  const writeUrl = useRef(
+    debounce((value: string) => replaceUrlParam('rugs', value || null), 150)
+  ).current;
+  useEffect(() => () => writeUrl.cancel(), [writeUrl]);
+
+  const setFilters = (next: string[]) => {
+    setActive(next);
+    writeUrl(next.join(','));
+  };
+
+  const toggleChip = (slug: string) => {
+    const isActive = active.includes(slug);
+    analytics.filterChipClicked(slug, isActive ? 'remove' : 'add');
+    setFilters(isActive ? active.filter((s) => s !== slug) : [...active, slug]);
+  };
+
+  const selectAll = () => {
+    if (active.length > 0) analytics.filterCleared(active.length);
+    setFilters([]);
+  };
+
+  const visible = useMemo(
+    () =>
+      active.length === 0
+        ? col.rugs
+        : col.rugs.filter((r) => active.includes(r.slug)),
+    [active, col.rugs]
+  );
+
   // Analytics event helper
   function trackView(eventName: string, props: Record<string, string>) {
     if (typeof window !== 'undefined' && (window as any).gtag) {
@@ -42,7 +112,7 @@ export function CollectionDetailContent({
     }
   }
 
-  // Fire rug_viewed on mount
+  // Fire collection_viewed on mount
   React.useEffect(() => {
     trackView('collection_viewed', { collection_slug: col.slug });
   }, [col.slug]);
@@ -145,7 +215,7 @@ export function CollectionDetailContent({
           whileInView="visible"
           viewport={{ once: true }}
           custom={0}
-          style={{ marginBottom: '40px' }}
+          style={{ marginBottom: '24px' }}
         >
           <span
             style={{
@@ -159,96 +229,144 @@ export function CollectionDetailContent({
           </span>
         </motion.div>
 
+        {/* ── Rug filter chips ────────────────────────────────────────── */}
         <div
-          style={{
+          role="group"
+          aria-label="Filter pieces"
+          className={
+            'mb-8 flex gap-2 pb-1 ' +
+            (col.rugs.length > 6
+              ? 'snap-x overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] sm:flex-wrap sm:justify-start sm:overflow-visible'
+              : 'flex-wrap justify-start')
+          }
+        >
+          <RugFilterChip label="All" active={active.length === 0} onClick={selectAll} />
+          {col.rugs.map((rug) => (
+            <RugFilterChip
+              key={rug.slug}
+              label={rug.name}
+              active={active.includes(rug.slug)}
+              onClick={() => toggleChip(rug.slug)}
+            />
+          ))}
+        </div>
+
+        {/* Grid / empty state */}
+        {visible.length === 0 ? (
+          <div className="text-center py-20" role="status">
+            <p style={{ color: 'var(--ink-soft)', fontSize: '15px' }}>
+              No pieces match this filter.
+            </p>
+            <button
+              onClick={selectAll}
+              className="mt-3 text-[12px] uppercase tracking-[0.16em] text-accent underline-offset-4 hover:underline"
+            >
+              Clear filter
+            </button>
+          </div>
+        ) : (
+          <motion.div layout="position" className="rug-grid" style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(3, 1fr)',
             gap: '32px',
-          }}
-          className="rug-grid"
-        >
-          {col.rugs.map((rug, i) => {
-            const size = rugSizes[i % rugSizes.length] as RugSize;
-            const sty = rugSizeStyle[size];
+          }}>
+            <AnimatePresence mode="popLayout">
+              {visible.map((rug, vi) => {
+                const globalIdx = col.rugs.indexOf(rug);
+                const size = rugSizes[globalIdx % rugSizes.length] as RugSize;
+                const sty = rugSizeStyle[size];
 
-            return (
-              <motion.article
-                key={rug.slug}
-                initial={{ opacity: 0, y: 60 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1.1, delay: (i % 3) * 0.1, ease: [0.16, 1, 0.3, 1] as any }}
-                viewport={{ once: true, margin: '-60px' }}
-              >
-                <Link
-                  href={`/collection/${col.slug}/${rug.slug}`}
-                  className="group block"
-                  onClick={() => trackView('rug_inquiry_initiated', { rug_slug: rug.slug, collection_slug: col.slug })}
-                >
-                  <div
-                    style={{
-                      position: 'relative',
-                      overflow: 'hidden',
-                      background: 'var(--canvas-muted, #f0ece3)',
-                      marginBottom: '20px',
-                      ...sty,
+                return (
+                  <motion.article
+                    key={rug.slug}
+                    style={{ position: 'relative' }}
+                    layout="position"
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.98 }}
+                    transition={{
+                      duration: 0.35,
+                      delay: (vi % 3) * 0.04,
+                      ease: [0.32, 0.72, 0, 1],
                     }}
                   >
-                    <Image
-                      src={rug.image}
-                      alt={rug.name}
-                      fill
-                      loading={i < 3 ? 'eager' : 'lazy'}
-                      fetchPriority={i < 3 ? 'high' : undefined}
-                      sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 30vw"
-                      placeholder="blur"
-                      blurDataURL={blurDataURL()}
-                      style={{
-                        objectFit: 'cover',
-                        transition: 'transform 1.2s ease',
-                      }}
-                      className="group-hover:scale-[1.04]"
+                    <ShortlistToggleButton
+                      collectionSlug={col.slug}
+                      rugSlug={rug.slug}
+                      rugName={`${col.name} ${rug.name}`}
                     />
-                  </div>
+                    <Link
+                      href={`/collection/${col.slug}/${rug.slug}`}
+                      className="group block"
+                      onClick={() => trackView('rug_inquiry_initiated', { rug_slug: rug.slug, collection_slug: col.slug })}
+                    >
+                      <div
+                        style={{
+                          position: 'relative',
+                          overflow: 'hidden',
+                          background: 'var(--canvas-muted, #f0ece3)',
+                          marginBottom: '20px',
+                          ...sty,
+                        }}
+                      >
+                        <Image
+                          src={rug.image}
+                          alt={rug.name}
+                          fill
+                          loading={globalIdx < 3 ? 'eager' : 'lazy'}
+                          fetchPriority={globalIdx < 3 ? 'high' : undefined}
+                          sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 30vw"
+                          placeholder="blur"
+                          blurDataURL={blurDataURL()}
+                          style={{
+                            objectFit: 'cover',
+                            transition: 'transform 1.2s ease',
+                          }}
+                          className="group-hover:scale-[1.04]"
+                        />
+                      </div>
 
-                  <span
-                    style={{
-                      display: 'block',
-                      fontSize: '11px',
-                      letterSpacing: '0.14em',
-                      textTransform: 'uppercase',
-                      color: 'var(--ink-soft)',
-                      marginBottom: '6px',
-                    }}
-                  >
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                  <h3
-                    style={{
-                      fontFamily: 'var(--font-display)',
-                      fontWeight: 300,
-                      fontSize: '26px',
-                      letterSpacing: '-0.01em',
-                      color: 'var(--ink)',
-                      marginBottom: '6px',
-                    }}
-                  >
-                    {rug.name}
-                  </h3>
-                  {rug.description && (
-                    <p style={{ fontSize: '14px', color: 'var(--ink-soft)', lineHeight: 1.55, marginBottom: '10px', maxWidth: '34ch' }}>
-                      {rug.description}
-                    </p>
-                  )}
-                  {rug.price && (
-                    <span style={{ fontSize: '13px', color: 'var(--ink-soft)', letterSpacing: '0.06em' }}>
-                      {rug.price}
-                    </span>
-                  )}
-                </Link>
-              </motion.article>
-            );
-          })}
-        </div>
+                      <span
+                        style={{
+                          display: 'block',
+                          fontSize: '11px',
+                          letterSpacing: '0.14em',
+                          textTransform: 'uppercase',
+                          color: 'var(--ink-soft)',
+                          marginBottom: '6px',
+                        }}
+                      >
+                        {String(globalIdx + 1).padStart(2, '0')}
+                      </span>
+                      <h3
+                        style={{
+                          fontFamily: 'var(--font-display)',
+                          fontWeight: 300,
+                          fontSize: '26px',
+                          letterSpacing: '-0.01em',
+                          color: 'var(--ink)',
+                          marginBottom: '6px',
+                        }}
+                      >
+                        {rug.name}
+                      </h3>
+                      {rug.description && (
+                        <p style={{ fontSize: '14px', color: 'var(--ink-soft)', lineHeight: 1.55, marginBottom: '10px', maxWidth: '34ch' }}>
+                          {rug.description}
+                        </p>
+                      )}
+                      {rug.price && (
+                        <span style={{ fontSize: '13px', color: 'var(--ink-soft)', letterSpacing: '0.06em' }}>
+                          {rug.price}
+                        </span>
+                      )}
+                    </Link>
+                  </motion.article>
+                );
+              })}
+            </AnimatePresence>
+          </motion.div>
+        )}
       </div>
 
       {/* ── Bottom CTA ────────────────────────────────────────────────── */}
@@ -372,5 +490,33 @@ export function CollectionDetailContent({
         .group-hover\\:scale-\\[1\\.04\\]:hover { transform: scale(1.04); }
       `}</style>
     </>
+  );
+}
+
+// ── Rug filter chip (same styling as the collection index filter chips) ──────
+
+function RugFilterChip({
+  label,
+  active,
+  onClick,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      aria-pressed={active}
+      onClick={onClick}
+      className={
+        'shrink-0 snap-start whitespace-nowrap rounded-full border px-4 py-1.5 text-[11px] uppercase tracking-[0.16em] transition-colors duration-200 ' +
+        (active
+          ? 'border-accent bg-accent text-[var(--canvas)]'
+          : 'border-ink bg-transparent text-ink hover:border-accent')
+      }
+    >
+      {label}
+    </button>
   );
 }

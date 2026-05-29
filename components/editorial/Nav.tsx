@@ -55,6 +55,9 @@ export function Nav() {
         <Link href="/collection" className="nav-trade link hidden sm:inline-block">
           {t('collection')}
         </Link>
+        <Link href="/journal" className="nav-trade link hidden sm:inline-block">
+          {t('journal')}
+        </Link>
         <Link href="/trade" className="nav-trade link hidden sm:inline-block">
           {t('trade')}
         </Link>
