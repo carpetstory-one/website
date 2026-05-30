@@ -4,6 +4,7 @@ import { Footer } from '@/components/editorial/Footer';
 import { Inquiry } from '@/components/editorial/Inquiry';
 import { Metadata } from 'next';
 import { generatePageMetadata, breadcrumbSchema, jsonLd } from '@/lib/seo';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -11,10 +12,11 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations({ locale, namespace: 'InquiryPage' });
   return generatePageMetadata({
-    title: 'Inquiry — Start a Conversation',
-    description:
-      'Tell us about the space. We reply within 24 hours. Or message us directly on WhatsApp.',
+    title: t('metaTitle'),
+    description: t('metaDescription'),
     path: '/inquiry',
     locale,
   });
@@ -22,13 +24,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function InquiryPage({ params }: Props) {
   const { locale } = await params;
+  setRequestLocale(locale);
+
+  const tCommon = await getTranslations('Common');
+  const tInquiry = await getTranslations('InquiryPage');
+
   const breadcrumb = breadcrumbSchema([
-    { name: 'Home', url: `/${locale}` },
-    { name: 'Inquiry', url: `/${locale}/inquiry` },
+    { name: tCommon('home'), url: `/${locale}` },
+    { name: tInquiry('title'), url: `/${locale}/inquiry` },
   ]);
 
   return (
-    <div className="relative bg-canvas min-h-screen flex flex-col">
+    <div className="bg-canvas relative flex min-h-screen flex-col">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumb) }}

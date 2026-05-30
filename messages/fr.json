@@ -4,7 +4,9 @@
     "loading": "Chargement…",
     "close": "Fermer",
     "open": "Ouvrir",
-    "menu": "Menu"
+    "menu": "Menu",
+    "home": "Accueil",
+    "collections": "Collections"
   },
   "Nav": {
     "brand": "Carpetstory",
@@ -16,7 +18,8 @@
     "inquiry": "Contact",
     "whatsapp": "WhatsApp",
     "openMenu": "Ouvrir le menu",
-    "closeMenu": "Fermer le menu"
+    "closeMenu": "Fermer le menu",
+    "rugs": "Toutes les pièces"
   },
   "Hero": {
     "consultation": "Consultation Gratuite",
@@ -168,7 +171,7 @@
     "p1": "Mon grand-père tissait. Mon père vendait. Entre les deux, j'ai remarqué que le monde avait cessé de regarder le sol.",
     "p2": "Carpetstory est une petite tentative pour amener les gens à regarder à nouveau vers le bas. Pas le tapis — les huit mois qu'il a fallu, et les mains qui les ont pris.",
     "signature": "Aashrit",
-    "signatureMeta": "Aashrit Anand, Fondateur"
+    "signatureMeta": "Ashrit Garg, Fondateur"
   },
   "World": {
     "label": "VII — Dans le monde",
@@ -267,7 +270,7 @@
     "headlineStart": "Parlez-nous de",
     "headlineItalic": "l'espace.",
     "name": "Votre nom",
-    "namePlaceholder": "Aashrit Anand",
+    "namePlaceholder": "Ashrit Garg",
     "email": "Email",
     "emailPlaceholder": "vous@quelquepart.com",
     "location": "Où dans le monde",
@@ -283,7 +286,12 @@
     "orWriteOn": "Ou écrivez sur",
     "whatsapp": "WhatsApp",
     "successTitle": "Reçu.",
-    "successBody": "Nous vous contacterons sous peu."
+    "successBody": "Nous vous contacterons sous peu.",
+    "interest": "Intéressé par la collection",
+    "notSure": "Pas encore sûr",
+    "errorName": "Veuillez entrer votre nom.",
+    "errorEmail": "Veuillez entrer une adresse e-mail valide.",
+    "errorMessage": "Veuillez nous parler de votre espace."
   },
   "InquiryForm": {
     "label": "Contact",
@@ -333,11 +341,211 @@
     "german": "Deutsch"
   },
   "PiecePage": {
-    "dimensions": "Dimensions",
+"dimensions": "Dimensions",
     "materials": "Matériaux",
     "density": "Densité",
     "weaveTime": "Temps de tissage",
     "priceFrom": "À partir de",
-    "inquire": "Demander des informations"
+    "inquire": "Demander des informations",
+    "leadTime": "Délai de livraison",
+    "origin": "Origine",
+    "inquireCTA": "Demander des informations sur cette pièce →",
+    "whatsappCTA": "Nous contacter sur WhatsApp à propos de cette pièce",
+    "moreFromCollection": "Plus de la collection {collection}"
+  },
+  "TradePage": {
+    "eyebrow": "Partenariats de Fabrication & Professionnels",
+    "title": "Partenariat",
+    "intro": "Un grand tapis ne se fait pas rapidement. Une grande maison de fabrication non plus. Carpetstory produit toute la gamme de tapis de Jaipur — approvisionnant les professionnels et les marques de luxe dans plus de trente pays avec rigueur et discrétion. Nous fabriquons tout. Nous ne faisons aucun compromis.",
+    "pillar1Title": "Polyvalence",
+    "pillar1Body": "Des tapis artisanaux noués à la main aux moquettes de précision fabriquées à la machine, nous produisons toutes les constructions et toutes les spécifications — pour les designers, les importateurs, les marques de luxe et les détaillants. Quel que soit votre sol, nous le fabriquons.",
+    "pillar2Title": "Rigueur & Discrétion",
+    "pillar2Body": "Conçu avec patience, pour habiller les plus beaux intérieurs du monde. Infrastructure d'exportation complète, transparence des étapes et discrétion absolue dont dépendent les grandes maisons de luxe.",
+    "pillar3Title": "Confiance",
+    "pillar3Body": "Une maison de fabrication et d'exportation de tapis complète à Jaipur. Nous collaborons avec ceux qui exigent un fabricant qu'ils n'ont jamais à remettre en question. Si c'est votre cas, vous êtes au bon endroit.",
+    "collaborators": "Collaborateurs",
+    "whoWePartnerWith": "Avec qui nous travaillons",
+    "partner1Title": "Architectes & Designers d'intérieur",
+    "partner1Body": "Nous fabriquons selon les spécifications exactes de votre projet, taille, construction, matière et palette, avec la précision et le respect des délais que requièrent les projets professionnels.",
+    "partner1Bullet1": "Tarifs professionnels préférentiels",
+    "partner1Bullet2": "Expédition d'échantillons dans le monde entier",
+    "partner1Bullet3": "Fiches techniques compatibles CAD",
+    "partner1Bullet4": "Gestionnaire de compte dédié",
+    "partner2Title": "Importateurs & Distributeurs",
+    "partner2Body": "Notre infrastructure de production prend en charge les commandes répétées à volume élevé avec documentation d'exportation complète, fabrication sous marque propre et qualité constante sur chaque envoi.",
+    "partner2Bullet1": "Quantité minimale de 5 pièces",
+    "partner2Bullet2": "Production sous marque blanche & OEM",
+    "partner2Bullet3": "Documentation d'exportation complète",
+    "partner2Bullet4": "Fret maritime & aérien depuis Delhi",
+    "partner3Title": "Détaillants & Showrooms",
+    "partner3Body": "Nous fournissons des collections prêtes pour le commerce à nos partenaires détaillants et showrooms, avec l'exclusivité, la fiabilité de réapprovisionnement et le soutien de marque nécessaires.",
+    "partner3Bullet1": "Exclusivité régionale disponible",
+    "partner3Bullet2": "Consignation pour new partners",
+    "partner3Bullet3": "Supports professionnels co-marqués",
+    "partner3Bullet4": "Cohérence des réapprovisionnements garantie",
+    "partner4Title": "Marques de Tapis de Luxe",
+    "partner4Body": "Nous fabriquons en marque blanche pour les marques de luxe établies qui recherchent un partenaire de production de haut niveau à Jaipur. Vos conceptions et normes, exécutées en toute discrétion.",
+    "partner4Bullet1": "Fabrication en marque blanche",
+    "partner4Bullet2": "Passage fluide du design à la production",
+    "partner4Bullet3": "Accords de confidentialité & d'exclusivité",
+    "partner4Bullet4": "Cohérence à l'échelle de la collection",
+    "howWeWork": "Comment nous travaillons",
+    "ourProcess": "Notre processus",
+    "step1Title": "Soumettre votre cahier des charges",
+    "step1Desc": "Spécifications, quantités, documents de référence ou exigences de produit.",
+    "step2Title": "Examen technique",
+    "step2Desc": "Options de production, tarification et délais sous un jour ouvrable.",
+    "step3Title": "Approbation de l'échantillon",
+    "step3Desc": "Un échantillon physique envoyé pour examen et validation avant production.",
+    "step4Title": "Production",
+    "step4Desc": "Transparence totale du calendrier avec rapports réguliers et inspections.",
+    "step5Title": "Export & livraison",
+    "step5Desc": "Expédition de porte à porte avec documentation complète et conformité.",
+    "globalLogistics": "Logistique globale",
+    "marketsWeSupply": "Marchés que nous livrons",
+    "submitQuery": "Envoyer la demande",
+    "fullName": "Nom complet *",
+    "fullNamePlaceholder": "ex. Salim Khan",
+    "company": "Entreprise *",
+    "companyPlaceholder": "ex. Khan Designs",
+    "designation": "Fonction *",
+    "designationPlaceholder": "ex. Designer Principal",
+    "country": "Pays *",
+    "countryPlaceholder": "ex. France",
+    "email": "Email *",
+    "emailPlaceholder": "ex. design@studio.com",
+    "phone": "Téléphone *",
+    "phonePlaceholder": "ex. +33 1 23 45 67 89",
+    "iAmA": "Je suis… *",
+    "iAmInterestedIn": "Je m'intéresse à…",
+    "requirement": "Parlez-nous de vos besoins",
+    "requirementPlaceholder": "Quantités estimées, délais, dimensions, construction…",
+    "sending": "Envoi en cours…",
+    "received": "Reçu.",
+    "successMessage": "Merci d'avoir initié une demande B2B. Notre équipe commerciale à Jaipur examinera vos spécifications et vous contactera sous un jour ouvrable.",
+    "notReady": "Pas encore prêt à commander ?",
+    "startWithSample": "Commencez par un échantillon.",
+    "sampleKitDesc": "Avant de spécifier, de commander ou de vous engager — touchez la matière, sentez la construction, comprenez la différence. Notre conseiller sélectionne personnellement les bons échantillons selon vos besoins.",
+    "sampleKitBullet1": "Sélectionné selon votre brief par un conseiller Carpetstory",
+    "sampleKitBullet2": "Expédié chez vous dans le monde entier",
+    "sampleKitBullet3": "50% de la valeur du kit déductible de votre première commande B2B",
+    "startingFrom": "À partir de",
+    "requestSampleKit": "Demander votre kit d'échantillons",
+    "partnerTypes": {
+      "designer": "Architecte / Designer d'intérieur",
+      "importer": "Importateur / Distributeur",
+      "retailer": "Détaillant / Showroom",
+      "brand": "Marque de tapis de luxe",
+      "other": "Autre"
+    },
+    "interests": {
+      "ready": "Collections prêtes",
+      "custom": "Commandes sur mesure",
+      "whiteLabel": "Fabrication en marque blanche",
+      "account": "Compte professionnel",
+      "kit": "Kit d'échantillons",
+      "general": "Demande générale"
+    }
+  },
+  "CollectionsPage": {
+    "eyebrow": "Les Collections",
+    "headline": "Douze maisons. Un atelier.",
+    "description": "Des motifs d'archives persans aux longs poils marocains, chaque collection est tissée à Jaipur selon les mêmes normes de fabrication.",
+    "noCollections": "Aucune collection ne correspond à ces filtres.",
+    "clearFilters": "Effacer les filtres",
+    "explore": "Explorer la collection →"
+  },
+  "RugsPage": {
+    "eyebrow": "Toutes les pièces",
+    "title": "Chaque pièce de l'atelier.",
+    "subtitle": "{total} tapis dans {count} collections. Filtrez, sauvegardez et partagez.",
+    "estimateCTA": "Estimer votre pièce →",
+    "showing": "Affichage de {shown} sur {total} pièces",
+    "noRugs": "Aucune pièce ne correspond à ces filtres.",
+    "clearFilters": "Effacer les filtres",
+    "calcEyebrow": "Un calculateur silencieux",
+    "calcTitle": "Estimer votre pièce.",
+    "calcDesc": "Une estimation approximative pour commencer la conversation — pas un devis. Donnez-nous la construction, nous estimerons le coût.",
+    "otherCollections": "Autres collections",
+    "explore": "Explorer →",
+    "beginInquiry": "Commencer une demande →"
+  },
+  "Filters": {
+    "collection": "Collection",
+    "material": "Matériau",
+    "make": "Fabrication",
+    "size": "Taille",
+    "price": "Prix",
+    "color": "Couleur",
+    "sort": "Tri",
+    "trigger": "Filtres",
+    "close": "Fermer les filtres",
+    "clearAll": "Tout effacer",
+    "showCount": "Afficher {count, plural, =1 {# pièce} other {# pièces}}",
+    "sortOptions": {
+      "curated": "Sélection",
+      "newest": "Nouveautés",
+      "priceAsc": "Prix : croissant",
+      "priceDesc": "Prix : décroissant",
+      "nameAsc": "Nom (A–Z)"
+    },
+    "materials": {
+      "Wool": "Laine",
+      "Silk": "Soie",
+      "Cotton": "Coton",
+      "Wool & Silk": "Laine & Soie",
+      "Wool & Cotton": "Laine & Coton"
+    },
+    "makes": {
+      "Hand-knotted": "Noué à la main",
+      "Hand-tufted": "Touffeté à la main",
+      "Flatweave": "Tissage à plat",
+      "Machine-made": "Fait à la machine"
+    },
+    "sizes": {
+      "Small": "Petit",
+      "Medium": "Moyen",
+      "Large": "Grand",
+      "Oversized": "Très grand",
+      "Runner": "Passage"
+    },
+    "colors": {
+      "red": "Rouge & Garance",
+      "blue": "Bleu",
+      "green": "Vert",
+      "neutral": "Neutre/Beige",
+      "ink": "Noir & Encre",
+      "gold": "Or",
+      "multi": "Multicolore"
+    }
+  },
+  "CraftPage": {
+    "title": "L'Artisanat",
+    "description": "Un dévouement sans compromis aux techniques traditionnelles de nouage à la main, préservant un art séculaire au cœur de Jaipur."
+  },
+  "AboutPage": {
+    "title": "À Propos",
+    "metaTitle": "À Propos de Carpetstory — Notre Héritage et notre Vision",
+    "metaDescription": "Découvrez l'histoire derrière Carpetstory. Quatre générations de maîtres tisserands à Jaipur, Rajasthan. Techniques traditionnelles de nouage à la main et vision familiale."
+  },
+  "ContactPage": {
+    "title": "Contact",
+    "metaTitle": "Contact — Commencer une conversation",
+    "metaDescription": "Contactez l'équipe Carpetstory. Commencez une conversation sur votre espace. Nous répondons sous 24 heures. Ou écrivez-nous sur WhatsApp."
+  },
+  "HeritagePage": {
+    "title": "Héritage",
+    "metaTitle": "Héritage — Quatre Générations à Jaipur",
+    "metaDescription": "Fondé en 1924. Quatre générations de maîtres tisserands à Jaipur — teintures naturelles, laine filée à la main, nœud persan. Le même rouge garance depuis le début."
+  },
+  "InquiryPage": {
+    "title": "Demande d'information",
+    "metaTitle": "Demande d'information — Commencer une conversation",
+    "metaDescription": "Parlez-nous de l'espace. Nous répondons sous 24 heures. Ou écrivez-nous directement sur WhatsApp."
+  },
+  "JournalPage": {
+    "title": "Journal",
+    "readArticle": "Lire l'article",
+    "description": "Notes de l'atelier. Écrits sur l'artisanat, la couleur, les matériaux et les personnes qui tissent les tapis Carpetstory."
   }
 }

@@ -36,11 +36,7 @@ export function SlideIn({
   const prefersReducedMotion = useReducedMotion();
 
   if (prefersReducedMotion) {
-    return (
-      <div className={`slide-${direction} ${className}`}>
-        {children}
-      </div>
-    );
+    return <div className={`slide-${direction} ${className}`}>{children}</div>;
   }
 
   // Clone variants to apply custom delay without mutating the shared object

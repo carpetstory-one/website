@@ -1,7 +1,11 @@
 import Image from 'next/image';
 import { Nav } from '@/components/editorial/Nav';
 import { Footer } from '@/components/editorial/Footer';
-import { getCollectionBySlug, getRugBySlug, collections } from '@/lib/collections';
+import {
+  getCollectionBySlug,
+  getRugBySlug,
+  collections,
+} from '@/lib/collections';
 import { blurDataURL } from '@/lib/blur';
 import { notFound } from 'next/navigation';
 import { Link } from '@/i18n/routing';
@@ -13,7 +17,7 @@ import {
   jsonLd,
   SITE_URL,
 } from '@/lib/seo';
-import { setRequestLocale } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { RugDetailContent } from './RugDetailContent';
 
 type Props = {
@@ -24,7 +28,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, rugSlug, locale } = await params;
   const result = getRugBySlug(slug, rugSlug);
 
-  if (!result) return { title: 'Not Found', robots: { index: false, follow: false } };
+  if (!result)
+    return { title: 'Not Found', robots: { index: false, follow: false } };
   const { collection, rug } = result;
 
   return generatePageMetadata({
@@ -54,7 +59,9 @@ export function generateStaticParams() {
 export default async function RugDetailPage({ params }: Props) {
   const { slug, rugSlug, locale } = await params;
   setRequestLocale(locale);
-  
+
+  const tCommon = await getTranslations('Common');
+
   const result = getRugBySlug(slug, rugSlug);
 
   if (!result) notFound();
@@ -66,8 +73,8 @@ export default async function RugDetailPage({ params }: Props) {
     .slice(0, 4);
 
   const breadcrumb = breadcrumbSchema([
-    { name: 'Home', url: `/${locale}` },
-    { name: 'Collections', url: `/${locale}/collection` },
+    { name: tCommon('home'), url: `/${locale}` },
+    { name: tCommon('collections'), url: `/${locale}/collection` },
     { name: collection.name, url: `/${locale}/collection/${slug}` },
     { name: rug.name, url: `/${locale}/collection/${slug}/${rugSlug}` },
   ]);
@@ -90,10 +97,12 @@ export default async function RugDetailPage({ params }: Props) {
   );
 
   return (
-    <div className="relative bg-canvas min-h-screen flex flex-col">
+    <div className="bg-canvas relative flex min-h-screen flex-col">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLd({ '@graph': [breadcrumb, product] }) }}
+        dangerouslySetInnerHTML={{
+          __html: jsonLd({ '@graph': [breadcrumb, product] }),
+        }}
       />
 
       <Nav />
@@ -114,11 +123,23 @@ export default async function RugDetailPage({ params }: Props) {
           width: '100%',
         }}
       >
-        <Link href="/" style={{ color: 'inherit', textDecoration: 'none' }}>Home</Link>
+        <Link href="/" style={{ color: 'inherit', textDecoration: 'none' }}>
+          {tCommon('home')}
+        </Link>
         <span>/</span>
-        <Link href="/collection" style={{ color: 'inherit', textDecoration: 'none' }}>Collections</Link>
+        <Link
+          href="/collection"
+          style={{ color: 'inherit', textDecoration: 'none' }}
+        >
+          {tCommon('collections')}
+        </Link>
         <span>/</span>
-        <Link href={`/collection/${slug}`} style={{ color: 'inherit', textDecoration: 'none' }}>{collection.name}</Link>
+        <Link
+          href={`/collection/${slug}`}
+          style={{ color: 'inherit', textDecoration: 'none' }}
+        >
+          {collection.name}
+        </Link>
         <span>/</span>
         <span style={{ color: 'var(--ink)' }}>{rug.name}</span>
       </div>

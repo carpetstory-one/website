@@ -27,7 +27,7 @@ export function ThreadCanvas({ hostId }: { hostId: string }) {
     let animationFrameId: number;
     let width = 0;
     let height = 0;
-    
+
     // Mouse state
     const mouse = { x: -1000, y: -1000, vx: 0, vy: 0 };
     let lastMouse = { x: -1000, y: -1000 };
@@ -92,7 +92,7 @@ export function ThreadCanvas({ hostId }: { hostId: string }) {
       for (let i = 0; i < THREAD_COUNT; i++) {
         threads.push(new Thread(i * spacing));
       }
-      
+
       ctx.lineWidth = 1;
       ctx.strokeStyle = THREAD_COLOR;
     };
@@ -105,7 +105,7 @@ export function ThreadCanvas({ hostId }: { hostId: string }) {
       lastMouse.x = e.clientX;
       lastMouse.y = e.clientY;
     };
-    
+
     // Decay mouse velocity when stopped
     const decayMouse = () => {
       mouse.vx *= 0.5;
@@ -114,7 +114,7 @@ export function ThreadCanvas({ hostId }: { hostId: string }) {
 
     const animate = () => {
       ctx.clearRect(0, 0, width, height);
-      
+
       decayMouse();
 
       for (let i = 0; i < threads.length; i++) {
@@ -156,8 +156,8 @@ export function ThreadCanvas({ hostId }: { hostId: string }) {
 
   if (prefersReducedMotion || isMobile) {
     return (
-      <div 
-        className="thread-canvas-wrap" 
+      <div
+        className="thread-canvas-wrap"
         data-thread-host={hostId}
         style={{
           position: 'absolute',
@@ -171,8 +171,8 @@ export function ThreadCanvas({ hostId }: { hostId: string }) {
   }
 
   return (
-    <div 
-      className="thread-canvas-wrap" 
+    <div
+      className="thread-canvas-wrap"
       data-thread-host={hostId}
       style={{
         position: 'absolute',
@@ -182,7 +182,7 @@ export function ThreadCanvas({ hostId }: { hostId: string }) {
         zIndex: 0,
       }}
     >
-      <canvas 
+      <canvas
         ref={canvasRef}
         style={{ display: 'block', width: '100%', height: '100%' }}
       />

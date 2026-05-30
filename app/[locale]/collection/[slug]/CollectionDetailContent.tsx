@@ -1,14 +1,35 @@
 'use client';
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'motion/react';
+import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { blurDataURL } from '@/lib/blur';
 import type { Collection, Rug } from '@/lib/collections';
 import { ShortlistToggleButton } from '@/components/shortlist/ShortlistToggleButton';
+import { EstimateTool } from '@/components/estimate/EstimateTool';
 import { analytics } from '@/lib/analytics';
-import { replaceUrlParam, debounce } from '@/lib/url';
+import { debounce } from '@/lib/url';
+import { RugFilters } from '@/components/rugs/RugFilters';
+import {
+  getAllRugs,
+  filterAndSort,
+  emptyFilters,
+  hasActiveFilters,
+  parseFiltersFromParams,
+  serializeFilters,
+  priceBounds,
+  availableMaterials,
+  availableMakes,
+  type RugFilters as Filters,
+} from '@/lib/rugs';
 
 const slideUp = {
   hidden: { opacity: 0, y: 60 },
@@ -21,44 +42,13 @@ const slideUp = {
 
 // Asymmetric rug grid — every 3rd card is larger
 const rugSizes = ['medium', 'small', 'large'] as const;
-type RugSize = typeof rugSizes[number];
+type RugSize = (typeof rugSizes)[number];
 
 const rugSizeStyle: Record<RugSize, React.CSSProperties> = {
-  large:  { gridColumn: 'span 1', aspectRatio: '3/4' },
+  large: { gridColumn: 'span 1', aspectRatio: '3/4' },
   medium: { gridColumn: 'span 1', aspectRatio: '4/5' },
-  small:  { gridColumn: 'span 1', aspectRatio: '1/1' },
+  small: { gridColumn: 'span 1', aspectRatio: '1/1' },
 };
-
-// ── Helpers for rug filter URL state ──────────────────────────────────────────
-
-function parseRugFilter(raw: string | null, validSlugs: Set<string>): string[] {
-  if (!raw) return [];
-  return Array.from(
-    new Set(
-      raw
-        .split(',')
-        .map((s) => s.trim().toLowerCase())
-        .filter((s) => validSlugs.has(s))
-    )
-  );
-}
-
-function sameSet(a: string[], b: string[]): boolean {
-  if (a.length !== b.length) return false;
-  const set = new Set(a);
-  return b.every((x) => set.has(x));
-}
-
-/** Read the ?rugs= param directly from the browser URL (SSR-safe — returns [] on server). */
-function readRugsFromUrl(validSlugs: Set<string>): string[] {
-  if (typeof window === 'undefined') return [];
-  return parseRugFilter(
-    new URLSearchParams(window.location.search).get('rugs'),
-    validSlugs,
-  );
-}
-
-// ── Component ────────────────────────────────────────────────────────────────
 
 export function CollectionDetailContent({
   col,
@@ -69,53 +59,75 @@ export function CollectionDetailContent({
   locale: string;
   others: Collection[];
 }) {
-  const validSlugs = useMemo(() => new Set(col.rugs.map((r) => r.slug)), [col.rugs]);
+  const tRugs = useTranslations('RugsPage');
+  const tPiece = useTranslations('PiecePage');
 
-  // Start empty on server; hydrate from URL on mount (avoids useSearchParams
-  // which forces the SSG page into dynamic rendering and breaks on Netlify).
-  const [active, setActive] = useState<string[]>([]);
+  const [filters, setFilters] = useState<Filters>(() => emptyFilters());
 
-  // Hydrate on mount + listen for back/forward via popstate.
+  // Hydrate from URL on mount + adopt back/forward popstate
   useEffect(() => {
-    setActive(readRugsFromUrl(validSlugs));
+    setFilters(
+      parseFiltersFromParams(new URLSearchParams(window.location.search))
+    );
+    const onPop = () =>
+      setFilters(
+        parseFiltersFromParams(new URLSearchParams(window.location.search))
+      );
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
 
-    const onPopState = () => {
-      const fromUrl = readRugsFromUrl(validSlugs);
-      setActive((prev) => (sameSet(prev, fromUrl) ? prev : fromUrl));
-    };
-    window.addEventListener('popstate', onPopState);
-    return () => window.removeEventListener('popstate', onPopState);
-  }, [validSlugs]);
-
-  // Debounced shallow URL write (150ms, same as the collection index).
   const writeUrl = useRef(
-    debounce((value: string) => replaceUrlParam('rugs', value || null), 150)
+    debounce((f: Filters) => {
+      if (typeof window === 'undefined') return;
+      const url = new URL(window.location.href);
+      const ALL_FILTER_KEYS = [
+        'collection',
+        'material',
+        'make',
+        'size',
+        'color',
+        'price',
+        'sort',
+      ];
+      ALL_FILTER_KEYS.forEach((k) => url.searchParams.delete(k));
+      const qs = new URLSearchParams(serializeFilters(f));
+      qs.forEach((v, k) => url.searchParams.set(k, v));
+      window.history.replaceState(window.history.state, '', url);
+    }, 150)
   ).current;
   useEffect(() => () => writeUrl.cancel(), [writeUrl]);
 
-  const setFilters = (next: string[]) => {
-    setActive(next);
-    writeUrl(next.join(','));
-  };
-
-  const toggleChip = (slug: string) => {
-    const isActive = active.includes(slug);
-    analytics.filterChipClicked(slug, isActive ? 'remove' : 'add');
-    setFilters(isActive ? active.filter((s) => s !== slug) : [...active, slug]);
-  };
-
-  const selectAll = () => {
-    if (active.length > 0) analytics.filterCleared(active.length);
-    setFilters([]);
-  };
-
-  const visible = useMemo(
-    () =>
-      active.length === 0
-        ? col.rugs
-        : col.rugs.filter((r) => active.includes(r.slug)),
-    [active, col.rugs]
+  const update = useCallback(
+    (patch: Partial<Filters>) => {
+      setFilters((prev) => {
+        const next = { ...prev, ...patch };
+        writeUrl(next);
+        return next;
+      });
+    },
+    [writeUrl]
   );
+
+  const clearAll = useCallback(() => {
+    const cleared = emptyFilters();
+    setFilters(cleared);
+    writeUrl(cleared);
+  }, [writeUrl]);
+
+  // Load synthesized flat rugs belonging to this specific collection
+  const collectionRugs = useMemo(() => {
+    return getAllRugs().filter((r) => r.collectionSlug === col.slug);
+  }, [col.slug]);
+
+  const bounds = useMemo(() => priceBounds(), []);
+  const materials = useMemo(() => availableMaterials(), []);
+  const makes = useMemo(() => availableMakes(), []);
+
+  // Run standard filtering and sorting
+  const visible = useMemo(() => {
+    return filterAndSort(collectionRugs, filters);
+  }, [collectionRugs, filters]);
 
   // Analytics event helper
   function trackView(eventName: string, props: Record<string, string>) {
@@ -164,7 +176,14 @@ export function CollectionDetailContent({
           >
             {col.name}
           </span>
-          <p style={{ fontSize: '16px', lineHeight: 1.7, color: 'var(--ink-soft)', maxWidth: '46ch' }}>
+          <p
+            style={{
+              fontSize: '16px',
+              lineHeight: 1.7,
+              color: 'var(--ink-soft)',
+              maxWidth: '46ch',
+            }}
+          >
             {col.description}
           </p>
         </motion.div>
@@ -187,26 +206,98 @@ export function CollectionDetailContent({
           >
             {col.meta.origin && (
               <div>
-                <dt style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-soft)', marginBottom: '6px' }}>Origin</dt>
-                <dd style={{ fontSize: '15px', color: 'var(--ink)', fontWeight: 500 }}>{col.meta.origin}</dd>
+                <dt
+                  style={{
+                    fontSize: '11px',
+                    letterSpacing: '0.14em',
+                    textTransform: 'uppercase',
+                    color: 'var(--ink-soft)',
+                    marginBottom: '6px',
+                  }}
+                >
+                  {tPiece('origin')}
+                </dt>
+                <dd
+                  style={{
+                    fontSize: '15px',
+                    color: 'var(--ink)',
+                    fontWeight: 500,
+                  }}
+                >
+                  {col.meta.origin}
+                </dd>
               </div>
             )}
             {col.meta.materials && (
               <div>
-                <dt style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-soft)', marginBottom: '6px' }}>Materials</dt>
-                <dd style={{ fontSize: '15px', color: 'var(--ink)', fontWeight: 500 }}>{col.meta.materials}</dd>
+                <dt
+                  style={{
+                    fontSize: '11px',
+                    letterSpacing: '0.14em',
+                    textTransform: 'uppercase',
+                    color: 'var(--ink-soft)',
+                    marginBottom: '6px',
+                  }}
+                >
+                  {tPiece('materials')}
+                </dt>
+                <dd
+                  style={{
+                    fontSize: '15px',
+                    color: 'var(--ink)',
+                    fontWeight: 500,
+                  }}
+                >
+                  {col.meta.materials}
+                </dd>
               </div>
             )}
             {col.meta.knotDensity && (
               <div>
-                <dt style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-soft)', marginBottom: '6px' }}>Knot Density</dt>
-                <dd style={{ fontSize: '15px', color: 'var(--ink)', fontWeight: 500 }}>{col.meta.knotDensity}</dd>
+                <dt
+                  style={{
+                    fontSize: '11px',
+                    letterSpacing: '0.14em',
+                    textTransform: 'uppercase',
+                    color: 'var(--ink-soft)',
+                    marginBottom: '6px',
+                  }}
+                >
+                  {tPiece('density')}
+                </dt>
+                <dd
+                  style={{
+                    fontSize: '15px',
+                    color: 'var(--ink)',
+                    fontWeight: 500,
+                  }}
+                >
+                  {col.meta.knotDensity}
+                </dd>
               </div>
             )}
             {col.meta.leadTime && (
               <div>
-                <dt style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-soft)', marginBottom: '6px' }}>Lead Time</dt>
-                <dd style={{ fontSize: '15px', color: 'var(--ink)', fontWeight: 500 }}>{col.meta.leadTime}</dd>
+                <dt
+                  style={{
+                    fontSize: '11px',
+                    letterSpacing: '0.14em',
+                    textTransform: 'uppercase',
+                    color: 'var(--ink-soft)',
+                    marginBottom: '6px',
+                  }}
+                >
+                  {tPiece('leadTime')}
+                </dt>
+                <dd
+                  style={{
+                    fontSize: '15px',
+                    color: 'var(--ink)',
+                    fontWeight: 500,
+                  }}
+                >
+                  {col.meta.leadTime}
+                </dd>
               </div>
             )}
           </motion.dl>
@@ -229,156 +320,162 @@ export function CollectionDetailContent({
           custom={0}
           style={{ marginBottom: '24px' }}
         >
-          <span
-            style={{
-              fontSize: '11px',
-              letterSpacing: '0.18em',
-              textTransform: 'uppercase',
-              color: 'var(--ink-soft)',
-            }}
-          >
-            Pieces in this collection
-          </span>
-        </motion.div>
-
-        {/* ── Rug filter chips ────────────────────────────────────────── */}
-        <div
-          role="group"
-          aria-label="Filter pieces"
-          className={
-            'mb-8 flex gap-2 pb-1 ' +
-            (col.rugs.length > 6
-              ? 'snap-x overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] sm:flex-wrap sm:justify-start sm:overflow-visible'
-              : 'flex-wrap justify-start')
-          }
-        >
-          <RugFilterChip label="All" active={active.length === 0} onClick={selectAll} />
-          {col.rugs.map((rug) => (
-            <RugFilterChip
-              key={rug.slug}
-              label={rug.name}
-              active={active.includes(rug.slug)}
-              onClick={() => toggleChip(rug.slug)}
+          {/* Sticky filter bar */}
+          <div className="rugx-filterwrap mb-8">
+            <RugFilters
+              filters={filters}
+              update={update}
+              matchingCount={visible.length}
+              onClearAll={clearAll}
+              bounds={bounds}
+              materials={materials}
+              makes={makes}
+              hideFacets={['collection']}
             />
-          ))}
-        </div>
-
-        {/* Grid / empty state */}
-        {visible.length === 0 ? (
-          <div className="text-center py-20" role="status">
-            <p style={{ color: 'var(--ink-soft)', fontSize: '15px' }}>
-              No pieces match this filter.
-            </p>
-            <button
-              onClick={selectAll}
-              className="mt-3 text-[12px] uppercase tracking-[0.16em] text-accent underline-offset-4 hover:underline"
-            >
-              Clear filter
-            </button>
           </div>
-        ) : (
-          <motion.div layout="position" className="rug-grid" style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '32px',
-          }}>
-            <AnimatePresence mode="popLayout">
-              {visible.map((rug, vi) => {
-                const globalIdx = col.rugs.indexOf(rug);
-                const size = rugSizes[globalIdx % rugSizes.length] as RugSize;
-                const sty = rugSizeStyle[size];
 
-                return (
-                  <motion.article
-                    key={rug.slug}
-                    style={{ position: 'relative' }}
-                    layout="position"
-                    initial={{ opacity: 0, scale: 0.98 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.98 }}
-                    transition={{
-                      duration: 0.35,
-                      delay: (vi % 3) * 0.04,
-                      ease: [0.32, 0.72, 0, 1],
-                    }}
-                  >
-                    <ShortlistToggleButton
-                      collectionSlug={col.slug}
-                      rugSlug={rug.slug}
-                      rugName={`${col.name} ${rug.name}`}
-                    />
-                    <Link
-                      href={`/collection/${col.slug}/${rug.slug}`}
-                      className="group block"
-                      onClick={() => trackView('rug_inquiry_initiated', { rug_slug: rug.slug, collection_slug: col.slug })}
+          {/* Grid / empty state */}
+          {visible.length === 0 ? (
+            <div className="py-20 text-center" role="status">
+              <p style={{ color: 'var(--ink-soft)', fontSize: '15px' }}>
+                {tRugs('noRugs')}
+              </p>
+              <button
+                onClick={clearAll}
+                className="text-accent mt-3 text-[12px] tracking-[0.16em] uppercase underline-offset-4 hover:underline"
+              >
+                {tRugs('clearFilters')}
+              </button>
+            </div>
+          ) : (
+            <motion.div
+              layout="position"
+              className="rug-grid"
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, 1fr)',
+                gap: '32px',
+              }}
+            >
+              <AnimatePresence mode="popLayout">
+                {visible.map((rug, vi) => {
+                  const globalIdx = col.rugs.findIndex(
+                    (r) => r.slug === rug.rugSlug
+                  );
+                  const size = rugSizes[globalIdx % rugSizes.length] as RugSize;
+                  const sty = rugSizeStyle[size];
+
+                  return (
+                    <motion.article
+                      key={rug.id}
+                      style={{ position: 'relative' }}
+                      layout="position"
+                      initial={{ opacity: 0, scale: 0.98 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.98 }}
+                      transition={{
+                        duration: 0.35,
+                        delay: (vi % 3) * 0.04,
+                        ease: [0.32, 0.72, 0, 1],
+                      }}
                     >
-                      <div
-                        style={{
-                          position: 'relative',
-                          overflow: 'hidden',
-                          background: 'var(--canvas-muted, #f0ece3)',
-                          marginBottom: '20px',
-                          ...sty,
-                        }}
+                      <ShortlistToggleButton
+                        collectionSlug={col.slug}
+                        rugSlug={rug.rugSlug}
+                        rugName={`${col.name} ${rug.name}`}
+                      />
+                      <Link
+                        href={rug.href}
+                        className="group block"
+                        onClick={() =>
+                          trackView('rug_inquiry_initiated', {
+                            rug_slug: rug.rugSlug,
+                            collection_slug: col.slug,
+                          })
+                        }
                       >
-                        <Image
-                          src={rug.image}
-                          alt={rug.name}
-                          fill
-                          loading={globalIdx < 3 ? 'eager' : 'lazy'}
-                          fetchPriority={globalIdx < 3 ? 'high' : undefined}
-                          sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 30vw"
-                          placeholder="blur"
-                          blurDataURL={blurDataURL()}
+                        <div
                           style={{
-                            objectFit: 'cover',
-                            transition: 'transform 1.2s ease',
+                            position: 'relative',
+                            overflow: 'hidden',
+                            background: 'var(--canvas-muted, #f0ece3)',
+                            marginBottom: '20px',
+                            ...sty,
                           }}
-                          className="group-hover:scale-[1.04]"
-                        />
-                      </div>
+                        >
+                          <Image
+                            src={rug.image}
+                            alt={rug.name}
+                            fill
+                            loading={globalIdx < 3 ? 'eager' : 'lazy'}
+                            fetchPriority={globalIdx < 3 ? 'high' : undefined}
+                            sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 30vw"
+                            placeholder="blur"
+                            blurDataURL={blurDataURL()}
+                            style={{
+                              objectFit: 'cover',
+                              transition: 'transform 1.2s ease',
+                            }}
+                            className="group-hover:scale-[1.04]"
+                          />
+                        </div>
 
-                      <span
-                        style={{
-                          display: 'block',
-                          fontSize: '11px',
-                          letterSpacing: '0.14em',
-                          textTransform: 'uppercase',
-                          color: 'var(--ink-soft)',
-                          marginBottom: '6px',
-                        }}
-                      >
-                        {String(globalIdx + 1).padStart(2, '0')}
-                      </span>
-                      <h3
-                        style={{
-                          fontFamily: 'var(--font-display)',
-                          fontWeight: 300,
-                          fontSize: '26px',
-                          letterSpacing: '-0.01em',
-                          color: 'var(--ink)',
-                          marginBottom: '6px',
-                        }}
-                      >
-                        {rug.name}
-                      </h3>
-                      {rug.description && (
-                        <p style={{ fontSize: '14px', color: 'var(--ink-soft)', lineHeight: 1.55, marginBottom: '10px', maxWidth: '34ch' }}>
-                          {rug.description}
-                        </p>
-                      )}
-                      {rug.price && (
-                        <span style={{ fontSize: '13px', color: 'var(--ink-soft)', letterSpacing: '0.06em' }}>
-                          {rug.price}
+                        <span
+                          style={{
+                            display: 'block',
+                            fontSize: '11px',
+                            letterSpacing: '0.14em',
+                            textTransform: 'uppercase',
+                            color: 'var(--ink-soft)',
+                            marginBottom: '6px',
+                          }}
+                        >
+                          {String(globalIdx + 1).padStart(2, '0')}
                         </span>
-                      )}
-                    </Link>
-                  </motion.article>
-                );
-              })}
-            </AnimatePresence>
-          </motion.div>
-        )}
+                        <h3
+                          style={{
+                            fontFamily: 'var(--font-display)',
+                            fontWeight: 300,
+                            fontSize: '26px',
+                            letterSpacing: '-0.01em',
+                            color: 'var(--ink)',
+                            marginBottom: '6px',
+                          }}
+                        >
+                          {rug.name}
+                        </h3>
+                        {rug.description && (
+                          <p
+                            style={{
+                              fontSize: '14px',
+                              color: 'var(--ink-soft)',
+                              lineHeight: 1.55,
+                              marginBottom: '10px',
+                              maxWidth: '34ch',
+                            }}
+                          >
+                            {rug.description}
+                          </p>
+                        )}
+                        {rug.priceLabel && (
+                          <span
+                            style={{
+                              fontSize: '13px',
+                              color: 'var(--ink-soft)',
+                              letterSpacing: '0.06em',
+                            }}
+                          >
+                            {rug.priceLabel}
+                          </span>
+                        )}
+                      </Link>
+                    </motion.article>
+                  );
+                })}
+              </AnimatePresence>
+            </motion.div>
+          )}
+        </motion.div>
       </div>
 
       {/* ── Bottom CTA ────────────────────────────────────────────────── */}
@@ -410,9 +507,23 @@ export function CollectionDetailContent({
             textDecoration: 'none',
           }}
         >
-          Begin an inquiry →
+          {tRugs('beginInquiry')}
         </Link>
       </div>
+
+      {/* ── Estimate your piece (inline) ──────────────────────────────── */}
+      <section className="est-section" aria-labelledby="estimate-heading">
+        <div className="est-section-head">
+          <span className="est-section-eyebrow">{tRugs('calcEyebrow')}</span>
+          <h2 id="estimate-heading" className="est-section-title">
+            {tRugs('calcTitle')}
+          </h2>
+          <p className="est-section-sub">
+            {tRugs('calcDesc')}
+          </p>
+        </div>
+        <EstimateTool source="collection" />
+      </section>
 
       {/* ── Other collections horizontal strip ────────────────────────── */}
       <div
@@ -432,7 +543,7 @@ export function CollectionDetailContent({
               marginBottom: '28px',
             }}
           >
-            Other collections
+            {tRugs('otherCollections')}
           </span>
           <div
             style={{
@@ -448,7 +559,12 @@ export function CollectionDetailContent({
                 key={other.slug}
                 href={`/collection/${other.slug}`}
                 style={{ textDecoration: 'none', flexShrink: 0 }}
-                onClick={() => trackView('collection_card_clicked', { collection_slug: other.slug, source: 'index' })}
+                onClick={() =>
+                  trackView('collection_card_clicked', {
+                    collection_slug: other.slug,
+                    source: 'index',
+                  })
+                }
               >
                 <div
                   style={{
@@ -482,7 +598,7 @@ export function CollectionDetailContent({
                   {other.name}
                 </span>
                 <span style={{ fontSize: '11px', color: 'var(--ink-soft)' }}>
-                  Explore →
+                  {tRugs('explore')}
                 </span>
               </Link>
             ))}
@@ -502,33 +618,5 @@ export function CollectionDetailContent({
         .group-hover\\:scale-\\[1\\.04\\]:hover { transform: scale(1.04); }
       `}</style>
     </>
-  );
-}
-
-// ── Rug filter chip (same styling as the collection index filter chips) ──────
-
-function RugFilterChip({
-  label,
-  active,
-  onClick,
-}: {
-  label: string;
-  active: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      aria-pressed={active}
-      onClick={onClick}
-      className={
-        'shrink-0 snap-start whitespace-nowrap rounded-full border px-4 py-1.5 text-[11px] uppercase tracking-[0.16em] transition-colors duration-200 ' +
-        (active
-          ? 'border-accent bg-accent text-[var(--canvas)]'
-          : 'border-ink bg-transparent text-ink hover:border-accent')
-      }
-    >
-      {label}
-    </button>
   );
 }

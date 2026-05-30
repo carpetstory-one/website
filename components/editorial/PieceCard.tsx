@@ -50,9 +50,12 @@ export function PieceCard({
 }) {
   return (
     <SlideIn direction="u" delay={(index % 3) * 100} className="w-full">
-      <a href={`/collection/${piece.slug}`} className="group block cursor-pointer">
+      <a
+        href={`/collection/${piece.slug}`}
+        className="group block cursor-pointer"
+      >
         <div
-          className="aspect-[3/4] mb-6 relative overflow-hidden"
+          className="relative mb-6 aspect-[3/4] overflow-hidden"
           style={{ background: piece.placeholderGradient }}
         >
           <Image
@@ -63,21 +66,21 @@ export function PieceCard({
             sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
             placeholder="blur"
             blurDataURL={blurDataURL()}
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
           />
-          <div className="absolute top-4 left-4 bg-ink/70 text-canvas px-3 py-1.5 text-[10px] tracking-[0.16em] uppercase z-[2]">
+          <div className="bg-ink/70 text-canvas absolute top-4 left-4 z-[2] px-3 py-1.5 text-[10px] tracking-[0.16em] uppercase">
             {String(index + 1).padStart(2, '0')}
           </div>
-          <div className="absolute inset-0 bg-ink/0 group-hover:bg-ink/15 transition-colors duration-500 pointer-events-none" />
+          <div className="bg-ink/0 group-hover:bg-ink/15 pointer-events-none absolute inset-0 transition-colors duration-500" />
         </div>
 
-        <h3 className="font-display italic font-light text-[28px] sm:text-[32px] tracking-[-0.02em] mb-2 text-ink">
+        <h3 className="font-display text-ink mb-2 text-[28px] font-light tracking-[-0.02em] italic sm:text-[32px]">
           {piece.name}
         </h3>
-        <p className="text-ink-soft text-[14px] leading-[1.55] mb-3 max-w-[36ch]">
+        <p className="text-ink-soft mb-3 max-w-[36ch] text-[14px] leading-[1.55]">
           {piece.description}
         </p>
-        <div className="text-[12px] text-ink-soft tracking-[0.1em] uppercase">
+        <div className="text-ink-soft text-[12px] tracking-[0.1em] uppercase">
           {fromLabel} {formatPrice(piece.priceUSD)}
         </div>
       </a>

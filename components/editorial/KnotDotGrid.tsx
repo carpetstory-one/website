@@ -15,7 +15,10 @@ export function KnotDotGrid({
   ));
 
   return (
-    <div className={`dots-${count} ${className}`} id={count === 100 ? 'dots-100' : undefined}>
+    <div
+      className={`dots-${count} ${className}`}
+      id={count === 100 ? 'dots-100' : undefined}
+    >
       {dots}
     </div>
   );

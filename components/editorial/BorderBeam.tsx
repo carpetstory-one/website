@@ -14,7 +14,7 @@ export function BorderBeam({
   className?: string;
 }) {
   return (
-    <div 
+    <div
       className={`beam-host ${className}`}
       style={{ '--beam-delay': delay } as React.CSSProperties}
     >

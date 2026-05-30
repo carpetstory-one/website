@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import Image from 'next/image';
 import { motion } from 'motion/react';
@@ -23,7 +23,8 @@ export function Materials() {
       name: t('woolName'),
       desc: t('woolDesc'),
       origin: t('woolOrigin'),
-      imgSrc: 'https://i.pinimg.com/control1/736x/bb/42/3f/bb423fa2cfb4bf90b3eb12ee569bb1ea.jpg',
+      imgSrc:
+        'https://i.pinimg.com/control1/736x/bb/42/3f/bb423fa2cfb4bf90b3eb12ee569bb1ea.jpg',
       imgAlt: 'Close-up of raw wool fibers',
     },
     {
@@ -31,7 +32,8 @@ export function Materials() {
       name: t('silkName'),
       desc: t('silkDesc'),
       origin: t('silkOrigin'),
-      imgSrc: 'https://i.pinimg.com/736x/62/6e/91/626e914beaba64dfff06cf99eb1fc8da.jpg',
+      imgSrc:
+        'https://i.pinimg.com/736x/62/6e/91/626e914beaba64dfff06cf99eb1fc8da.jpg',
       imgAlt: 'Lustrous silk threads catching light',
     },
     {
@@ -39,7 +41,8 @@ export function Materials() {
       name: t('cottonName'),
       desc: t('cottonDesc'),
       origin: t('cottonOrigin'),
-      imgSrc: 'https://i.pinimg.com/control1/736x/1e/d3/a9/1ed3a9b808f6feacca284cf3c1b69d5d.jpg',
+      imgSrc:
+        'https://i.pinimg.com/control1/736x/1e/d3/a9/1ed3a9b808f6feacca284cf3c1b69d5d.jpg',
       imgAlt: 'Raw cotton fibers and bolls',
     },
   ];
@@ -59,7 +62,7 @@ export function Materials() {
             variants={slideUp}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-80px" }}
+            viewport={{ once: true, margin: '-80px' }}
             custom={0}
           >
             {t('label')}
@@ -69,7 +72,7 @@ export function Materials() {
             variants={slideUp}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-80px" }}
+            viewport={{ once: true, margin: '-80px' }}
             custom={0.15}
           >
             {t('headline')}
@@ -84,14 +87,18 @@ export function Materials() {
               variants={slideUp}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, margin: "-80px" }}
+              viewport={{ once: true, margin: '-80px' }}
               custom={i * 0.15}
             >
               <motion.div
                 className={`swatch ${mat.swatchClass}`}
                 initial={{ scale: 1.05, opacity: 0 }}
                 whileInView={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 1.2, delay: i * 0.15 + 0.2, ease: [0.16, 1, 0.3, 1] as any }}
+                transition={{
+                  duration: 1.2,
+                  delay: i * 0.15 + 0.2,
+                  ease: [0.16, 1, 0.3, 1] as any,
+                }}
                 viewport={{ once: true }}
                 role="img"
                 aria-label={`${mat.name} swatch`}
@@ -120,7 +127,7 @@ export function Materials() {
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] as any }}
-          viewport={{ once: true, margin: "-80px" }}
+          viewport={{ once: true, margin: '-80px' }}
         >
           <span className="label">{t('dyesLabel')}</span>
           <div className="dyes-text">
@@ -134,7 +141,11 @@ export function Materials() {
                 className={`dye-swatch ${dye.cls}`}
                 initial={{ opacity: 0, scale: 0.8 }}
                 whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] as any }}
+                transition={{
+                  duration: 0.8,
+                  delay: i * 0.12,
+                  ease: [0.16, 1, 0.3, 1] as any,
+                }}
                 viewport={{ once: true }}
                 role="img"
                 aria-label={t(dye.key)}

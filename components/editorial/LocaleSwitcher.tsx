@@ -41,7 +41,10 @@ export function LocaleSwitcher() {
     document.cookie = `NEXT_LOCALE=${next}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax`;
     setOpen(false);
     startTransition(() => {
-      router.replace({ pathname, query: params as Record<string, string> }, { locale: next });
+      router.replace(
+        { pathname, query: params as Record<string, string> },
+        { locale: next }
+      );
     });
   };
 
@@ -54,7 +57,7 @@ export function LocaleSwitcher() {
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label={t('label')}
-        className={`min-h-[44px] min-w-[44px] inline-flex items-center gap-1 px-2 text-[12px] sm:text-[13px] font-medium tracking-[0.02em] transition-opacity ${
+        className={`inline-flex min-h-[44px] min-w-[44px] items-center gap-1 px-2 text-[12px] font-medium tracking-[0.02em] transition-opacity sm:text-[13px] ${
           isPending ? 'opacity-50' : 'opacity-100 hover:opacity-70'
         }`}
       >
@@ -75,7 +78,7 @@ export function LocaleSwitcher() {
         <ul
           role="listbox"
           aria-label={t('label')}
-          className="absolute right-0 top-full mt-2 min-w-[140px] bg-[var(--canvas)] border border-[rgba(26,24,23,0.12)] shadow-[0_8px_24px_-12px_rgba(26,24,23,0.18)] z-50"
+          className="absolute top-full right-0 z-50 mt-2 min-w-[140px] border border-[rgba(26,24,23,0.12)] bg-[var(--canvas)] shadow-[0_8px_24px_-12px_rgba(26,24,23,0.18)]"
         >
           {routing.locales.map((l) => (
             <li key={l}>
@@ -84,7 +87,7 @@ export function LocaleSwitcher() {
                 role="option"
                 aria-selected={l === locale}
                 onClick={() => switchTo(l)}
-                className={`w-full text-left px-4 py-3 min-h-[44px] text-[13px] tracking-[0.02em] flex items-center justify-between gap-3 transition-colors hover:bg-[var(--canvas-warm)] ${
+                className={`flex min-h-[44px] w-full items-center justify-between gap-3 px-4 py-3 text-left text-[13px] tracking-[0.02em] transition-colors hover:bg-[var(--canvas-warm)] ${
                   l === locale ? 'text-[var(--accent)]' : 'text-[var(--ink)]'
                 }`}
               >

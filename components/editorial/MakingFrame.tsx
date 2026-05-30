@@ -30,7 +30,7 @@ export function MakingFrame({
           sizes="(max-width: 768px) 95vw, 90vw"
           placeholder="blur"
           blurDataURL={blurDataURL()}
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 h-full w-full object-cover"
         />
       </div>
     </Reveal>

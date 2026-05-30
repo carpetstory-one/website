@@ -71,17 +71,19 @@ export default async function PostPage({ params }: Props) {
   ]);
 
   return (
-    <div className="relative bg-canvas min-h-screen flex flex-col">
+    <div className="bg-canvas relative flex min-h-screen flex-col">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLd({ '@graph': [article, breadcrumb] }) }}
+        dangerouslySetInnerHTML={{
+          __html: jsonLd({ '@graph': [article, breadcrumb] }),
+        }}
       />
 
       <Nav />
 
-      <article className="flex-1 pt-28 sm:pt-32 pb-16 sm:pb-24 px-5 sm:px-7 lg:px-12">
-        <header className="max-w-4xl mx-auto text-center mb-12 sm:mb-16">
-          <div className="flex items-center justify-center gap-3 sm:gap-4 text-[11px] uppercase tracking-[0.16em] text-ink-soft mb-6 sm:mb-8 flex-wrap">
+      <article className="flex-1 px-5 pt-28 pb-16 sm:px-7 sm:pt-32 sm:pb-24 lg:px-12">
+        <header className="mx-auto mb-12 max-w-4xl text-center sm:mb-16">
+          <div className="text-ink-soft mb-6 flex flex-wrap items-center justify-center gap-3 text-[11px] tracking-[0.16em] uppercase sm:mb-8 sm:gap-4">
             <time dateTime={post.meta.date}>
               {new Date(post.meta.date).toLocaleDateString(locale, {
                 month: 'long',
@@ -89,13 +91,13 @@ export default async function PostPage({ params }: Props) {
                 year: 'numeric',
               })}
             </time>
-            <span className="w-1 h-1 rounded-full bg-accent/40" />
+            <span className="bg-accent/40 h-1 w-1 rounded-full" />
             <span>{post.meta.readingTime}</span>
           </div>
-          <h1 className="font-display font-light text-[32px] sm:text-[40px] md:text-[64px] lg:text-[80px] leading-[1.05] tracking-[-0.02em] text-ink mb-8 sm:mb-12">
+          <h1 className="font-display text-ink mb-8 text-[32px] leading-[1.05] font-light tracking-[-0.02em] sm:mb-12 sm:text-[40px] md:text-[64px] lg:text-[80px]">
             {post.meta.title}
           </h1>
-          <div className="relative aspect-[21/9] w-full overflow-hidden bg-canvas-warm">
+          <div className="bg-canvas-warm relative aspect-[21/9] w-full overflow-hidden">
             <Image
               src={post.meta.coverImage}
               alt={post.meta.title}
@@ -107,7 +109,7 @@ export default async function PostPage({ params }: Props) {
           </div>
         </header>
 
-        <div className="max-w-3xl mx-auto prose-container">
+        <div className="prose-container mx-auto max-w-3xl">
           <MDXRemote source={post.content} components={components} />
         </div>
       </article>

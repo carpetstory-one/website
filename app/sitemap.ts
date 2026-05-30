@@ -3,8 +3,7 @@ import { routing } from '@/i18n/routing';
 import { collections } from '@/lib/collections';
 import { getAllPosts } from '@/lib/mdx';
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || 'https://carpetstory.com';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://carpetstory.com';
 
 type RouteSpec = {
   path: string;
@@ -67,7 +66,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const languages = Object.fromEntries(
       routing.locales.map((l) => [l, `${SITE_URL}/${l}${route.path}`])
     );
-    languages['x-default'] = `${SITE_URL}/${routing.defaultLocale}${route.path}`;
+    languages['x-default'] =
+      `${SITE_URL}/${routing.defaultLocale}${route.path}`;
 
     return {
       url: `${SITE_URL}/${routing.defaultLocale}${route.path}`,

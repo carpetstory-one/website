@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { motion } from 'motion/react';
 import { useTranslations } from 'next-intl';
@@ -25,7 +25,7 @@ export function PromiseSection() {
             variants={slideIn}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true, margin: '-100px' }}
             custom={0}
           >
             {parts[0]}
@@ -37,7 +37,7 @@ export function PromiseSection() {
             variants={slideIn}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true, margin: '-100px' }}
             custom={0.2}
           >
             <span className="label">{t('label')}</span>

@@ -4,6 +4,7 @@ import { Heritage } from '@/components/editorial/Heritage';
 import { Letter } from '@/components/editorial/Letter';
 import { Metadata } from 'next';
 import { generatePageMetadata, breadcrumbSchema, jsonLd } from '@/lib/seo';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -11,30 +12,36 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations({ locale, namespace: 'AboutPage' });
   return generatePageMetadata({
-    title: 'About Carpetstory — Our Heritage and Vision',
-    description:
-      'Discover the story behind Carpetstory. Four generations of master weavers in Jaipur, Rajasthan. Traditional hand-knotted techniques and family vision.',
+    title: t('metaTitle'),
+    description: t('metaDescription'),
     path: '/about',
     locale,
     keywords: [
       'Carpetstory about',
       'Jaipur carpet weavers',
       'hand-knotted rugs history',
-      'Aashrit Anand founder',
+      'Aashrit Garg founder',
     ],
   });
 }
 
 export default async function AboutPage({ params }: Props) {
   const { locale } = await params;
+  setRequestLocale(locale);
+
+  const tCommon = await getTranslations('Common');
+  const tAbout = await getTranslations('AboutPage');
+
   const breadcrumb = breadcrumbSchema([
-    { name: 'Home', url: `/${locale}` },
-    { name: 'About', url: `/${locale}/about` },
+    { name: tCommon('home'), url: `/${locale}` },
+    { name: tAbout('title'), url: `/${locale}/about` },
   ]);
 
   return (
-    <div className="relative bg-canvas min-h-screen flex flex-col">
+    <div className="bg-canvas relative flex min-h-screen flex-col">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumb) }}

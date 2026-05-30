@@ -24,12 +24,12 @@ export function MagneticLink({
 
   const handleMouse = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isMobile || prefersReducedMotion || !ref.current) return;
-    
+
     const { clientX, clientY } = e;
     const { height, width, left, top } = ref.current.getBoundingClientRect();
     const middleX = clientX - (left + width / 2);
     const middleY = clientY - (top + height / 2);
-    
+
     // Scale down the movement so it feels subtle
     setPosition({ x: middleX * 0.2, y: middleY * 0.2 });
   };
@@ -46,7 +46,7 @@ export function MagneticLink({
       ref={ref}
       onMouseMove={handleMouse}
       onMouseLeave={reset}
-      className="inline-block relative"
+      className="relative inline-block"
     >
       <Component
         {...props}

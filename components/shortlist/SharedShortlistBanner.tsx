@@ -36,10 +36,11 @@ export function SharedShortlistBanner() {
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.3 }}
             style={{ backgroundColor: 'var(--ink)', color: 'var(--canvas)' }}
-            className="fixed left-1/2 top-[84px] z-[95] flex max-w-[90vw] -translate-x-1/2 items-center gap-3 rounded-full px-5 py-3 text-[13px] shadow-lg"
+            className="fixed top-[84px] left-1/2 z-[95] flex max-w-[90vw] -translate-x-1/2 items-center gap-3 rounded-full px-5 py-3 text-[13px] shadow-lg"
           >
             <span>
-              Someone shared {count} {count === 1 ? 'piece' : 'pieces'} with you.
+              Someone shared {count} {count === 1 ? 'piece' : 'pieces'} with
+              you.
             </span>
             <button
               type="button"
@@ -67,14 +68,14 @@ export function SharedShortlistBanner() {
             }}
             className="fixed bottom-6 left-6 z-[85] flex items-center gap-2 rounded-full px-3 py-2 shadow-sm"
           >
-            <span className="text-[10px] uppercase tracking-[0.16em]">
+            <span className="text-[10px] tracking-[0.16em] uppercase">
               Viewing a shared selection
             </span>
             <button
               type="button"
               onClick={dismissSharedView}
               aria-label="Dismiss shared selection notice"
-              className="flex h-4 w-4 items-center justify-center transition-colors hover:text-accent"
+              className="hover:text-accent flex h-4 w-4 items-center justify-center transition-colors"
             >
               <X className="h-3 w-3" aria-hidden="true" />
             </button>

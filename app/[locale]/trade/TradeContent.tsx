@@ -1,64 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import { SlideIn } from '@/components/editorial/SlideIn';
 import { Reveal } from '@/components/editorial/Reveal';
 
-const PARTNER_TYPES = [
-  'Interior designer / Architect',
-  'Importer / Distributor',
-  'Retailer / Showroom',
-  'Luxury carpet brand',
-  'Other',
-];
+const PARTNER_TYPES = ['designer', 'importer', 'retailer', 'brand', 'other'] as const;
 
-const INTERESTS = [
-  'Ready collections',
-  'Made to specification orders',
-  'White label manufacturing',
-  'Trade account',
-  'Sample kit',
-  'General enquiry',
-];
-
-const PARTNERS = [
-  {
-    num: '01',
-    title: 'Interior Designers & Architects',
-    body: 'We manufacture to your exact project specification, size, construction, material, and palette, with the precision and lead-time discipline that professional projects demand.',
-    bullets: ['Preferential trade pricing', 'Sample dispatch worldwide', 'CAD-ready technical spec sheets', 'Dedicated account management'],
-  },
-  {
-    num: '02',
-    title: 'Importers & Distributors',
-    body: 'Our production infrastructure supports high-volume, repeat-order supply with full export documentation, private label manufacturing, and consistent quality across every shipment.',
-    bullets: ['MOQ from 5 pieces', 'Private label & OEM production', 'Full export documentation', 'Sea & air freight ex Delhi'],
-  },
-  {
-    num: '03',
-    title: 'Retailers & Showrooms',
-    body: 'We supply curated, commercially ready collections to retail and showroom partners with the exclusivity, reorder reliability, and brand support that serious retail operations require.',
-    bullets: ['Regional exclusivity available', 'Consignment for new partners', 'Co-branded trade materials', 'Reorder consistency guaranteed'],
-  },
-  {
-    num: '04',
-    title: 'Luxury Carpet Brands',
-    body: 'We provide white label manufacturing for established luxury brands requiring a high-calibre Jaipur production partner. Your designs and standards, executed with complete discretion.',
-    bullets: ['White label manufacturing', 'Design-to-production handoff', 'NDA & exclusivity arrangements', 'Collection-level consistency'],
-  },
-];
-
-const PROCESS = [
-  { step: '01', title: 'Submit your brief', desc: 'Specifications, quantities, reference materials, or a product requirement.' },
-  { step: '02', title: 'Technical review', desc: 'Production options, pricing, and lead times within one business day.' },
-  { step: '03', title: 'Sample approval', desc: 'A physical sample dispatched for review and sign-off before production.' },
-  { step: '04', title: 'Production', desc: 'Full transparency on timeline with milestone updates and inspection.' },
-  { step: '05', title: 'Export & delivery', desc: 'Door-to-door shipping with complete documentation and compliance.' },
-];
-
-const MARKETS = ['Europe', 'United Kingdom', 'United States', 'Canada', 'UAE', 'Saudi Arabia', 'Qatar', 'Australia'];
+const INTERESTS = ['ready', 'custom', 'whiteLabel', 'account', 'kit', 'general'] as const;
 
 export function TradeContent() {
+  const t = useTranslations('TradePage');
+
   const [formData, setFormData] = useState({
     name: '',
     company: '',
@@ -75,7 +29,8 @@ export function TradeContent() {
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const set = (field: string, value: string) => setFormData((p) => ({ ...p, [field]: value }));
+  const set = (field: string, value: string) =>
+    setFormData((p) => ({ ...p, [field]: value }));
 
   const handleInterestChange = (interest: string) => {
     setFormData((prev) => {
@@ -86,15 +41,94 @@ export function TradeContent() {
     });
   };
 
+  const partners = [
+    {
+      num: '01',
+      title: t('partner1Title'),
+      body: t('partner1Body'),
+      bullets: [
+        t('partner1Bullet1'),
+        t('partner1Bullet2'),
+        t('partner1Bullet3'),
+        t('partner1Bullet4'),
+      ],
+    },
+    {
+      num: '02',
+      title: t('partner2Title'),
+      body: t('partner2Body'),
+      bullets: [
+        t('partner2Bullet1'),
+        t('partner2Bullet2'),
+        t('partner2Bullet3'),
+        t('partner2Bullet4'),
+      ],
+    },
+    {
+      num: '03',
+      title: t('partner3Title'),
+      body: t('partner3Body'),
+      bullets: [
+        t('partner3Bullet1'),
+        t('partner3Bullet2'),
+        t('partner3Bullet3'),
+        t('partner3Bullet4'),
+      ],
+    },
+    {
+      num: '04',
+      title: t('partner4Title'),
+      body: t('partner4Body'),
+      bullets: [
+        t('partner4Bullet1'),
+        t('partner4Bullet2'),
+        t('partner4Bullet3'),
+        t('partner4Bullet4'),
+      ],
+    },
+  ];
+
+  const processSteps = [
+    {
+      step: '01',
+      title: t('step1Title'),
+      desc: t('step1Desc'),
+    },
+    {
+      step: '02',
+      title: t('step2Title'),
+      desc: t('step2Desc'),
+    },
+    {
+      step: '03',
+      title: t('step3Title'),
+      desc: t('step3Desc'),
+    },
+    {
+      step: '04',
+      title: t('step4Title'),
+      desc: t('step4Desc'),
+    },
+    {
+      step: '05',
+      title: t('step5Title'),
+      desc: t('step5Desc'),
+    },
+  ];
+
   function validate() {
     const e: Record<string, string> = {};
-    if (!formData.name.trim()) e.name = 'Required';
-    if (!formData.company.trim()) e.company = 'Required';
-    if (!formData.country.trim()) e.country = 'Required';
-    if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) e.email = 'Invalid email';
-    if (!formData.phone.trim()) e.phone = 'Required';
-    if (!formData.designation.trim()) e.designation = 'Required';
-    if (!formData.partnerType) e.partnerType = 'Please select one';
+    if (!formData.name.trim()) e.name = t('errorRequired');
+    if (!formData.company.trim()) e.company = t('errorRequired');
+    if (!formData.country.trim()) e.country = t('errorRequired');
+    if (
+      !formData.email.trim() ||
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+    )
+      e.email = t('errorEmail');
+    if (!formData.phone.trim()) e.phone = t('errorRequired');
+    if (!formData.designation.trim()) e.designation = t('errorRequired');
+    if (!formData.partnerType) e.partnerType = t('errorSelectOne');
     return e;
   }
 
@@ -103,7 +137,9 @@ export function TradeContent() {
     const errs = validate();
     setErrors(errs);
     if (Object.keys(errs).length > 0) {
-      document.getElementById('query-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document
+        .getElementById('query-form')
+        ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       return;
     }
     setIsSubmitting(true);
@@ -117,8 +153,8 @@ export function TradeContent() {
     const el = document.getElementById('query-form');
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
-      if (preselectSampleKit && !formData.interests.includes('Sample kit')) {
-        handleInterestChange('Sample kit');
+      if (preselectSampleKit && !formData.interests.includes('kit')) {
+        handleInterestChange('kit');
       }
     }
   };
@@ -137,37 +173,49 @@ export function TradeContent() {
 
   return (
     <div className="space-y-24 md:space-y-32">
-
       {/* 1. Header ───────────────────────────────────────────── */}
       <Reveal>
         <header className="text-center">
-          <span className="block text-[11px] tracking-[0.22em] uppercase text-accent mb-6">
-            Manufacturing &amp; Trade Partnerships
+          <span className="text-accent mb-6 block text-[11px] tracking-[0.22em] uppercase">
+            {t('eyebrow')}
           </span>
-          <h1 className="font-display font-light text-[38px] sm:text-[56px] lg:text-[76px] leading-[1.04] tracking-[-0.03em] text-ink max-w-[14ch] mx-auto">
-            Source With Us Or Partner With Carpetstory
+          <h1 className="font-display text-ink mx-auto max-w-[14ch] text-[38px] leading-[1.04] font-light tracking-[-0.03em] sm:text-[56px] lg:text-[76px]">
+            {t('title')}
           </h1>
-          <p className="body-md text-ink-soft font-light max-w-[58ch] mx-auto mt-8 leading-relaxed">
-            A great carpet is not made quickly. Neither is a great manufacturing house. Carpetstory
-            produces the full spectrum of carpets and rugs from Jaipur — supplying trade professionals
-            and luxury brands across more than thirty countries with rigour and discretion.
-            We manufacture everything. We compromise on nothing.
+          <p className="body-md text-ink-soft mx-auto mt-8 max-w-[58ch] leading-relaxed font-light">
+            {t('intro')}
           </p>
-          <div className="w-12 h-px bg-accent mx-auto mt-10" />
+          <div className="bg-accent mx-auto mt-10 h-px w-12" />
         </header>
       </Reveal>
 
       {/* 2. Philosophy pillars ───────────────────────────────── */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-y-12 gap-x-10 lg:gap-x-14">
+      <div className="grid grid-cols-1 gap-x-10 gap-y-12 md:grid-cols-3 lg:gap-x-14">
         {[
-          { num: 'I', title: 'Versatility', body: 'From hand-knotted artisan rugs to precision machine-made carpets, we produce every construction and every specification — for designers, importers, luxury brands, and retailers. Whatever your floor demands, we make it.' },
-          { num: 'II', title: 'Rigour & Discretion', body: 'Built with patience, to supply the world’s finest interiors. Full export infrastructure, milestone transparency, and the kind of discretion that established luxury houses quietly depend on.' },
-          { num: 'III', title: 'Trust', body: 'A full-spectrum carpet manufacturing and export house in Jaipur. We partner with those who demand a manufacturer they never have to question. If that is you, you are in the right place.' },
+          {
+            num: 'I',
+            title: t('pillar1Title'),
+            body: t('pillar1Body'),
+          },
+          {
+            num: 'II',
+            title: t('pillar2Title'),
+            body: t('pillar2Body'),
+          },
+          {
+            num: 'III',
+            title: t('pillar3Title'),
+            body: t('pillar3Body'),
+          },
         ].map((p, i) => (
           <SlideIn key={p.num} direction="u" delay={i * 100}>
             <div>
-              <span className="font-display font-light italic text-[24px] text-accent">{p.num} — {p.title}</span>
-              <p className="body-md text-ink-soft leading-relaxed font-light mt-4">{p.body}</p>
+              <span className="font-display text-accent text-[24px] font-light italic">
+                {p.num} — {p.title}
+              </span>
+              <p className="body-md text-ink-soft mt-4 leading-relaxed font-light">
+                {p.body}
+              </p>
             </div>
           </SlideIn>
         ))}
@@ -177,22 +225,40 @@ export function TradeContent() {
       <section className="space-y-12 md:space-y-16">
         <Reveal>
           <div className="text-center">
-            <span className="block text-[11px] tracking-[0.22em] uppercase text-ink-soft mb-4">Collaborators</span>
-            <h2 className="font-display font-light text-[32px] md:text-[46px] text-ink tracking-[-0.02em] leading-[1.05]">Who We Partner With</h2>
+            <span className="text-ink-soft mb-4 block text-[11px] tracking-[0.22em] uppercase">
+              {t('collaborators')}
+            </span>
+            <h2 className="font-display text-ink text-[32px] leading-[1.05] font-light tracking-[-0.02em] md:text-[46px]">
+              {t('whoWePartnerWith')}
+            </h2>
           </div>
         </Reveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
-          {PARTNERS.map((card, i) => (
-            <SlideIn key={card.num} direction="u" delay={i % 2 === 0 ? 0 : 100} className="h-full">
-              <div className="flex flex-col h-full border border-[rgba(26,24,23,0.1)] p-8 md:p-10 transition-colors duration-500 hover:border-accent">
-                <span className="font-display font-light text-accent text-[26px] leading-none mb-5">{card.num}</span>
-                <h3 className="text-[17px] font-medium text-ink tracking-[0.01em] mb-3">{card.title}</h3>
-                <p className="text-[14px] text-ink-soft font-light leading-relaxed mb-8 flex-1">{card.body}</p>
-                <ul className="space-y-2.5 pt-6 border-t border-[rgba(26,24,23,0.08)]">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
+          {partners.map((card, i) => (
+            <SlideIn
+              key={card.num}
+              direction="u"
+              delay={i % 2 === 0 ? 0 : 100}
+              className="h-full"
+            >
+              <div className="hover:border-accent flex h-full flex-col border border-[rgba(26,24,23,0.1)] p-8 transition-colors duration-500 md:p-10">
+                <span className="font-display text-accent mb-5 text-[26px] leading-none font-light">
+                  {card.num}
+                </span>
+                <h3 className="text-ink mb-3 text-[17px] font-medium tracking-[0.01em]">
+                  {card.title}
+                </h3>
+                <p className="text-ink-soft mb-8 flex-1 text-[14px] leading-relaxed font-light">
+                  {card.body}
+                </p>
+                <ul className="space-y-2.5 border-t border-[rgba(26,24,23,0.08)] pt-6">
                   {card.bullets.map((b) => (
-                    <li key={b} className="flex items-start gap-3 text-[13px] text-ink-soft font-light">
-                      <span className="w-1 h-1 bg-accent rounded-full mt-[8px] flex-shrink-0" />
+                    <li
+                      key={b}
+                      className="text-ink-soft flex items-start gap-3 text-[13px] font-light"
+                    >
+                      <span className="bg-accent mt-[8px] h-1 w-1 flex-shrink-0 rounded-full" />
                       {b}
                     </li>
                   ))}
@@ -207,17 +273,27 @@ export function TradeContent() {
       <section className="space-y-12 md:space-y-16">
         <Reveal>
           <div className="text-center">
-            <span className="block text-[11px] tracking-[0.22em] uppercase text-accent mb-4">How We Work</span>
-            <h2 className="font-display font-light text-[32px] md:text-[46px] text-ink tracking-[-0.02em] leading-[1.05]">Our Process</h2>
+            <span className="text-accent mb-4 block text-[11px] tracking-[0.22em] uppercase">
+              {t('howWeWork')}
+            </span>
+            <h2 className="font-display text-ink text-[32px] leading-[1.05] font-light tracking-[-0.02em] md:text-[46px]">
+              {t('ourProcess')}
+            </h2>
           </div>
         </Reveal>
 
-        <div className="flex flex-col md:flex-row gap-y-10 md:gap-x-7 border-t border-[rgba(26,24,23,0.12)] pt-10 md:pt-12">
-          {PROCESS.map((item) => (
+        <div className="flex flex-col gap-y-10 border-t border-[rgba(26,24,23,0.12)] pt-10 md:flex-row md:gap-x-7 md:pt-12">
+          {processSteps.map((item) => (
             <div key={item.step} className="md:flex-1">
-              <span className="font-display font-light text-[34px] text-accent block leading-none mb-4">{item.step}</span>
-              <h4 className="text-[14px] font-medium text-ink mb-2 tracking-[0.01em]">{item.title}</h4>
-              <p className="text-[13px] text-ink-soft leading-relaxed font-light max-w-[26ch]">{item.desc}</p>
+              <span className="font-display text-accent mb-4 block text-[34px] leading-none font-light">
+                {item.step}
+              </span>
+              <h4 className="text-ink mb-2 text-[14px] font-medium tracking-[0.01em]">
+                {item.title}
+              </h4>
+              <p className="text-ink-soft max-w-[26ch] text-[13px] leading-relaxed font-light">
+                {item.desc}
+              </p>
             </div>
           ))}
         </div>
@@ -225,85 +301,263 @@ export function TradeContent() {
 
       {/* 5. Markets we supply ────────────────────────────────── */}
       <SlideIn direction="u">
-        <div className="text-center border-y border-[rgba(26,24,23,0.1)] py-14 md:py-16">
-          <span className="block text-[10px] tracking-[0.26em] uppercase text-ink-soft mb-5">Global Logistics</span>
-          <h3 className="font-display font-light text-[26px] md:text-[34px] text-ink tracking-[-0.02em] mb-7">Markets We Supply</h3>
-          <p className="text-[12.5px] md:text-[13.5px] tracking-[0.14em] uppercase text-ink-soft leading-[2] max-w-[60ch] mx-auto">
-            {MARKETS.map((m, i) => (
-              <span key={m}>
-                {m}
-                {i < MARKETS.length - 1 && <span className="text-accent mx-2.5" aria-hidden="true">·</span>}
-              </span>
-            ))}
-            <span className="text-accent mx-2.5" aria-hidden="true">·</span>
-            <span className="italic lowercase tracking-normal font-display text-[16px] md:text-[18px] text-ink-soft normal-case">and more</span>
-          </p>
+        <div className="overflow-hidden border-y border-[rgba(26,24,23,0.1)] py-14 text-center md:py-16">
+          <span className="text-ink-soft mb-5 block text-[10px] tracking-[0.26em] uppercase">
+            {t('globalLogistics')}
+          </span>
+          <h3 className="font-display text-ink mb-12 text-[26px] font-light tracking-[-0.02em] md:text-[34px]">
+            {t('marketsWeSupply')}
+          </h3>
+
+          <style>{`
+            @keyframes marquee-markets {
+              0% { transform: translateX(0); }
+              100% { transform: translateX(-50%); }
+            }
+            .marquee-markets-container {
+              display: flex;
+              width: max-content;
+              animation: marquee-markets 40s linear infinite;
+            }
+            .marquee-markets-container:hover {
+              animation-play-state: paused;
+            }
+          `}</style>
+          <div
+            className="relative w-full overflow-hidden"
+            style={{
+              maskImage:
+                'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
+            }}
+          >
+            <div className="marquee-markets-container flex items-center gap-12 px-6 md:gap-24">
+              {[...Array(2)].map((_, i) => (
+                <React.Fragment key={i}>
+                  <Image
+                    src="/Markets We Supply/Group-1.svg"
+                    alt="Market"
+                    width={100}
+                    height={40}
+                    className="h-8 w-auto object-contain opacity-80 md:h-12"
+                  />
+                  <Image
+                    src="/Markets We Supply/singapore.svg"
+                    alt="Singapore"
+                    width={60}
+                    height={60}
+                    className="h-4 w-auto object-contain opacity-80 md:h-6"
+                  />
+                  <Image
+                    src="/Markets We Supply/Group-2.svg"
+                    alt="Market"
+                    width={100}
+                    height={40}
+                    className="h-8 w-auto object-contain opacity-80 md:h-12"
+                  />
+                  <Image
+                    src="/Markets We Supply/germany.svg"
+                    alt="Germany"
+                    width={60}
+                    height={60}
+                    className="h-4 w-auto object-contain opacity-80 md:h-6"
+                  />
+                  <Image
+                    src="/Markets We Supply/Group-3.svg"
+                    alt="Market"
+                    width={100}
+                    height={40}
+                    className="h-8 w-auto object-contain opacity-80 md:h-12"
+                  />
+                  <Image
+                    src="/Markets We Supply/dubai.svg"
+                    alt="Dubai"
+                    width={100}
+                    height={40}
+                    className="h-4 w-auto object-contain opacity-80 md:h-6"
+                  />
+                  <Image
+                    src="/Markets We Supply/Group-4.svg"
+                    alt="Market"
+                    width={100}
+                    height={40}
+                    className="h-8 w-auto object-contain opacity-80 md:h-12"
+                  />
+                  <Image
+                    src="/Markets We Supply/turkey.svg"
+                    alt="Turkey"
+                    width={100}
+                    height={40}
+                    className="h-4 w-auto object-contain opacity-80 md:h-6"
+                  />
+                  <Image
+                    src="/Markets We Supply/Group.svg"
+                    alt="Market"
+                    width={100}
+                    height={40}
+                    className="h-8 w-auto object-contain opacity-80 md:h-12"
+                  />
+                  <Image
+                    src="/Markets We Supply/USA.svg"
+                    alt="USA"
+                    width={100}
+                    height={40}
+                    className="h-4 w-auto object-contain opacity-80 md:h-6"
+                  />
+                  <Image
+                    src="/Markets We Supply/Vector.svg"
+                    alt="Market"
+                    width={100}
+                    height={40}
+                    className="h-8 w-auto object-contain opacity-80 md:h-12"
+                  />
+                  <Image
+                    src="/Markets We Supply/canada.svg"
+                    alt="Canada"
+                    width={100}
+                    height={40}
+                    className="h-4 w-auto object-contain opacity-80 md:h-6"
+                  />
+                  <Image
+                    src="/Markets We Supply/moscow.svg"
+                    alt="Moscow"
+                    width={100}
+                    height={40}
+                    className="h-8 w-auto object-contain opacity-80 md:h-12"
+                  />
+                  <Image
+                    src="/Markets We Supply/russia.svg"
+                    alt="Russia"
+                    width={100}
+                    height={40}
+                    className="h-4 w-auto object-contain opacity-80 md:h-6"
+                  />
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
         </div>
       </SlideIn>
 
       {/* 6. Submit query form ────────────────────────────────── */}
-      <div id="query-form" className="inquiry mb-10 md:mb-10" style={{ padding: 0 }}>
+      <div
+        id="query-form"
+        className="inquiry mb-10 md:mb-10"
+        style={{ padding: 0 }}
+      >
         {submitted ? (
-          <div className="inquiry-form" role="status" aria-live="polite" style={{ textAlign: 'center' }}>
-            <h2>Received.</h2>
+          <div
+            className="inquiry-form"
+            role="status"
+            aria-live="polite"
+            style={{ textAlign: 'center' }}
+          >
+            <h2>{t('received')}</h2>
             <p style={{ marginTop: '24px', color: 'var(--ink-soft)' }}>
-              Thank you for starting a B2B inquiry. Our trade team in Jaipur will review your
-              specifications and contact you within one business day.
+              {t('successMessage')}
             </p>
           </div>
         ) : (
           <form className="inquiry-form" onSubmit={handleSubmit} noValidate>
             <h2>
-              Submit <span className="it">Query</span>
+              {t('submitQuery').split(' ')[0]}{' '}
+              <span className="it">{t('submitQuery').split(' ')[1]}</span>
             </h2>
 
             <div className="row-2">
               <div className="field">
-                <label htmlFor="name">Full Name *</label>
-                <input id="name" type="text" placeholder="e.g. Salim Khan" value={formData.name} onChange={(e) => set('name', e.target.value)} style={inputBorder('name')} />
+                <label htmlFor="name">{t('fullName')}</label>
+                <input
+                  id="name"
+                  type="text"
+                  placeholder={t('fullNamePlaceholder')}
+                  value={formData.name}
+                  onChange={(e) => set('name', e.target.value)}
+                  style={inputBorder('name')}
+                />
                 {errors.name && <span style={errStyle}>{errors.name}</span>}
               </div>
               <div className="field">
-                <label htmlFor="company">Company *</label>
-                <input id="company" type="text" placeholder="e.g. Khan Designs" value={formData.company} onChange={(e) => set('company', e.target.value)} style={inputBorder('company')} />
-                {errors.company && <span style={errStyle}>{errors.company}</span>}
+                <label htmlFor="company">{t('company')}</label>
+                <input
+                  id="company"
+                  type="text"
+                  placeholder={t('companyPlaceholder')}
+                  value={formData.company}
+                  onChange={(e) => set('company', e.target.value)}
+                  style={inputBorder('company')}
+                />
+                {errors.company && (
+                  <span style={errStyle}>{errors.company}</span>
+                )}
               </div>
             </div>
 
             <div className="row-2">
               <div className="field">
-                <label htmlFor="designation">Designation *</label>
-                <input id="designation" type="text" placeholder="e.g. Lead Designer" value={formData.designation} onChange={(e) => set('designation', e.target.value)} style={inputBorder('designation')} />
-                {errors.designation && <span style={errStyle}>{errors.designation}</span>}
+                <label htmlFor="designation">{t('designation')}</label>
+                <input
+                  id="designation"
+                  type="text"
+                  placeholder={t('designationPlaceholder')}
+                  value={formData.designation}
+                  onChange={(e) => set('designation', e.target.value)}
+                  style={inputBorder('designation')}
+                />
+                {errors.designation && (
+                  <span style={errStyle}>{errors.designation}</span>
+                )}
               </div>
               <div className="field">
-                <label htmlFor="country">Country *</label>
-                <input id="country" type="text" placeholder="e.g. United Kingdom" value={formData.country} onChange={(e) => set('country', e.target.value)} style={inputBorder('country')} />
-                {errors.country && <span style={errStyle}>{errors.country}</span>}
+                <label htmlFor="country">{t('country')}</label>
+                <input
+                  id="country"
+                  type="text"
+                  placeholder={t('countryPlaceholder')}
+                  value={formData.country}
+                  onChange={(e) => set('country', e.target.value)}
+                  style={inputBorder('country')}
+                />
+                {errors.country && (
+                  <span style={errStyle}>{errors.country}</span>
+                )}
               </div>
             </div>
 
             <div className="row-2">
               <div className="field">
-                <label htmlFor="email">Email *</label>
-                <input id="email" type="email" placeholder="e.g. design@studio.com" value={formData.email} onChange={(e) => set('email', e.target.value)} style={inputBorder('email')} />
+                <label htmlFor="email">{t('email')}</label>
+                <input
+                  id="email"
+                  type="email"
+                  placeholder={t('emailPlaceholder')}
+                  value={formData.email}
+                  onChange={(e) => set('email', e.target.value)}
+                  style={inputBorder('email')}
+                />
                 {errors.email && <span style={errStyle}>{errors.email}</span>}
               </div>
               <div className="field">
-                <label htmlFor="phone">Phone *</label>
-                <input id="phone" type="tel" placeholder="e.g. +44 20 7946 0000" value={formData.phone} onChange={(e) => set('phone', e.target.value)} style={inputBorder('phone')} />
+                <label htmlFor="phone">{t('phone')}</label>
+                <input
+                  id="phone"
+                  type="tel"
+                  placeholder={t('phonePlaceholder')}
+                  value={formData.phone}
+                  onChange={(e) => set('phone', e.target.value)}
+                  style={inputBorder('phone')}
+                />
                 {errors.phone && <span style={errStyle}>{errors.phone}</span>}
               </div>
             </div>
 
             {/* I am a… — pill radios */}
             <div className="field">
-              <label>I am a… *</label>
+              <label>{t('iAmA')}</label>
               <div className="flex flex-wrap gap-3 pt-2">
                 {PARTNER_TYPES.map((opt) => {
                   const isSelected = formData.partnerType === opt;
                   return (
-                    <label key={opt} className="cursor-pointer group">
+                    <label key={opt} className="group cursor-pointer">
                       <input
                         type="radio"
                         name="partnerType"
@@ -312,40 +566,46 @@ export function TradeContent() {
                         onChange={() => set('partnerType', opt)}
                         className="peer sr-only"
                       />
-                      <span className={`block px-5 py-2.5 rounded-full text-[13px] font-light transition-all duration-300 border ${
-                        isSelected 
-                          ? 'bg-accent border-accent text-white' 
-                          : 'bg-transparent border-[rgba(26,24,23,0.15)] text-ink-soft group-hover:border-[rgba(26,24,23,0.3)] group-hover:text-ink'
-                      }`}>
-                        {opt}
+                      <span
+                        className={`block rounded-full border px-5 py-2.5 text-[13px] font-light transition-all duration-300 ${
+                          isSelected
+                            ? 'bg-accent border-accent text-white'
+                            : 'text-ink-soft group-hover:text-ink border-[rgba(26,24,23,0.15)] bg-transparent group-hover:border-[rgba(26,24,23,0.3)]'
+                        }`}
+                      >
+                        {t(`partnerTypes.${opt}`)}
                       </span>
                     </label>
                   );
                 })}
               </div>
-              {errors.partnerType && <span style={errStyle}>{errors.partnerType}</span>}
+              {errors.partnerType && (
+                <span style={errStyle}>{errors.partnerType}</span>
+              )}
             </div>
 
             {/* I am interested in… — pill checkboxes */}
             <div className="field">
-              <label>I am interested in…</label>
+              <label>{t('iAmInterestedIn')}</label>
               <div className="flex flex-wrap gap-3 pt-2">
                 {INTERESTS.map((opt) => {
                   const isSelected = formData.interests.includes(opt);
                   return (
-                    <label key={opt} className="cursor-pointer group">
+                    <label key={opt} className="group cursor-pointer">
                       <input
                         type="checkbox"
                         checked={isSelected}
                         onChange={() => handleInterestChange(opt)}
                         className="peer sr-only"
                       />
-                      <span className={`block px-5 py-2.5 rounded-full text-[13px] font-light transition-all duration-300 border ${
-                        isSelected 
-                          ? 'bg-accent border-accent text-white' 
-                          : 'bg-transparent border-[rgba(26,24,23,0.15)] text-ink-soft group-hover:border-[rgba(26,24,23,0.3)] group-hover:text-ink'
-                      }`}>
-                        {opt}
+                      <span
+                        className={`block rounded-full border px-5 py-2.5 text-[13px] font-light transition-all duration-300 ${
+                          isSelected
+                            ? 'bg-accent border-accent text-white'
+                            : 'text-ink-soft group-hover:text-ink border-[rgba(26,24,23,0.15)] bg-transparent group-hover:border-[rgba(26,24,23,0.3)]'
+                        }`}
+                      >
+                        {t(`interests.${opt}`)}
                       </span>
                     </label>
                   );
@@ -354,20 +614,37 @@ export function TradeContent() {
             </div>
 
             <div className="field" style={{ marginBottom: 0 }}>
-              <label htmlFor="requirement">Tell us about your requirement</label>
+              <label htmlFor="requirement">
+                {t('requirement')}
+              </label>
               <textarea
                 id="requirement"
-                placeholder="Estimated quantities, timelines, sizing, construction…"
+                placeholder={t('requirementPlaceholder')}
                 value={formData.requirement}
                 onChange={(e) => set('requirement', e.target.value)}
               />
             </div>
 
             <div className="mt-14 flex justify-center">
-              <button className="btn-send magnetic" type="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Sending…' : 'Submit Query'}
-                <svg width="16" height="10" viewBox="0 0 16 10" fill="none" aria-hidden="true">
-                  <path d="M1 5H15M15 5L11 1M15 5L11 9" stroke="currentColor" strokeWidth="1" />
+              <button
+                className="btn-send magnetic"
+                type="submit"
+                disabled={isSubmitting}
+                suppressHydrationWarning
+              >
+                {isSubmitting ? t('sending') : t('submitQuery')}
+                <svg
+                  width="16"
+                  height="10"
+                  viewBox="0 0 16 10"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M1 5H15M15 5L11 1M15 5L11 9"
+                    stroke="currentColor"
+                    strokeWidth="1"
+                  />
                 </svg>
               </button>
             </div>
@@ -377,47 +654,54 @@ export function TradeContent() {
 
       {/* 7. Sample kit ───────────────────────────────────────── */}
       <SlideIn direction="u">
-        <div className="bg-accent text-white flex flex-col lg:flex-row lg:items-stretch">
+        <div className="bg-accent flex flex-col text-white lg:flex-row lg:items-stretch">
           <div className="flex-1 p-10 md:p-14 lg:p-16">
-            <span className="block text-[11px] tracking-[0.22em] uppercase text-white/55 mb-6">Carpetstory Sample Kit</span>
-            <h2 className="font-display font-light text-[30px] md:text-[42px] leading-[1.08] mb-6">
-              Not ready to order yet?<br />
-              <span className="italic">Start with a sample.</span>
+            <span className="mb-6 block text-[11px] tracking-[0.22em] text-white/55 uppercase">
+              {t('sampleKitDesc').split(' — ')[0] || t('eyebrow')}
+            </span>
+            <h2 className="font-display mb-6 text-[30px] leading-[1.08] font-light md:text-[42px]">
+              {t('notReady')}
+              <br />
+              <span className="italic">{t('startWithSample')}</span>
             </h2>
-            <p className="text-[14.5px] text-white/80 font-light leading-relaxed max-w-[52ch] mb-8">
-              Before you specify, before you order, before you commit — hold the material, feel the
-              construction, understand the difference. Our consultant curates the right swatches
-              personally, based on your requirement. No image does it justice.
+            <p className="mb-8 max-w-[52ch] text-[14.5px] leading-relaxed font-light text-white/80">
+              {t('sampleKitDesc')}
             </p>
             <ul className="space-y-3">
               {[
-                'Curated to your brief by a Carpetstory consultant',
-                'Shipped to your door worldwide',
-                '50% of the kit value redeemable on your first B2B order',
+                t('sampleKitBullet1'),
+                t('sampleKitBullet2'),
+                t('sampleKitBullet3'),
               ].map((b) => (
-                <li key={b} className="flex items-start gap-3 text-[13.5px] text-white/85 font-light">
-                  <span className="w-1 h-1 bg-white/70 rounded-full mt-[8px] flex-shrink-0" />
+                <li
+                  key={b}
+                  className="flex items-start gap-3 text-[13.5px] font-light text-white/85"
+                >
+                  <span className="mt-[8px] h-1 w-1 flex-shrink-0 rounded-full bg-white/70" />
                   {b}
                 </li>
               ))}
             </ul>
           </div>
 
-          <div className="lg:w-[320px] flex-shrink-0 border-t lg:border-t-0 lg:border-l border-white/15 p-10 md:p-12 flex flex-col items-center justify-center text-center gap-7">
+          <div className="flex flex-shrink-0 flex-col items-center justify-center gap-7 border-t border-white/15 p-10 text-center md:p-12 lg:w-[320px] lg:border-t-0 lg:border-l">
             <div>
-              <span className="text-[10px] text-white/55 tracking-[0.2em] uppercase block mb-2">Starting from</span>
-              <div className="font-display text-[44px] font-light leading-none">$99</div>
+              <span className="mb-2 block text-[10px] tracking-[0.2em] text-white/55 uppercase">
+                {t('startingFrom')}
+              </span>
+              <div className="font-display text-[44px] leading-none font-light">
+                $99
+              </div>
             </div>
             <button
               onClick={() => scrollToForm(true)}
-              className="w-full px-8 py-4 bg-white text-[#6E1F23] text-[11px] uppercase tracking-[0.18em] font-medium hover:bg-white/85 transition-colors"
+              className="w-full bg-white px-8 py-4 text-[11px] font-medium tracking-[0.18em] text-[#6E1F23] uppercase transition-colors hover:bg-white/85"
             >
-              Request Your Sample Kit
+              {t('requestSampleKit')}
             </button>
           </div>
         </div>
       </SlideIn>
-
     </div>
   );
 }

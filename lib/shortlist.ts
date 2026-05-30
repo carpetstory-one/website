@@ -9,11 +9,7 @@
  * non-existent rugs into the UI.
  */
 
-import {
-  getRugBySlug,
-  type Collection,
-  type Rug,
-} from '@/lib/collections';
+import { getRugBySlug, type Collection, type Rug } from '@/lib/collections';
 
 export const SHORTLIST_STORAGE_KEY = 'carpetstory_shortlist';
 export const SHORTLIST_PARAM = 'shortlist';
@@ -92,7 +88,9 @@ export function writeStoredShortlist(items: ShortlistItem[]): void {
 export type ResolvedShortlistItem = { collection: Collection; rug: Rug };
 
 /** Resolve slug pairs into full data for rendering. Order preserved. */
-export function resolveShortlist(items: ShortlistItem[]): ResolvedShortlistItem[] {
+export function resolveShortlist(
+  items: ShortlistItem[]
+): ResolvedShortlistItem[] {
   const out: ResolvedShortlistItem[] = [];
   for (const item of items) {
     const found = getRugBySlug(item.collectionSlug, item.rugSlug);

@@ -40,7 +40,10 @@ export function CookieConsent() {
       {/* GA4 — only if accepted */}
       {consent === 'accepted' && gaId && (
         <>
-          <Script src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} strategy="afterInteractive" />
+          <Script
+            src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+            strategy="afterInteractive"
+          />
           <Script id="ga4-init" strategy="afterInteractive">
             {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${gaId}');`}
           </Script>
@@ -68,7 +71,7 @@ export function CookieConsent() {
             bottom: '24px',
             left: '50%',
             transform: 'translateX(-50%)',
-            zIndex: 9999,
+            zIndex: 'var(--z-banner)',
             background: 'var(--ink)',
             color: 'var(--canvas)',
             padding: '20px 28px',
@@ -85,18 +88,45 @@ export function CookieConsent() {
         >
           <p style={{ margin: 0, flex: '1 1 200px', opacity: 0.8 }}>
             We use analytics to understand how visitors experience the site.{' '}
-            <a href="/privacy" style={{ color: 'var(--canvas)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>Privacy</a>
+            <a
+              href="/privacy"
+              style={{
+                color: 'var(--canvas)',
+                textDecoration: 'underline',
+                textUnderlineOffset: '2px',
+              }}
+            >
+              Privacy
+            </a>
           </p>
           <div style={{ display: 'flex', gap: '12px', flexShrink: 0 }}>
             <button
               onClick={decline}
-              style={{ background: 'none', border: '1px solid rgba(255,255,255,0.2)', color: 'var(--canvas)', padding: '8px 16px', fontSize: '12px', letterSpacing: '0.06em', cursor: 'pointer', opacity: 0.7 }}
+              style={{
+                background: 'none',
+                border: '1px solid rgba(255,255,255,0.2)',
+                color: 'var(--canvas)',
+                padding: '8px 16px',
+                fontSize: '12px',
+                letterSpacing: '0.06em',
+                cursor: 'pointer',
+                opacity: 0.7,
+              }}
             >
               Decline
             </button>
             <button
               onClick={accept}
-              style={{ background: 'var(--canvas)', border: 'none', color: 'var(--ink)', padding: '8px 16px', fontSize: '12px', letterSpacing: '0.06em', cursor: 'pointer', fontWeight: 500 }}
+              style={{
+                background: 'var(--canvas)',
+                border: 'none',
+                color: 'var(--ink)',
+                padding: '8px 16px',
+                fontSize: '12px',
+                letterSpacing: '0.06em',
+                cursor: 'pointer',
+                fontWeight: 500,
+              }}
             >
               Accept
             </button>

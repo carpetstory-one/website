@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import Image from 'next/image';
 import { motion } from 'motion/react';
@@ -51,7 +51,7 @@ export function World() {
           variants={slideUp}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
+          viewport={{ once: true, margin: '-80px' }}
           custom={0}
         >
           {t('label')}
@@ -61,7 +61,7 @@ export function World() {
           variants={slideUp}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
+          viewport={{ once: true, margin: '-80px' }}
           custom={0.15}
         >
           {t('headline')}
@@ -71,12 +71,9 @@ export function World() {
       <div className="world-marquee-wrapper">
         <div className="world-marquee-track">
           {duplicatedItems.map((item, index) => (
-            <figure
-              key={index}
-              className="world-item flex-shrink-0"
-            >
+            <figure key={index} className="world-item flex-shrink-0">
               <div
-                className={`ph ${item.cls} w-full aspect-[16/10] mb-3 md:mb-4 group relative overflow-hidden`}
+                className={`ph ${item.cls} group relative mb-3 aspect-[16/10] w-full overflow-hidden md:mb-4`}
                 style={{ backgroundColor: 'var(--canvas-warmer)' }}
               >
                 <Image
@@ -87,10 +84,10 @@ export function World() {
                   sizes="(max-width: 768px) 80vw, 560px"
                   placeholder="blur"
                   blurDataURL={blurDataURL()}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
                 />
               </div>
-              <figcaption className="caption text-[13px] text-ink-soft tracking-[0.02em]">
+              <figcaption className="caption text-ink-soft text-[13px] tracking-[0.02em]">
                 {item.caption}
               </figcaption>
             </figure>

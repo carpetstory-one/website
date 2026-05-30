@@ -4,6 +4,7 @@ import { Heritage } from '@/components/editorial/Heritage';
 import { Letter } from '@/components/editorial/Letter';
 import { Metadata } from 'next';
 import { generatePageMetadata, breadcrumbSchema, jsonLd } from '@/lib/seo';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -11,10 +12,11 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations({ locale, namespace: 'HeritagePage' });
   return generatePageMetadata({
-    title: 'Heritage — Four Generations in Jaipur',
-    description:
-      'Founded 1924. Four generations of master weavers in Jaipur — natural dyes, hand-spun wool, the Persian knot. The same madder red since the beginning.',
+    title: t('metaTitle'),
+    description: t('metaDescription'),
     path: '/heritage',
     locale,
     keywords: [
@@ -28,13 +30,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function HeritagePage({ params }: Props) {
   const { locale } = await params;
+  setRequestLocale(locale);
+
+  const tCommon = await getTranslations('Common');
+  const tHeritage = await getTranslations('HeritagePage');
+
   const breadcrumb = breadcrumbSchema([
-    { name: 'Home', url: `/${locale}` },
-    { name: 'Heritage', url: `/${locale}/heritage` },
+    { name: tCommon('home'), url: `/${locale}` },
+    { name: tHeritage('title'), url: `/${locale}/heritage` },
   ]);
 
   return (
-    <div className="relative bg-canvas min-h-screen flex flex-col">
+    <div className="bg-canvas relative flex min-h-screen flex-col">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumb) }}

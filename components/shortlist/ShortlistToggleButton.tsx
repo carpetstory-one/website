@@ -45,10 +45,10 @@ export function ShortlistToggleButton({
         aria-label={label}
         onClick={handleClick}
         className={
-          'flex w-full items-center justify-center gap-2 border px-7 py-4 text-[13px] uppercase tracking-[0.12em] transition-colors duration-300 ' +
+          'flex w-full items-center justify-center gap-2 border px-7 py-4 text-[13px] tracking-[0.12em] uppercase transition-colors duration-300 ' +
           (active
             ? 'border-accent bg-accent text-[var(--canvas)]'
-            : 'border-ink bg-transparent text-ink hover:bg-ink hover:text-[var(--canvas)]') +
+            : 'border-ink text-ink hover:bg-ink bg-transparent hover:text-[var(--canvas)]') +
           (className ? ' ' + className : '')
         }
       >
@@ -72,7 +72,7 @@ export function ShortlistToggleButton({
       whileHover={{ scale: 1.1 }}
       style={{ backgroundColor: 'rgba(237,229,212,0.85)' }}
       className={
-        'absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full text-ink backdrop-blur-sm transition-colors hover:text-accent' +
+        'text-ink hover:text-accent absolute top-3 right-3 z-10 flex h-9 w-9 items-center justify-center rounded-full backdrop-blur-sm transition-colors' +
         (className ? ' ' + className : '')
       }
     >

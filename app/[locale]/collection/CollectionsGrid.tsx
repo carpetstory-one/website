@@ -1,14 +1,33 @@
 'use client';
 
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useCallback,
+} from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'motion/react';
-import { useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { blurDataURL } from '@/lib/blur';
 import { collections } from '@/lib/collections';
 import { analytics } from '@/lib/analytics';
-import { replaceUrlParam, debounce } from '@/lib/url';
+import { debounce } from '@/lib/url';
+import { RugFilters } from '@/components/rugs/RugFilters';
+import {
+  getAllRugs,
+  filterAndSort,
+  emptyFilters,
+  hasActiveFilters,
+  parseFiltersFromParams,
+  serializeFilters,
+  priceBounds,
+  availableMaterials,
+  availableMakes,
+  type RugFilters as Filters,
+} from '@/lib/rugs';
 
 const slideUp = {
   hidden: { opacity: 0, y: 60 },
@@ -19,82 +38,84 @@ const slideUp = {
   }),
 };
 
-const VALID_SLUGS = new Set(collections.map((c) => c.slug));
 const ORDER = new Map(collections.map((c, i) => [c.slug, i]));
 
-function parseFilter(raw: string | null): string[] {
-  if (!raw) return [];
-  return Array.from(
-    new Set(
-      raw
-        .split(',')
-        .map((s) => s.trim().toLowerCase())
-        .filter((s) => VALID_SLUGS.has(s))
-    )
-  );
-}
-
-function sameSet(a: string[], b: string[]): boolean {
-  if (a.length !== b.length) return false;
-  const set = new Set(a);
-  return b.every((x) => set.has(x));
-}
-
 export function CollectionsGrid() {
-  const searchParams = useSearchParams();
+  const t = useTranslations('CollectionsPage');
 
-  // Local state drives instant UI; the URL write is debounced (150ms) and
-  // shallow (history.replaceState) so chip clicks never re-render the server
-  // route or flood the back-button history.
-  const [active, setActive] = useState<string[]>(() =>
-    parseFilter(searchParams.get('filter'))
-  );
+  const [filters, setFilters] = useState<Filters>(() => emptyFilters());
 
-  // Adopt URL changes coming from outside our own writes (back/forward).
-  // Our debounced write resolves to the same value, so this is a no-op then.
+  // Hydrate from URL on mount + adopt back/forward popstate
   useEffect(() => {
-    const fromUrl = parseFilter(searchParams.get('filter'));
-    setActive((prev) => (sameSet(prev, fromUrl) ? prev : fromUrl));
-  }, [searchParams]);
+    setFilters(
+      parseFiltersFromParams(new URLSearchParams(window.location.search))
+    );
+    const onPop = () =>
+      setFilters(
+        parseFiltersFromParams(new URLSearchParams(window.location.search))
+      );
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
 
   const writeUrl = useRef(
-    debounce((value: string) => replaceUrlParam('filter', value || null), 150)
+    debounce((f: Filters) => {
+      if (typeof window === 'undefined') return;
+      const url = new URL(window.location.href);
+      const ALL_FILTER_KEYS = [
+        'collection',
+        'material',
+        'make',
+        'size',
+        'color',
+        'price',
+        'sort',
+      ];
+      ALL_FILTER_KEYS.forEach((k) => url.searchParams.delete(k));
+      const qs = new URLSearchParams(serializeFilters(f));
+      qs.forEach((v, k) => url.searchParams.set(k, v));
+      window.history.replaceState(window.history.state, '', url);
+    }, 150)
   ).current;
   useEffect(() => () => writeUrl.cancel(), [writeUrl]);
 
-  const setFilters = (next: string[]) => {
-    setActive(next);
-    writeUrl(next.join(','));
-  };
-
-  const toggleChip = (slug: string) => {
-    const isActive = active.includes(slug);
-    analytics.filterChipClicked(slug, isActive ? 'remove' : 'add');
-    setFilters(isActive ? active.filter((s) => s !== slug) : [...active, slug]);
-  };
-
-  const selectAll = () => {
-    if (active.length > 0) analytics.filterCleared(active.length);
-    setFilters([]);
-  };
-
-  const visible = useMemo(
-    () =>
-      active.length === 0
-        ? collections
-        : collections.filter((c) => active.includes(c.slug)),
-    [active]
+  const update = useCallback(
+    (patch: Partial<Filters>) => {
+      setFilters((prev) => {
+        const next = { ...prev, ...patch };
+        writeUrl(next);
+        return next;
+      });
+    },
+    [writeUrl]
   );
 
-  const scrollable = collections.length > 6;
+  const clearAll = useCallback(() => {
+    const cleared = emptyFilters();
+    setFilters(cleared);
+    writeUrl(cleared);
+  }, [writeUrl]);
+
+  const allRugs = useMemo(() => getAllRugs(), []);
+  const bounds = useMemo(() => priceBounds(), []);
+  const materials = useMemo(() => availableMaterials(), []);
+  const makes = useMemo(() => availableMakes(), []);
+
+  const visible = useMemo(() => {
+    if (!hasActiveFilters(filters)) return collections;
+    return collections.filter((col) => {
+      const colRugs = allRugs.filter((r) => r.collectionSlug === col.slug);
+      const matchingRugs = filterAndSort(colRugs, filters);
+      return matchingRugs.length > 0;
+    });
+  }, [filters, allRugs]);
 
   return (
-    <main className="flex-1 pt-28 sm:pt-36 pb-16 sm:pb-24 px-5 sm:px-8 lg:px-12">
-      <div className="max-w-[1400px] mx-auto">
-
+    <main className="flex-1 px-5 pt-28 pb-16 sm:px-8 sm:pt-36 sm:pb-24 lg:px-12">
+      <div className="mx-auto max-w-[1400px]">
         {/* Page header */}
         <motion.header
-          className="mb-10 sm:mb-12 text-center max-w-2xl mx-auto"
+          className="mx-auto mb-10 max-w-2xl text-center sm:mb-12"
           variants={slideUp}
           initial="hidden"
           whileInView="visible"
@@ -111,7 +132,7 @@ export function CollectionsGrid() {
               marginBottom: '20px',
             }}
           >
-            The Collections
+            {t('eyebrow')}
           </span>
           <h1
             style={{
@@ -124,47 +145,46 @@ export function CollectionsGrid() {
               marginBottom: '22px',
             }}
           >
-            Twelve houses. One workshop.
+            {t('headline')}
           </h1>
-          <p style={{ fontSize: '16px', lineHeight: 1.65, color: 'var(--ink-soft)', maxWidth: '38ch', margin: '0 auto' }}>
-            From Persian archive patterns to Moroccan long pile, every collection is woven
-            in Jaipur to the same standard of construction.
+          <p
+            style={{
+              fontSize: '16px',
+              lineHeight: 1.65,
+              color: 'var(--ink-soft)',
+              maxWidth: '38ch',
+              margin: '0 auto',
+            }}
+          >
+            {t('description')}
           </p>
         </motion.header>
 
-        {/* Filter bar */}
-        <div
-          role="group"
-          aria-label="Filter collections"
-          className={
-            'mb-10 flex gap-2 pb-1 ' +
-            (scrollable
-              ? 'snap-x overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] sm:flex-wrap sm:justify-center sm:overflow-visible'
-              : 'flex-wrap justify-center')
-          }
-        >
-          <FilterChip label="All" active={active.length === 0} onClick={selectAll} />
-          {collections.map((c) => (
-            <FilterChip
-              key={c.slug}
-              label={c.name}
-              active={active.includes(c.slug)}
-              onClick={() => toggleChip(c.slug)}
-            />
-          ))}
+        {/* Sticky filter bar */}
+        <div className="rugx-filterwrap mb-10">
+          <RugFilters
+            filters={filters}
+            update={update}
+            matchingCount={visible.length}
+            onClearAll={clearAll}
+            bounds={bounds}
+            materials={materials}
+            makes={makes}
+            hideFacets={['collection', 'sort']}
+          />
         </div>
 
         {/* Grid / empty state */}
         {visible.length === 0 ? (
-          <div className="text-center py-20" role="status">
+          <div className="py-20 text-center" role="status">
             <p style={{ color: 'var(--ink-soft)', fontSize: '15px' }}>
-              No collections match this filter.
+              {t('noCollections')}
             </p>
             <button
-              onClick={selectAll}
-              className="mt-3 text-[12px] uppercase tracking-[0.16em] text-accent underline-offset-4 hover:underline"
+              onClick={clearAll}
+              className="text-accent mt-3 text-[12px] tracking-[0.16em] uppercase underline-offset-4 hover:underline"
             >
-              Clear filter
+              {t('clearFilters')}
             </button>
           </div>
         ) : (
@@ -195,11 +215,18 @@ export function CollectionsGrid() {
                       aria-label={`${col.name} — ${col.tagline}`}
                       className="feat-link"
                       onClick={() => {
-                        if (typeof window !== 'undefined' && (window as any).gtag) {
-                          (window as any).gtag('event', 'collection_card_clicked', {
-                            collection_slug: col.slug,
-                            source: 'index',
-                          });
+                        if (
+                          typeof window !== 'undefined' &&
+                          (window as any).gtag
+                        ) {
+                          (window as any).gtag(
+                              'event',
+                              'collection_card_clicked',
+                              {
+                                collection_slug: col.slug,
+                                source: 'index',
+                              }
+                          );
                         }
                       }}
                     >
@@ -223,7 +250,9 @@ export function CollectionsGrid() {
                         <span className="feat-eyebrow">{eyebrow}</span>
                         <h2 className="feat-name">{col.name}</h2>
                         <p className="feat-tag">{col.tagline}</p>
-                        <span className="feat-explore">Explore the collection →</span>
+                        <span className="feat-explore">
+                          {t('explore')}
+                        </span>
                       </div>
                     </Link>
                   </motion.article>
@@ -234,31 +263,5 @@ export function CollectionsGrid() {
         )}
       </div>
     </main>
-  );
-}
-
-function FilterChip({
-  label,
-  active,
-  onClick,
-}: {
-  label: string;
-  active: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      aria-pressed={active}
-      onClick={onClick}
-      className={
-        'shrink-0 snap-start whitespace-nowrap rounded-full border px-4 py-1.5 text-[11px] uppercase tracking-[0.16em] transition-colors duration-200 ' +
-        (active
-          ? 'border-accent bg-accent text-[var(--canvas)]'
-          : 'border-ink bg-transparent text-ink hover:border-accent')
-      }
-    >
-      {label}
-    </button>
   );
 }

@@ -38,10 +38,25 @@ const nextConfig = {
 
   async redirects() {
     // 301 redirects from retired piece slugs → /collection (safest fallback)
-    const retiredSlugs = ['khwab', 'saanjh', 'mehfil', 'shubh', 'naqsh', 'aaraam'];
+    const retiredSlugs = [
+      'khwab',
+      'saanjh',
+      'mehfil',
+      'shubh',
+      'naqsh',
+      'aaraam',
+    ];
     return retiredSlugs.flatMap((slug) => [
-      { source: `/collection/${slug}`, destination: '/collection', permanent: true },
-      { source: `/:locale/collection/${slug}`, destination: '/:locale/collection', permanent: true },
+      {
+        source: `/collection/${slug}`,
+        destination: '/collection',
+        permanent: true,
+      },
+      {
+        source: `/:locale/collection/${slug}`,
+        destination: '/:locale/collection',
+        permanent: true,
+      },
     ]);
   },
 
@@ -50,7 +65,10 @@ const nextConfig = {
       {
         source: '/videos/:path*',
         headers: [
-          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
         ],
       },
     ];

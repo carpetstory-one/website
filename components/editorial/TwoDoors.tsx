@@ -9,11 +9,11 @@ export function TwoDoors() {
   return (
     <section
       aria-label={t('tradeHeadline')}
-      className="py-0 flex flex-col md:flex-row h-auto md:h-screen min-h-[600px] relative z-10 border-b border-ink-faint"
+      className="border-ink-faint relative z-10 flex h-auto min-h-[600px] flex-col border-b py-0 md:h-screen md:flex-row"
     >
-      <div className="w-full md:w-1/2 p-8 md:p-12 lg:p-24 flex flex-col justify-center border-b md:border-b-0 md:border-r border-ink-faint bg-canvas group">
+      <div className="border-ink-faint bg-canvas group flex w-full flex-col justify-center border-b p-8 md:w-1/2 md:border-r md:border-b-0 md:p-12 lg:p-24">
         <SlideIn direction="u" delay={100}>
-          <h2 className="font-display text-[28px] sm:text-[32px] md:text-[48px] leading-[1.1] tracking-[-0.02em] font-light text-ink mb-6">
+          <h2 className="font-display text-ink mb-6 text-[28px] leading-[1.1] font-light tracking-[-0.02em] sm:text-[32px] md:text-[48px]">
             {t('tradeHeadline')}
           </h2>
           <p className="body-md text-ink-soft mb-12 max-w-sm">
@@ -21,17 +21,17 @@ export function TwoDoors() {
           </p>
           <Link
             href="/trade"
-            className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.16em] font-medium text-accent hover:text-accent-soft transition-colors min-h-[44px]"
+            className="text-accent hover:text-accent-soft inline-flex min-h-[44px] items-center gap-2 text-[12px] font-medium tracking-[0.16em] uppercase transition-colors"
           >
             {t('tradeCta')}
-            <span className="w-6 h-[1px] bg-current transition-all group-hover:w-10" />
+            <span className="h-[1px] w-6 bg-current transition-all group-hover:w-10" />
           </Link>
         </SlideIn>
       </div>
 
-      <div className="w-full md:w-1/2 p-8 md:p-12 lg:p-24 flex flex-col justify-center bg-canvas-warm group">
+      <div className="bg-canvas-warm group flex w-full flex-col justify-center p-8 md:w-1/2 md:p-12 lg:p-24">
         <SlideIn direction="u" delay={200}>
-          <h2 className="font-display text-[28px] sm:text-[32px] md:text-[48px] leading-[1.1] tracking-[-0.02em] font-light text-ink mb-6">
+          <h2 className="font-display text-ink mb-6 text-[28px] leading-[1.1] font-light tracking-[-0.02em] sm:text-[32px] md:text-[48px]">
             {t('commissionHeadline')}
           </h2>
           <p className="body-md text-ink-soft mb-12 max-w-sm">
@@ -41,9 +41,9 @@ export function TwoDoors() {
             href="https://wa.me/919876543210"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.16em] font-medium text-accent hover:text-accent-soft transition-colors min-h-[44px]"
+            className="text-accent hover:text-accent-soft inline-flex min-h-[44px] items-center gap-2 text-[12px] font-medium tracking-[0.16em] uppercase transition-colors"
           >
-            <MessageCircle className="w-4 h-4 fill-current" />
+            <MessageCircle className="h-4 w-4 fill-current" />
             {t('commissionCta')}
           </a>
         </SlideIn>

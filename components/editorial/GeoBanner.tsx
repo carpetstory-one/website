@@ -26,8 +26,9 @@ export async function GeoBanner({ locale }: { locale: string }) {
   if (!country) return null;
 
   // Find which locale this country prefers (if any), and skip if already on it.
-  const preferredLocale = (Object.entries(localeCountries) as Array<[Locale, string[]]>)
-    .find(([, countries]) => countries.includes(country))?.[0];
+  const preferredLocale = (
+    Object.entries(localeCountries) as Array<[Locale, string[]]>
+  ).find(([, countries]) => countries.includes(country))?.[0];
 
   if (!preferredLocale || preferredLocale === locale) return null;
 

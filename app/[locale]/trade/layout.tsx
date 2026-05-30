@@ -11,7 +11,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   return generatePageMetadata({
-    title: 'Source With Us Or Partner With Carpetstory',
+    title: 'Partner With Us — Trade & Manufacturing',
     description:
       'Carpetstory is a full spectrum carpet manufacturing and export house in Jaipur, partnering with designers, brands, importers, and showrooms globally.',
     path: '/trade',
@@ -27,10 +27,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function TradeLayout({ children }: Props) {
   return (
-    <div className="relative bg-canvas min-h-screen flex flex-col">
+    <div className="bg-canvas relative flex min-h-screen flex-col">
       <Nav />
 
-      <main className="flex-1 pt-28 sm:pt-32 pb-16 sm:pb-24 px-5 sm:px-7 lg:px-12 flex justify-center">
+      <main className="flex flex-1 justify-center px-5 pt-28 pb-16 sm:px-7 sm:pt-32 sm:pb-24 lg:px-12">
         <article className="w-full max-w-[1000px]">{children}</article>
       </main>
 

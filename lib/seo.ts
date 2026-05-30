@@ -6,8 +6,7 @@
 import type { Metadata } from 'next';
 import { routing } from '@/i18n/routing';
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || 'https://carpetstory.com';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://carpetstory.com';
 const SITE_NAME = 'Carpetstory';
 
 const OG_LOCALE: Record<string, string> = {
@@ -56,7 +55,8 @@ export function generatePageMetadata({
       `${SITE_URL}/${l}${cleanPath === '/' ? '' : cleanPath}`,
     ])
   );
-  languages['x-default'] = `${SITE_URL}/${routing.defaultLocale}${cleanPath === '/' ? '' : cleanPath}`;
+  languages['x-default'] =
+    `${SITE_URL}/${routing.defaultLocale}${cleanPath === '/' ? '' : cleanPath}`;
 
   return {
     title: truncatedTitle,
@@ -121,7 +121,7 @@ export const organizationSchema = {
   foundingDate: '2014',
   founder: {
     '@type': 'Person',
-    name: 'Aashrit Anand',
+    name: 'Ashrit Garg',
   },
   address: {
     '@type': 'PostalAddress',
@@ -193,9 +193,7 @@ export const localBusinessSchema = {
   sameAs: ['https://www.instagram.com/carpetstory'],
 };
 
-export function breadcrumbSchema(
-  items: Array<{ name: string; url: string }>
-) {
+export function breadcrumbSchema(items: Array<{ name: string; url: string }>) {
   return {
     '@type': 'BreadcrumbList',
     itemListElement: items.map((item, i) => ({
@@ -207,9 +205,7 @@ export function breadcrumbSchema(
   };
 }
 
-export function faqSchema(
-  items: Array<{ question: string; answer: string }>
-) {
+export function faqSchema(items: Array<{ question: string; answer: string }>) {
   return {
     '@type': 'FAQPage',
     mainEntity: items.map((item) => ({

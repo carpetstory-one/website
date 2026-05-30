@@ -36,8 +36,7 @@ export const testimonials: Testimonial[] = [
       'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&h=120&fit=crop&crop=faces',
   },
   {
-    quote:
-      "You don't buy a piece like this. You inherit it forward.",
+    quote: "You don't buy a piece like this. You inherit it forward.",
     name: 'Marcou & Vasilakis',
     role: 'Athens, Greece',
     avatar:

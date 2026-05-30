@@ -4,7 +4,9 @@
     "loading": "Wird geladen…",
     "close": "Schließen",
     "open": "Öffnen",
-    "menu": "Menü"
+    "menu": "Menü",
+    "home": "Startseite",
+    "collections": "Kollektionen"
   },
   "Nav": {
     "brand": "Carpetstory",
@@ -16,7 +18,8 @@
     "inquiry": "Anfrage",
     "whatsapp": "WhatsApp",
     "openMenu": "Menü öffnen",
-    "closeMenu": "Menü schließen"
+    "closeMenu": "Menü schließen",
+    "rugs": "Alle Stücke"
   },
   "Hero": {
     "consultation": "Kostenlose Beratung",
@@ -168,7 +171,7 @@
     "p1": "Mein Großvater webte. Mein Vater verkaufte. Dazwischen bemerkte ich, dass die Welt aufgehört hatte, auf den Boden zu schauen.",
     "p2": "Carpetstory ist ein kleiner Versuch, die Menschen wieder nach unten schauen zu lassen. Nicht auf den Teppich — auf die acht Monate, die er brauchte, und die Hände, die sie auf sich nahmen.",
     "signature": "Aashrit",
-    "signatureMeta": "Aashrit Anand, Gründer"
+    "signatureMeta": "Ashrit Garg, Gründer"
   },
   "World": {
     "label": "VII — In der Welt",
@@ -267,7 +270,7 @@
     "headlineStart": "Erzählen Sie uns von",
     "headlineItalic": "dem Raum.",
     "name": "Ihr Name",
-    "namePlaceholder": "Aashrit Anand",
+    "namePlaceholder": "Ashrit Garg",
     "email": "E-Mail",
     "emailPlaceholder": "sie@irgendwo.com",
     "location": "Wo auf der Welt",
@@ -283,7 +286,12 @@
     "orWriteOn": "Oder schreiben Sie über",
     "whatsapp": "WhatsApp",
     "successTitle": "Erhalten.",
-    "successBody": "Wir werden uns in Kürze melden."
+    "successBody": "Wir werden uns in Kürze melden.",
+    "interest": "Interessiert an der Kollektion",
+    "notSure": "Noch nicht sicher",
+    "errorName": "Bitte geben Sie Ihren Namen ein.",
+    "errorEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+    "errorMessage": "Bitte erzählen Sie uns von Ihrem Raum."
   },
   "InquiryForm": {
     "label": "Anfrage",
@@ -338,6 +346,206 @@
     "density": "Dichte",
     "weaveTime": "Webzeit",
     "priceFrom": "Ab",
-    "inquire": "Anfragen"
+    "inquire": "Anfragen",
+    "leadTime": "Lieferzeit",
+    "origin": "Herkunft",
+    "inquireCTA": "Informationen zu diesem Stück anfordern →",
+    "whatsappCTA": "Schreiben Sie uns auf WhatsApp zu diesem Stück",
+    "moreFromCollection": "Mehr aus der Kollektion {collection}"
+  },
+  "TradePage": {
+    "eyebrow": "Herstellungs- und Fachhandelspartnerschaften",
+    "title": "Partner mit uns",
+    "intro": "Ein großartiger Teppich entsteht nicht schnell. Ebenso wenig ein großartiges Herstellungshaus. Carpetstory produziert das gesamte Spektrum an Teppichen aus Jaipur — und beliefert Fachleute und Luxusmarken in über dreißig Ländern mit Präzision und Diskretion. Wir stellen alles her. Wir machen keine Kompromisse.",
+    "pillar1Title": "Vielseitigkeit",
+    "pillar1Body": "Von handgeknüpften Kunsthandatteppichen bis hin zu präzisen maschinengefertigten Teppichen produzieren wir jede Konstruktion und jede Spezifikation — für Designer, Importeure, Luxusmarken und Einzelhändler. Was auch immer Ihr Boden verlangt, wir machen es.",
+    "pillar2Title": "Strenge & Diskretion",
+    "pillar2Body": "Mit Geduld gebaut, um die feinsten Innenräume der Welt zu beliefern. Komplette Exportinfrastruktur, Transparenz bei Meilensteinen und die Diskretion, auf die etablierte Luxushäuser im Stillen vertrauen.",
+    "pillar3Title": "Vertrauen",
+    "pillar3Body": "Ein Full-Service-Teppichhersteller und Exporthaus in Jaipur. Wir arbeiten mit all jenen zusammen, die einen Hersteller verlangen, den sie nie infrage stellen müssen. Wenn Sie das sind, sind Sie hier richtig.",
+    "collaborators": "Partner",
+    "whoWePartnerWith": "Mit wem wir zusammenarbeiten",
+    "partner1Title": "Innenarchitekten & Architekten",
+    "partner1Body": "Wir fertigen nach Ihren genauen Projektspezifikationen, Größen, Konstruktionen, Materialien und Paletten, mit der Präzision und Termintreue, die professionelle Projekte erfordern.",
+    "partner1Bullet1": "Bevorzugte Fachhandelspreise",
+    "partner1Bullet2": "Weltweiter Musterversand",
+    "partner1Bullet3": "CAD-fähige technische Datenblätter",
+    "partner1Bullet4": "Persönliche Kontobetreuung",
+    "partner2Title": "Importeure & Händler",
+    "partner2Body": "Unsere Produktionsinfrastruktur unterstützt hochvolumige Nachbestellungen mit vollständiger Exportdokumentation, Eigenmarkenherstellung und gleichbleibender Qualität bei jeder Lieferung.",
+    "partner2Bullet1": "Mindestbestellmenge ab 5 Stück",
+    "partner2Bullet2": "Eigenmarken- & OEM-Produktion",
+    "partner2Bullet3": "Vollständige Exportdokumentation",
+    "partner2Bullet4": "See- und Luftfracht ab Delhi",
+    "partner3Title": "Einzelhändler & Showrooms",
+    "partner3Body": "Wir liefern kuratierte, verkaufsfertige Kollektionen an Einzelhandels- und Showroom-Partner mit der Exklusivität, Nachbestellzuverlässigkeit und Markenunterstützung, die ein professioneller Einzelhandel benötigt.",
+    "partner3Bullet1": "Regionale Exklusivität verfügbar",
+    "partner3Bullet2": "Konsignation für neue Partner",
+    "partner3Bullet3": "Gemeinsame Werbematerialien",
+    "partner3Bullet4": "Garantierte Nachbestellkonsistenz",
+    "partner4Title": "Luxus-Teppichmarken",
+    "partner4Body": "Wir bieten White-Label-Herstellung für etablierte Luxusmarken, die einen erstklassigen Produktionspartner in Jaipur suchen. Ihre Entwürfe und Standards, ausgeführt mit absoluter Diskretion.",
+    "partner4Bullet1": "White-Label-Herstellung",
+    "partner4Bullet2": "Übergabe vom Entwurf zur Produktion",
+    "partner4Bullet3": "Vertraulichkeitsvereinbarungen",
+    "partner4Bullet4": "Konsistenz auf Kollektionsebene",
+    "howWeWork": "Wie wir arbeiten",
+    "ourProcess": "Unser Ablauf",
+    "step1Title": "Briefing einreichen",
+    "step1Desc": "Spezifikationen, Mengen, Referenzmaterialien oder eine Produktanforderung.",
+    "step2Title": "Technische Prüfung",
+    "step2Desc": "Produktionsoptionen, Preise und Lieferzeiten innerhalb eines Werktags.",
+    "step3Title": "Freigabe der Muster",
+    "step3Desc": "Ein physisches Muster wird zur Prüfung und Freigabe vor der Produktion versandt.",
+    "step4Title": "Produktion",
+    "step4Desc": "Volle Transparenz über den Zeitplan mit Meilenstein-Updates und Inspektionen.",
+    "step5Title": "Export & Lieferung",
+    "step5Desc": "Tür-zu-Tür-Versand mit vollständiger Dokumentation und Einhaltung aller Vorschriften.",
+    "globalLogistics": "Globale Logistik",
+    "marketsWeSupply": "Märkte, die wir beliefern",
+    "submitQuery": "Anfrage senden",
+    "fullName": "Vollständiger Name *",
+    "fullNamePlaceholder": "z. B. Salim Khan",
+    "company": "Firma *",
+    "companyPlaceholder": "z. B. Khan Designs",
+    "designation": "Position *",
+    "designationPlaceholder": "z. B. Leitender Designer",
+    "country": "Land *",
+    "countryPlaceholder": "z. B. Deutschland",
+    "email": "E-Mail *",
+    "emailPlaceholder": "z. B. design@studio.com",
+    "phone": "Telefon *",
+    "phonePlaceholder": "z. B. +49 30 123456",
+    "iAmA": "Ich bin… *",
+    "iAmInterestedIn": "Ich interessiere mich für…",
+    "requirement": "Erzählen Sie uns von Ihrer Anforderung",
+    "requirementPlaceholder": "Geschätzte Mengen, Zeitpläne, Abmessungen, Konstruktion…",
+    "sending": "Wird gesendet…",
+    "received": "Erhalten.",
+    "successMessage": "Vielen Dank für Ihre B2B-Anfrage. Unser Fachhandelsteam in Jaipur wird Ihre Spezifikationen prüfen und sich innerhalb eines Werktags mit Ihnen in Verbindung setzen.",
+    "notReady": "Noch nicht bereit zu bestellen?",
+    "startWithSample": "Beginnen Sie mit einem Muster.",
+    "sampleKitDesc": "Bevor Sie spezifizieren, bestellen oder sich festlegen — fühlen Sie das Material, verstehen Sie die Struktur und den Unterschied. Unser Berater stellt die passenden Muster persönlich auf Basis Ihrer Anforderungen zusammen.",
+    "sampleKitBullet1": "Auf Ihre Anforderungen abgestimmt von einem Carpetstory-Berater",
+    "sampleKitBullet2": "Weltweit direkt zu Ihnen geliefert",
+    "sampleKitBullet3": "50% des Musterkartenwerts bei Ihrer ersten B2B-Bestellung anrechenbar",
+    "startingFrom": "Ab",
+    "requestSampleKit": "Musterkarte anfordern",
+    "partnerTypes": {
+      "designer": "Innenarchitekt / Architekt",
+      "importer": "Importeur / Händler",
+      "retailer": "Einzelhändler / Showroom",
+      "brand": "Luxus-Teppichmarke",
+      "other": "Andere"
+    },
+    "interests": {
+      "ready": "Verkaufsfertige Kollektionen",
+      "custom": "Sonderanfertigungen",
+      "whiteLabel": "White-Label-Herstellung",
+      "account": "Fachhandelskonto",
+      "kit": "Musterkarte",
+      "general": "Allgemeine Anfrage"
+    }
+  },
+  "CollectionsPage": {
+    "eyebrow": "Die Kollektionen",
+    "headline": "Zwölf Häuser. Eine Werkstatt.",
+    "description": "Von persischen Archivmustern bis hin zu marokkanischem Hochflor wird jede Kollektion in Jaipur nach demselben Konstruktionsstandard gewebt.",
+    "noCollections": "Keine Kollektionen entsprechen diesen Filtern.",
+    "clearFilters": "Filter löschen",
+    "explore": "Kollektion entdecken →"
+  },
+  "RugsPage": {
+    "eyebrow": "Alle Stücke",
+    "title": "Jedes Stück in der Werkstatt.",
+    "subtitle": "{total} Teppiche in {count} Kollektionen. Filtern, merken und teilen.",
+    "estimateCTA": "Teppich schätzen →",
+    "showing": "Zeige {shown} von {total} Stücken",
+    "noRugs": "Keine Stücke entsprechen diesen Filtern.",
+    "clearFilters": "Filter löschen",
+    "calcEyebrow": "Ein leiser Rechner",
+    "calcTitle": "Schätzen Sie Ihr Stück.",
+    "calcDesc": "Ein grober Richtwert, um das Gespräch zu beginnen — kein Angebot. Nennen Sie uns die Ausführung, und wir schätzen die Kosten.",
+    "otherCollections": "Andere Kollektionen",
+    "explore": "Entdecken →",
+    "beginInquiry": "Anfrage beginnen →"
+  },
+  "Filters": {
+    "collection": "Kollektion",
+    "material": "Material",
+    "make": "Herstellung",
+    "size": "Größe",
+    "price": "Preis",
+    "color": "Farbe",
+    "sort": "Sortierung",
+    "trigger": "Filter",
+    "close": "Filter schließen",
+    "clearAll": "Alle löschen",
+    "showCount": "{count, plural, =1 {# Stück} other {# Stücke}} anzeigen",
+    "sortOptions": {
+      "curated": "Kuriert",
+      "newest": "Neueste",
+      "priceAsc": "Preis: aufsteigend",
+      "priceDesc": "Preis: absteigend",
+      "nameAsc": "Name (A–Z)"
+    },
+    "materials": {
+      "Wool": "Wolle",
+      "Silk": "Seide",
+      "Cotton": "Baumwolle",
+      "Wool & Silk": "Wolle & Seide",
+      "Wool & Cotton": "Wolle & Baumwolle"
+    },
+    "makes": {
+      "Hand-knotted": "Handgeknüpft",
+      "Hand-tufted": "Handgetuftet",
+      "Flatweave": "Flachgewebe",
+      "Machine-made": "Maschinengefertigt"
+    },
+    "sizes": {
+      "Small": "Klein",
+      "Medium": "Mittel",
+      "Large": "Groß",
+      "Oversized": "Übergröße",
+      "Runner": "Läufer"
+    },
+    "colors": {
+      "red": "Rot & Kastanienbraun",
+      "blue": "Blau",
+      "green": "Grün",
+      "neutral": "Neutral/Beige",
+      "ink": "Schwarz & Tinte",
+      "gold": "Gold",
+      "multi": "Mehrfarbig"
+    }
+  },
+  "CraftPage": {
+    "title": "Das Handwerk",
+    "description": "Eine kompromisslose Hingabe an traditionelle Handknüpftechniken, die eine jahrhundertealte Kunstform im Herzen von Jaipur bewahrt."
+  },
+  "AboutPage": {
+    "title": "Über uns",
+    "metaTitle": "Über Carpetstory — Unser Erbe und unsere Vision",
+    "metaDescription": "Entdecken Sie die Geschichte hinter Carpetstory. Vier Generationen von Meisterwebern in Jaipur, Rajasthan. Traditionelle Handknüpftechniken und familiäre Vision."
+  },
+  "ContactPage": {
+    "title": "Kontakt",
+    "metaTitle": "Kontakt — Beginnen Sie ein Gespräch",
+    "metaDescription": "Kontaktieren Sie das Carpetstory-Team. Beginnen Sie ein Gespräch über Ihren Raum. Wir antworten innerhalb von 24 Stunden. Oder schreiben Sie uns auf WhatsApp."
+  },
+  "HeritagePage": {
+    "title": "Erbe",
+    "metaTitle": "Erbe — Vier Generationen in Jaipur",
+    "metaDescription": "Gegründet 1924. Vier Generationen von Meisterwebern in Jaipur — pflanzliche Farbstoffe, handgesponnene Wolle, der persische Knoten. Dasselbe Krapprot seit Beginn."
+  },
+  "InquiryPage": {
+    "title": "Anfrage",
+    "metaTitle": "Anfrage — Beginnen Sie ein Gespräch",
+    "metaDescription": "Erzählen Sie uns von dem Raum. Wir antworten innerhalb von 24 Stunden. Oder schreiben Sie uns direkt auf WhatsApp."
+  },
+  "JournalPage": {
+    "title": "Journal",
+    "readArticle": "Artikel lesen",
+    "description": "Notizen aus dem Atelier. Beiträge über Handwerk, Farbe, Materialien und die Menschen, die Carpetstory-Teppiche weben."
   }
 }

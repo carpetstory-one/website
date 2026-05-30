@@ -1,5 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
+import { BrandLogo } from './BrandLogo';
 
 export function Footer() {
   const t = useTranslations('Footer');
@@ -9,16 +10,26 @@ export function Footer() {
     <footer>
       <div className="footer-grid">
         <div>
-          <div className="brand">Carpetstory</div>
+          <a href="/" className="inline-block" aria-label="Carpetstory">
+            <BrandLogo size="lg" className="mb-6" />
+          </a>
           <div className="brand-line">{t('tagline')}</div>
         </div>
         <div className="col">
           <h2 className="footer-col-title">{t('explore')}</h2>
           <ul>
-            <li><Link href="/collection">{t('exploreCollection')}</Link></li>
-            <li><Link href="/trade">{t('exploreTrade')}</Link></li>
-            <li><Link href="/about">{t('exploreAbout')}</Link></li>
-            <li><Link href="/contact">{t('exploreContact')}</Link></li>
+            <li>
+              <Link href="/collection">{t('exploreCollection')}</Link>
+            </li>
+            <li>
+              <Link href="/trade">{t('exploreTrade')}</Link>
+            </li>
+            <li>
+              <Link href="/about">{t('exploreAbout')}</Link>
+            </li>
+            <li>
+              <Link href="/contact">{t('exploreContact')}</Link>
+            </li>
           </ul>
         </div>
         <div className="col">
@@ -52,7 +63,7 @@ export function Footer() {
             </li>
           </ul>
         </div>
-        </div>
+      </div>
 
       <div className="footer-threads" id="footer-threads" aria-hidden="true">
         <div className="thread"></div>
@@ -62,7 +73,9 @@ export function Footer() {
 
       <div className="footer-base">
         <span>{t('copyright', { year })}</span>
-        <span>{t('privacy')} · {t('terms')}</span>
+        <span>
+          {t('privacy')} · {t('terms')}
+        </span>
       </div>
     </footer>
   );

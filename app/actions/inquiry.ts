@@ -31,14 +31,14 @@ export async function submitInquiry(formData: FormData) {
   if (!process.env.RESEND_API_KEY) {
     // Simulate network delay for UI testing
     await new Promise((resolve) => setTimeout(resolve, 1500));
-    
+
     console.log('--- SIMULATED INQUIRY SUBMISSION ---');
     console.log(`From: ${name} <${email}>`);
     console.log(`Location: ${location}`);
     console.log(`Space: ${space}`);
     console.log(`Message: ${message}`);
     console.log('------------------------------------');
-    
+
     return { success: true };
   }
 

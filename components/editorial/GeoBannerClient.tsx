@@ -63,8 +63,8 @@ export function GeoBannerClient({
     suggestedLocale === 'de'
       ? tLocale('german')
       : suggestedLocale === 'fr'
-      ? tLocale('french')
-      : tLocale('english');
+        ? tLocale('french')
+        : tLocale('english');
 
   return (
     <AnimatePresence>
@@ -76,23 +76,23 @@ export function GeoBannerClient({
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 80, opacity: 0 }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] as any }}
-          className="fixed left-3 right-3 bottom-3 sm:left-6 sm:right-auto sm:bottom-6 z-[300] max-w-[420px] bg-[var(--canvas)] border border-[rgba(26,24,23,0.12)] shadow-[0_24px_48px_-16px_rgba(26,24,23,0.18)] p-5 sm:p-6"
+          className="fixed right-3 bottom-3 left-3 z-[300] max-w-[420px] border border-[rgba(26,24,23,0.12)] bg-[var(--canvas)] p-5 shadow-[0_24px_48px_-16px_rgba(26,24,23,0.18)] sm:right-auto sm:bottom-6 sm:left-6 sm:p-6"
         >
-          <p className="text-[14px] leading-[1.5] text-[var(--ink)] mb-4">
+          <p className="mb-4 text-[14px] leading-[1.5] text-[var(--ink)]">
             {t('message', { country: countryName })}
           </p>
-          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+          <div className="flex flex-col gap-2 sm:flex-row sm:gap-3">
             <button
               type="button"
               onClick={accept}
-              className="inline-flex items-center justify-center min-h-[44px] px-5 py-2 bg-[var(--accent)] text-[var(--canvas)] text-[12px] uppercase tracking-[0.12em] font-medium hover:bg-[var(--ink)] transition-colors"
+              className="inline-flex min-h-[44px] items-center justify-center bg-[var(--accent)] px-5 py-2 text-[12px] font-medium tracking-[0.12em] text-[var(--canvas)] uppercase transition-colors hover:bg-[var(--ink)]"
             >
               {langLabel}
             </button>
             <button
               type="button"
               onClick={dismiss}
-              className="inline-flex items-center justify-center min-h-[44px] px-5 py-2 text-[12px] uppercase tracking-[0.12em] font-medium text-[var(--ink-soft)] hover:text-[var(--ink)] transition-colors"
+              className="inline-flex min-h-[44px] items-center justify-center px-5 py-2 text-[12px] font-medium tracking-[0.12em] text-[var(--ink-soft)] uppercase transition-colors hover:text-[var(--ink)]"
             >
               {t('dismiss')}
             </button>
@@ -101,11 +101,31 @@ export function GeoBannerClient({
             type="button"
             onClick={dismiss}
             aria-label={t('dismiss')}
-            className="absolute top-2 right-2 w-9 h-9 inline-flex items-center justify-center text-[var(--ink-soft)] hover:text-[var(--ink)]"
+            className="absolute top-2 right-2 inline-flex h-9 w-9 items-center justify-center text-[var(--ink-soft)] hover:text-[var(--ink)]"
           >
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-              <line x1="1" y1="1" x2="13" y2="13" stroke="currentColor" strokeWidth="1.2" />
-              <line x1="13" y1="1" x2="1" y2="13" stroke="currentColor" strokeWidth="1.2" />
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 14 14"
+              fill="none"
+              aria-hidden="true"
+            >
+              <line
+                x1="1"
+                y1="1"
+                x2="13"
+                y2="13"
+                stroke="currentColor"
+                strokeWidth="1.2"
+              />
+              <line
+                x1="13"
+                y1="1"
+                x2="1"
+                y2="13"
+                stroke="currentColor"
+                strokeWidth="1.2"
+              />
             </svg>
           </button>
         </motion.div>

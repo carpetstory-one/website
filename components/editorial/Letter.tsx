@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { motion } from 'motion/react';
 import { useTranslations } from 'next-intl';
@@ -13,7 +13,7 @@ export function Letter() {
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] as any }}
-        viewport={{ once: true, margin: "-100px" }}
+        viewport={{ once: true, margin: '-100px' }}
       >
         <motion.span
           className="label"
@@ -27,7 +27,11 @@ export function Letter() {
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.3, ease: [0.16, 1, 0.3, 1] as any }}
+          transition={{
+            duration: 0.9,
+            delay: 0.3,
+            ease: [0.16, 1, 0.3, 1] as any,
+          }}
           viewport={{ once: true }}
         >
           {t('p1')}
@@ -35,7 +39,11 @@ export function Letter() {
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.5, ease: [0.16, 1, 0.3, 1] as any }}
+          transition={{
+            duration: 0.9,
+            delay: 0.5,
+            ease: [0.16, 1, 0.3, 1] as any,
+          }}
           viewport={{ once: true }}
         >
           {t('p2')}
@@ -44,7 +52,11 @@ export function Letter() {
           className="signature"
           initial={{ opacity: 0, scale: 0.8 }}
           whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.7, ease: [0.16, 1, 0.3, 1] as any }}
+          transition={{
+            duration: 1,
+            delay: 0.7,
+            ease: [0.16, 1, 0.3, 1] as any,
+          }}
           viewport={{ once: true }}
         >
           {t('signature')}

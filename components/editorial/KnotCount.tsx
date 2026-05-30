@@ -16,7 +16,12 @@ function AnimatedDotGrid() {
     const el = ref.current;
     if (!el) return;
     const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          obs.disconnect();
+        }
+      },
       { threshold: 0.3 }
     );
     obs.observe(el);
@@ -61,10 +66,23 @@ export function KnotCount() {
     <section
       className="knot-section knot-single"
       aria-labelledby="knot-heading"
-      style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+      }}
     >
-      <div className="knot-container" style={{ maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
-        <span className="label" style={{ display: 'block', marginBottom: '48px' }}>{t('label')}</span>
+      <div
+        className="knot-container"
+        style={{ maxWidth: '1200px', margin: '0 auto', width: '100%' }}
+      >
+        <span
+          className="label"
+          style={{ display: 'block', marginBottom: '48px' }}
+        >
+          {t('label')}
+        </span>
 
         <div className="knot-row">
           <div className="knot-number-col">
@@ -81,11 +99,27 @@ export function KnotCount() {
             >
               <CountUp target={1152000} duration={2500} />
             </h2>
-            <p style={{ fontFamily: 'var(--font-cormorant), serif', fontSize: 'clamp(20px, 3vw, 28px)', fontStyle: 'italic', fontWeight: 300, color: 'var(--ink)', marginBottom: '16px' }}>
+            <p
+              style={{
+                fontFamily: 'var(--font-cormorant), serif',
+                fontSize: 'clamp(20px, 3vw, 28px)',
+                fontStyle: 'italic',
+                fontWeight: 300,
+                color: 'var(--ink)',
+                marginBottom: '16px',
+              }}
+            >
               {t('rugSub')}
             </p>
-            <p style={{ fontSize: '13px', color: 'var(--ink-soft)', letterSpacing: '0.02em' }}>
-              {t('finalUpTo')} <CountUp target={2257920} duration={2800} /> {t('finalSuffix')}
+            <p
+              style={{
+                fontSize: '13px',
+                color: 'var(--ink-soft)',
+                letterSpacing: '0.02em',
+              }}
+            >
+              {t('finalUpTo')} <CountUp target={2257920} duration={2800} />{' '}
+              {t('finalSuffix')}
             </p>
           </div>
 
@@ -94,18 +128,34 @@ export function KnotCount() {
           </div>
         </div>
 
-        <div className="knot-foot" style={{ marginTop: '64px', paddingTop: '40px', borderTop: '1px solid rgba(26,24,23,0.12)', display: 'flex', gap: '48px', flexWrap: 'wrap' }}>
+        <div
+          className="knot-foot"
+          style={{
+            marginTop: '64px',
+            paddingTop: '40px',
+            borderTop: '1px solid rgba(26,24,23,0.12)',
+            display: 'flex',
+            gap: '48px',
+            flexWrap: 'wrap',
+          }}
+        >
           <div>
             <div className="label">{t('density')}</div>
-            <div className="val" style={{ marginTop: '6px', fontSize: '16px' }}>{t('densityValue')}</div>
+            <div className="val" style={{ marginTop: '6px', fontSize: '16px' }}>
+              {t('densityValue')}
+            </div>
           </div>
           <div>
             <div className="label">{t('weaveTime')}</div>
-            <div className="val" style={{ marginTop: '6px', fontSize: '16px' }}>{t('weaveTimeValue')}</div>
+            <div className="val" style={{ marginTop: '6px', fontSize: '16px' }}>
+              {t('weaveTimeValue')}
+            </div>
           </div>
           <div>
             <div className="label">{t('madeBy')}</div>
-            <div className="val" style={{ marginTop: '6px', fontSize: '16px' }}>{t('madeByValue')}</div>
+            <div className="val" style={{ marginTop: '6px', fontSize: '16px' }}>
+              {t('madeByValue')}
+            </div>
           </div>
         </div>
       </div>

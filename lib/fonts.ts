@@ -10,7 +10,12 @@
  * Fraunces + Inter Tight were dropped entirely in the cinematic redesign.
  */
 
-import { Cormorant_Garamond, Poppins, Sacramento, Caveat } from 'next/font/google';
+import {
+  Cormorant_Garamond,
+  Poppins,
+  Sacramento,
+  Mrs_Saint_Delafield,
+} from 'next/font/google';
 
 /**
  * Cormorant Garamond — display serif (replaces Fraunces 1:1)
@@ -53,14 +58,14 @@ export const sacramento = Sacramento({
 });
 
 /**
- * Caveat — handwriting script
+ * Mrs Saint Delafield — dramatic signature calligraphy script
  * Used ONLY for the founder's signature ("Aashrit") in the Letter section.
  * Preload disabled since it appears far below the fold.
  */
-export const caveat = Caveat({
+export const signature = Mrs_Saint_Delafield({
   subsets: ['latin'],
   display: 'swap',
   preload: false,
-  variable: '--font-caveat',
-  weight: ['500'],
+  variable: '--font-signature',
+  weight: '400',
 });

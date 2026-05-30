@@ -35,7 +35,7 @@ export function ShortlistIndicator() {
           exit={{ opacity: 0, scale: 0.6 }}
           transition={{ type: 'spring', stiffness: 500, damping: 30 }}
           style={{ backgroundColor: 'var(--accent)' }}
-          className="fixed bottom-6 right-6 z-[90] flex h-14 w-14 items-center justify-center rounded-full shadow-lg"
+          className="fixed right-6 bottom-6 z-[90] flex h-14 w-14 items-center justify-center rounded-full shadow-lg"
         >
           <motion.span
             animate={controls}
@@ -47,8 +47,11 @@ export function ShortlistIndicator() {
               aria-hidden="true"
             />
             <span
-              style={{ backgroundColor: 'var(--canvas)', color: 'var(--accent)' }}
-              className="absolute -right-2.5 -top-2.5 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[11px] font-medium tabular-nums"
+              style={{
+                backgroundColor: 'var(--canvas)',
+                color: 'var(--accent)',
+              }}
+              className="absolute -top-2.5 -right-2.5 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[11px] font-medium tabular-nums"
             >
               {count}
             </span>

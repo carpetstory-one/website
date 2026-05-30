@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Link, usePathname } from '@/i18n/routing';
 import { LocaleSwitcher } from './LocaleSwitcher';
+import { BrandLogo } from './BrandLogo';
 
 const WhatsAppIcon = ({ className = '' }: { className?: string }) => (
   <svg
@@ -18,11 +19,32 @@ const WhatsAppIcon = ({ className = '' }: { className?: string }) => (
   </svg>
 );
 
+const WHATSAPP_HREF = 'https://wa.me/919876543210';
+
+// Primary nav destinations — single source of truth for desktop links + the
+// mobile overlay menu so the two can never drift apart.
+const NAV_LINKS = [
+  { href: '/collection', key: 'collection' },
+  { href: '/rugs', key: 'rugs' },
+  { href: '/journal', key: 'journal' },
+  { href: '/trade', key: 'trade' },
+] as const;
+
 export function Nav() {
   const t = useTranslations('Nav');
   const pathname = usePathname();
   const isHome = pathname === '/';
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const burgerRef = useRef<HTMLButtonElement>(null);
+
+  // Resolve a label, tolerating message catalogs that don't yet have the key
+  // (e.g. the new "rugs" link) — falls back to a sensible English default.
+  const label = (key: string, fallback: string) => {
+    const value = t(key as any);
+    return value === `Nav.${key}` || value === key ? fallback : value;
+  };
 
   // On the home page the nav stays transparent + light over the full-bleed
   // dark hero, then turns solid (cream/ink) once the hero is nearly scrolled
@@ -41,38 +63,136 @@ export function Nav() {
     };
   }, [isHome]);
 
-  return (
-    <nav
-      id="nav"
-      aria-label="Primary"
-      className={`${isHome ? 'nav--home' : ''}${scrolled ? ' scrolled' : ''}`}
-    >
-      <Link href="/" className="brand" aria-label={t('brand')}>
-        {t('brand')}
-      </Link>
+  // Close the menu on route change.
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
 
-      <div className="nav-right flex items-center gap-3 sm:gap-5 lg:gap-7">
-        <Link href="/collection" className="nav-trade link hidden sm:inline-block">
-          {t('collection')}
-        </Link>
-        <Link href="/journal" className="nav-trade link hidden sm:inline-block">
-          {t('journal')}
-        </Link>
-        <Link href="/trade" className="nav-trade link hidden sm:inline-block">
-          {t('trade')}
-        </Link>
+  // Body scroll-lock + ESC-to-close + focus management while the menu is open.
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const { body } = document;
+    const prevOverflow = body.style.overflow;
+    body.style.overflow = 'hidden';
+
+    // Move focus into the panel for keyboard users.
+    const firstLink = panelRef.current?.querySelector<HTMLElement>('a, button');
+    firstLink?.focus();
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMenuOpen(false);
+        return;
+      }
+      if (e.key !== 'Tab' || !panelRef.current) return;
+      // Simple focus trap.
+      const focusable = panelRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled])'
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      body.style.overflow = prevOverflow;
+      // Return focus to the trigger.
+      burgerRef.current?.focus();
+    };
+  }, [menuOpen]);
+
+  return (
+    <>
+      <nav
+        id="nav"
+        aria-label="Primary"
+        className={`${isHome ? 'nav--home' : ''} ${scrolled ? 'scrolled' : ''} ${menuOpen ? 'is-open' : ''}`}
+      >
         <a
-          href="https://wa.me/919876543210"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="whatsapp magnetic"
-          aria-label={`${t('whatsapp')} — opens in new tab`}
+          href="/"
+          className="brand"
+          aria-label="Carpetstory"
+          suppressHydrationWarning
         >
-          <WhatsAppIcon />
-          <span className="hidden sm:inline">{t('whatsapp')}</span>
+          <BrandLogo size="sm" />
         </a>
-        <LocaleSwitcher />
+
+        <div className="nav-right flex items-center gap-3 sm:gap-5 lg:gap-7">
+          {NAV_LINKS.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              className="nav-trade link hidden sm:inline-block"
+            >
+              {label(l.key, l.key[0].toUpperCase() + l.key.slice(1))}
+            </Link>
+          ))}
+          <a
+            href={WHATSAPP_HREF}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="whatsapp magnetic flex"
+            aria-label={`${label('whatsapp', 'WhatsApp')} — opens in new tab`}
+            suppressHydrationWarning
+          >
+            <WhatsAppIcon />
+            <span className="hidden sm:inline">
+              {label('whatsapp', 'WhatsApp')}
+            </span>
+          </a>
+          <LocaleSwitcher />
+
+          {/* Mobile burger — visible below the `sm` breakpoint only. */}
+          <button
+            ref={burgerRef}
+            type="button"
+            className={`nav-burger sm:hidden ${menuOpen ? 'is-open' : ''}`}
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            onClick={() => setMenuOpen((v) => !v)}
+          >
+            <span className="nav-burger-line" />
+            <span className="nav-burger-line" />
+          </button>
+        </div>
+      </nav>
+
+      {/* Full-screen editorial overlay menu (mobile). */}
+      <div
+        id="mobile-menu"
+        ref={panelRef}
+        className={`mobile-menu ${menuOpen ? 'is-open' : ''}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Site menu"
+        hidden={!menuOpen}
+        data-lenis-prevent
+      >
+        <nav className="mobile-menu-links" aria-label="Mobile">
+          {NAV_LINKS.map((l, i) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              className="mobile-menu-link"
+              style={{ transitionDelay: `${0.06 + i * 0.05}s` }}
+              onClick={() => setMenuOpen(false)}
+            >
+              {label(l.key, l.key[0].toUpperCase() + l.key.slice(1))}
+            </Link>
+          ))}
+        </nav>
       </div>
-    </nav>
+    </>
   );
 }

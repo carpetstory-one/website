@@ -10,12 +10,16 @@ import {
   breadcrumbSchema,
   jsonLd,
 } from '@/lib/seo';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 
 type Props = {
   params: Promise<{ locale: string }>;
 };
 
-const FAQ_BY_LOCALE: Record<string, Array<{ question: string; answer: string }>> = {
+const FAQ_BY_LOCALE: Record<
+  string,
+  Array<{ question: string; answer: string }>
+> = {
   en: [
     {
       question: 'How long does a Carpetstory rug take to make?',
@@ -45,14 +49,15 @@ const FAQ_BY_LOCALE: Record<string, Array<{ question: string; answer: string }>>
   ],
   fr: [
     {
-      question: 'Combien de temps faut-il pour fabriquer un tapis Carpetstory ?',
+      question:
+        'Combien de temps faut-il pour fabriquer un tapis Carpetstory ?',
       answer:
-        'Chaque tapis est tissé par un seul artisan pendant six à dix mois, selon la taille et la densité des nœuds. Nos tissages les plus fins peuvent prendre jusqu\'à douze mois.',
+        "Chaque tapis est tissé par un seul artisan pendant six à dix mois, selon la taille et la densité des nœuds. Nos tissages les plus fins peuvent prendre jusqu'à douze mois.",
     },
     {
-      question: 'Quelle est la densité de nœuds d\'un tapis Carpetstory ?',
+      question: "Quelle est la densité de nœuds d'un tapis Carpetstory ?",
       answer:
-        'Nos tapis varient de 10 à 14 nœuds persans noués à la main par pouce carré. Une pièce de 8 × 10 pieds peut contenir plus d\'un million de nœuds.',
+        "Nos tapis varient de 10 à 14 nœuds persans noués à la main par pouce carré. Une pièce de 8 × 10 pieds peut contenir plus d'un million de nœuds.",
     },
     {
       question: 'Quels matériaux sont utilisés ?',
@@ -62,7 +67,7 @@ const FAQ_BY_LOCALE: Record<string, Array<{ question: string; answer: string }>>
     {
       question: 'Les teintures sont-elles naturelles ?',
       answer:
-        'Oui. Chaque couleur commence par une plante — racine de garance pour le rouge, indigo pour le bleu, coques de noix pour le brun, grenade pour l\'or. Toutes teintes et fixées au soleil à Jaipur.',
+        "Oui. Chaque couleur commence par une plante — racine de garance pour le rouge, indigo pour le bleu, coques de noix pour le brun, grenade pour l'or. Toutes teintes et fixées au soleil à Jaipur.",
     },
     {
       question: 'Où sont fabriqués les tapis Carpetstory ?',
@@ -101,10 +106,11 @@ const FAQ_BY_LOCALE: Record<string, Array<{ question: string; answer: string }>>
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations({ locale, namespace: 'CraftPage' });
   return generatePageMetadata({
-    title: 'The Craft — Hand-Knotted in Jaipur',
-    description:
-      'An uncompromising dedication to traditional hand-knotting techniques. Wool, silk, natural dyes, and the Persian knot — eight months per rug.',
+    title: `${t('title')} — Hand-Knotted in Jaipur`,
+    description: t('description'),
     path: '/craft',
     locale,
     keywords: [
@@ -120,26 +126,33 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CraftPage({ params }: Props) {
   const { locale } = await params;
+  setRequestLocale(locale);
+
+  const tCommon = await getTranslations('Common');
+  const tCraft = await getTranslations('CraftPage');
+
   const faqs = FAQ_BY_LOCALE[locale] || FAQ_BY_LOCALE.en;
   const breadcrumb = breadcrumbSchema([
-    { name: 'Home', url: `/${locale}` },
-    { name: 'The Craft', url: `/${locale}/craft` },
+    { name: tCommon('home'), url: `/${locale}` },
+    { name: tCraft('title'), url: `/${locale}/craft` },
   ]);
 
   return (
-    <div className="relative bg-canvas min-h-screen flex flex-col">
+    <div className="bg-canvas relative flex min-h-screen flex-col">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLd({ '@graph': [faqSchema(faqs), breadcrumb] }) }}
+        dangerouslySetInnerHTML={{
+          __html: jsonLd({ '@graph': [faqSchema(faqs), breadcrumb] }),
+        }}
       />
       <Nav />
       <main className="flex-1">
-        <div className="pt-20 sm:pt-24 pb-10 sm:pb-12 px-5 sm:px-7 lg:px-12 text-center max-w-4xl mx-auto">
-          <h1 className="font-display font-light text-[40px] sm:text-[56px] md:text-[80px] leading-[1] tracking-[-0.02em] text-ink mb-4 sm:mb-6">
-            The Craft
+        <div className="mx-auto max-w-4xl px-5 pt-20 pb-10 text-center sm:px-7 sm:pt-24 sm:pb-12 lg:px-12">
+          <h1 className="font-display text-ink mb-4 text-[40px] leading-[1] font-light tracking-[-0.02em] sm:mb-6 sm:text-[56px] md:text-[80px]">
+            {tCraft('title')}
           </h1>
           <p className="body-lg text-ink-soft">
-            An uncompromising dedication to traditional hand-knotting techniques, preserving a centuries-old art form in the heart of Jaipur.
+            {tCraft('description')}
           </p>
         </div>
         <MakingSection />

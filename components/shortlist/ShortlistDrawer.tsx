@@ -13,14 +13,8 @@ const EASE = [0.32, 0.72, 0, 1] as const;
 
 export function ShortlistDrawer() {
   const router = useRouter();
-  const {
-    shortlist,
-    count,
-    remove,
-    clear,
-    closeDrawer,
-    notify,
-  } = useShortlist();
+  const { shortlist, count, remove, clear, closeDrawer, notify } =
+    useShortlist();
 
   const [confirmClear, setConfirmClear] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -118,7 +112,7 @@ export function ShortlistDrawer() {
         exit={{ x: '100%' }}
         transition={{ duration: 0.35, ease: EASE }}
         style={{ backgroundColor: 'var(--canvas)', color: 'var(--ink)' }}
-        className="fixed right-0 top-0 z-[120] flex h-full w-full flex-col sm:w-[380px]"
+        className="fixed top-0 right-0 z-[120] flex h-full w-full flex-col sm:w-[380px]"
       >
         {/* Header */}
         <div
@@ -149,7 +143,7 @@ export function ShortlistDrawer() {
             type="button"
             onClick={closeDrawer}
             aria-label="Close shortlist"
-            className="-mr-2 -mt-1 flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:text-accent"
+            className="hover:text-accent -mt-1 -mr-2 flex h-9 w-9 items-center justify-center rounded-full transition-colors"
           >
             <X className="h-5 w-5" aria-hidden="true" />
           </button>
@@ -160,10 +154,14 @@ export function ShortlistDrawer() {
           {resolved.length === 0 ? (
             <p
               className="mt-6 italic"
-              style={{ fontSize: '14px', color: 'var(--ink-soft)', lineHeight: 1.6 }}
+              style={{
+                fontSize: '14px',
+                color: 'var(--ink-soft)',
+                lineHeight: 1.6,
+              }}
             >
-              Your shortlist is empty. Start saving pieces by tapping the bookmark
-              icon on any rug.
+              Your shortlist is empty. Start saving pieces by tapping the
+              bookmark icon on any rug.
             </p>
           ) : (
             <ul className="flex flex-col">
@@ -203,7 +201,10 @@ export function ShortlistDrawer() {
                       </span>
                       <span
                         className="mt-0.5 block text-[10px] uppercase"
-                        style={{ letterSpacing: '0.14em', color: 'var(--ink-soft)' }}
+                        style={{
+                          letterSpacing: '0.14em',
+                          color: 'var(--ink-soft)',
+                        }}
                       >
                         {collection.name}
                       </span>
@@ -213,7 +214,7 @@ export function ShortlistDrawer() {
                     type="button"
                     onClick={() => remove(collection.slug, rug.slug)}
                     aria-label={`Remove ${rug.name} from shortlist`}
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors hover:text-accent"
+                    className="hover:text-accent flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors"
                     style={{ color: 'var(--ink-soft)' }}
                   >
                     <X className="h-4 w-4" aria-hidden="true" />
@@ -233,7 +234,7 @@ export function ShortlistDrawer() {
             <button
               type="button"
               onClick={handleShare}
-              className="flex w-full items-center justify-center gap-2 px-6 py-3.5 text-[13px] uppercase tracking-[0.12em] transition-colors"
+              className="flex w-full items-center justify-center gap-2 px-6 py-3.5 text-[13px] tracking-[0.12em] uppercase transition-colors"
               style={{ backgroundColor: 'var(--ink)', color: 'var(--canvas)' }}
             >
               <Bookmark className="h-4 w-4 fill-current" aria-hidden="true" />
@@ -245,16 +246,21 @@ export function ShortlistDrawer() {
               onClick={() => {
                 analytics.shortlistInquiryInitiated(count);
                 closeDrawer();
-                router.push(`/contact?shortlist=${serializeShortlist(shortlist)}`);
+                router.push(
+                  `/contact?shortlist=${serializeShortlist(shortlist)}`
+                );
               }}
-              className="w-full px-6 py-3.5 text-center text-[13px] uppercase tracking-[0.12em] transition-colors hover:text-accent"
+              className="hover:text-accent w-full px-6 py-3.5 text-center text-[13px] tracking-[0.12em] uppercase transition-colors"
               style={{ border: '1px solid var(--ink)', color: 'var(--ink)' }}
             >
               Inquire about these pieces →
             </button>
 
             {confirmClear ? (
-              <p className="text-center text-[12px]" style={{ color: 'var(--ink-soft)' }}>
+              <p
+                className="text-center text-[12px]"
+                style={{ color: 'var(--ink-soft)' }}
+              >
                 Are you sure?{' '}
                 <button
                   type="button"
@@ -262,7 +268,7 @@ export function ShortlistDrawer() {
                     clear();
                     setConfirmClear(false);
                   }}
-                  className="underline underline-offset-4 hover:text-accent"
+                  className="hover:text-accent underline underline-offset-4"
                   style={{ color: 'var(--ink)' }}
                 >
                   Yes, clear
@@ -280,7 +286,7 @@ export function ShortlistDrawer() {
               <button
                 type="button"
                 onClick={() => setConfirmClear(true)}
-                className="text-center text-[12px] underline underline-offset-4 transition-colors hover:text-accent"
+                className="hover:text-accent text-center text-[12px] underline underline-offset-4 transition-colors"
                 style={{ color: 'var(--ink-soft)' }}
               >
                 Clear shortlist

@@ -2,7 +2,12 @@ import { Suspense } from 'react';
 import { Nav } from '@/components/editorial/Nav';
 import { Footer } from '@/components/editorial/Footer';
 import { Metadata } from 'next';
-import { generatePageMetadata, breadcrumbSchema, jsonLd, SITE_URL } from '@/lib/seo';
+import {
+  generatePageMetadata,
+  breadcrumbSchema,
+  jsonLd,
+  SITE_URL,
+} from '@/lib/seo';
 import { collections } from '@/lib/collections';
 import { CollectionsGrid } from './CollectionsGrid';
 
@@ -52,10 +57,12 @@ export default async function CollectionIndexPage({ params }: Props) {
   };
 
   return (
-    <div className="relative bg-canvas min-h-screen flex flex-col">
+    <div className="bg-canvas relative flex min-h-screen flex-col">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLd({ '@graph': [breadcrumb, itemList] }) }}
+        dangerouslySetInnerHTML={{
+          __html: jsonLd({ '@graph': [breadcrumb, itemList] }),
+        }}
       />
       <Nav />
       <Suspense fallback={<div className="flex-1" />}>

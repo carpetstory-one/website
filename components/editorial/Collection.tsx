@@ -17,7 +17,13 @@ const slideUp = {
 };
 
 // Mosaic placement classes — one lead card, two stacked, two below.
-const place = ['feat-lead', 'feat-side-1', 'feat-side-2', 'feat-bottom-1', 'feat-bottom-2'] as const;
+const place = [
+  'feat-lead',
+  'feat-side-1',
+  'feat-side-2',
+  'feat-bottom-1',
+  'feat-bottom-2',
+] as const;
 const roman = ['I', 'II', 'III', 'IV', 'V'] as const;
 
 export function Collection() {
@@ -25,7 +31,11 @@ export function Collection() {
   const featured = featuredCollections.slice(0, 5);
 
   return (
-    <section className="collection" id="collection" aria-labelledby="collection-heading">
+    <section
+      className="collection"
+      id="collection"
+      aria-labelledby="collection-heading"
+    >
       <div className="container">
         <div className="header">
           <motion.span
@@ -73,7 +83,11 @@ export function Collection() {
                 className={`feat-card ${place[i]}`}
                 initial={{ opacity: 0, y: 70 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1.1, delay: (i % 3) * 0.12, ease: [0.16, 1, 0.3, 1] as any }}
+                transition={{
+                  duration: 1.1,
+                  delay: (i % 3) * 0.12,
+                  ease: [0.16, 1, 0.3, 1] as any,
+                }}
                 viewport={{ once: true, margin: '-100px' }}
               >
                 <Link
@@ -95,9 +109,11 @@ export function Collection() {
                       alt={`${col.name} collection — ${col.tagline}`}
                       fill
                       loading="lazy"
-                      sizes={i === 0
-                        ? '(max-width: 640px) 90vw, (max-width: 1024px) 92vw, 58vw'
-                        : '(max-width: 640px) 90vw, (max-width: 1024px) 46vw, 40vw'}
+                      sizes={
+                        i === 0
+                          ? '(max-width: 640px) 90vw, (max-width: 1024px) 92vw, 58vw'
+                          : '(max-width: 640px) 90vw, (max-width: 1024px) 46vw, 40vw'
+                      }
                       placeholder="blur"
                       blurDataURL={blurDataURL()}
                       style={{ objectFit: 'cover' }}
@@ -110,7 +126,9 @@ export function Collection() {
                     <span className="feat-eyebrow">{eyebrow}</span>
                     <h3 className="feat-name">{col.name}</h3>
                     <p className="feat-tag">{col.tagline}</p>
-                    <span className="feat-explore">Explore the collection →</span>
+                    <span className="feat-explore">
+                      Explore the collection →
+                    </span>
                   </div>
                 </Link>
               </motion.article>

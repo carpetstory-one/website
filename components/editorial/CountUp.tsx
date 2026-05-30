@@ -57,10 +57,10 @@ export function CountUp({
     const update = (currentTime: number) => {
       const elapsed = currentTime - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      
+
       // easeOutExpo
       const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-      
+
       setValue(Math.floor(target * ease));
 
       if (progress < 1) {
@@ -82,7 +82,11 @@ export function CountUp({
     <span
       ref={ref}
       className={`${className} ${glow && isCounting ? 'glow' : ''} ${glow && !isCounting && value === target ? 'num-glow' : ''}`}
-      style={glow && isCounting ? { textShadow: '0 0 30px rgba(110, 31, 35, 0.35)' } : undefined}
+      style={
+        glow && isCounting
+          ? { textShadow: '0 0 30px rgba(110, 31, 35, 0.35)' }
+          : undefined
+      }
       data-countup={target}
     >
       {displayValue}

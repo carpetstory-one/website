@@ -11,7 +11,7 @@
  */
 
 import type { Metadata, Viewport } from 'next';
-import { cormorant, poppins, sacramento, caveat } from '@/lib/fonts';
+import { cormorant, poppins, sacramento, signature } from '@/lib/fonts';
 import '../globals.css';
 import { GlobalAnimations } from '@/components/editorial/GlobalAnimations';
 import { NextIntlClientProvider } from 'next-intl';
@@ -24,10 +24,13 @@ import { routing } from '@/i18n/routing';
 import { Toaster } from '@/components/ui/sonner';
 import { GeoBanner } from '@/components/editorial/GeoBanner';
 import { CookieConsent } from '@/components/editorial/CookieConsent';
-import { localBusinessSchema, organizationSchema, websiteSchema } from '@/lib/seo';
+import {
+  localBusinessSchema,
+  organizationSchema,
+  websiteSchema,
+} from '@/lib/seo';
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || 'https://carpetstory.com';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://carpetstory.com';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -120,7 +123,7 @@ export function generateStaticParams() {
 
 export default async function RootLayout({
   children,
-  params
+  params,
 }: {
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
@@ -142,10 +145,14 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
-      className={`${cormorant.variable} ${poppins.variable} ${sacramento.variable} ${caveat.variable}`}
+      className={`${cormorant.variable} ${poppins.variable} ${sacramento.variable} ${signature.variable}`}
     >
       <head>
-        <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://images.unsplash.com"
+          crossOrigin="anonymous"
+        />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
       </head>
       <body>
@@ -169,7 +176,9 @@ export default async function RootLayout({
               <GlobalAnimations />
               <GeoBanner locale={locale} />
               <CookieConsent />
-              <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+              <main
+                style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
+              >
                 {children}
               </main>
               <ShortlistUI />

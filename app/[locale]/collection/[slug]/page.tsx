@@ -14,7 +14,7 @@ import {
   jsonLd,
   SITE_URL,
 } from '@/lib/seo';
-import { setRequestLocale } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { CollectionDetailContent } from './CollectionDetailContent';
 
 type Props = {
@@ -25,7 +25,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, locale } = await params;
   const col = getCollectionBySlug(slug);
 
-  if (!col) return { title: 'Not Found', robots: { index: false, follow: false } };
+  if (!col)
+    return { title: 'Not Found', robots: { index: false, follow: false } };
 
   return generatePageMetadata({
     title: `${col.name} Collection — Carpetstory`,
@@ -52,13 +53,14 @@ export default async function CollectionDetailPage({ params }: Props) {
   const { slug, locale } = await params;
   setRequestLocale(locale);
 
+  const tCommon = await getTranslations('Common');
   const col = getCollectionBySlug(slug);
 
   if (!col) notFound();
 
   const breadcrumb = breadcrumbSchema([
-    { name: 'Home', url: `/${locale}` },
-    { name: 'Collections', url: `/${locale}/collection` },
+    { name: tCommon('home'), url: `/${locale}` },
+    { name: tCommon('collections'), url: `/${locale}/collection` },
     { name: col.name, url: `/${locale}/collection/${col.slug}` },
   ]);
 
@@ -79,10 +81,12 @@ export default async function CollectionDetailPage({ params }: Props) {
   const others = collections.filter((c) => c.slug !== col.slug);
 
   return (
-    <div className="relative bg-canvas min-h-screen flex flex-col">
+    <div className="bg-canvas relative flex min-h-screen flex-col">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLd({ '@graph': [breadcrumb, itemList] }) }}
+        dangerouslySetInnerHTML={{
+          __html: jsonLd({ '@graph': [breadcrumb, itemList] }),
+        }}
       />
 
       <Nav />
@@ -105,9 +109,16 @@ export default async function CollectionDetailPage({ params }: Props) {
           color: 'rgba(255,255,255,0.7)',
         }}
       >
-        <Link href="/" style={{ color: 'inherit', textDecoration: 'none' }}>Home</Link>
+        <Link href="/" style={{ color: 'inherit', textDecoration: 'none' }}>
+          {tCommon('home')}
+        </Link>
         <span>/</span>
-        <Link href="/collection" style={{ color: 'inherit', textDecoration: 'none' }}>Collections</Link>
+        <Link
+          href="/collection"
+          style={{ color: 'inherit', textDecoration: 'none' }}
+        >
+          {tCommon('collections')}
+        </Link>
         <span>/</span>
         <span style={{ color: '#fff' }}>{col.name}</span>
       </div>
@@ -146,10 +157,23 @@ export default async function CollectionDetailPage({ params }: Props) {
           />
         </div>
         {/* Overlay */}
-        <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.32)' }} />
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'rgba(0,0,0,0.32)',
+          }}
+        />
 
         {/* Centered text */}
-        <div style={{ position: 'relative', zIndex: 10, textAlign: 'center', padding: '0 24px' }}>
+        <div
+          style={{
+            position: 'relative',
+            zIndex: 10,
+            textAlign: 'center',
+            padding: '0 24px',
+          }}
+        >
           <span
             style={{
               display: 'block',

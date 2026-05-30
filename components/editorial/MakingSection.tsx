@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { motion } from 'motion/react';
 import { useTranslations } from 'next-intl';
@@ -15,7 +15,7 @@ export function MakingSection() {
           initial={{ opacity: 0, x: -40 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] as any }}
-          viewport={{ once: true, margin: "-80px" }}
+          viewport={{ once: true, margin: '-80px' }}
         >
           {t('label')}
         </motion.span>
@@ -23,8 +23,12 @@ export function MakingSection() {
           id="making-heading"
           initial={{ opacity: 0, x: 60 }}
           whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1.1, delay: 0.15, ease: [0.16, 1, 0.3, 1] as any }}
-          viewport={{ once: true, margin: "-80px" }}
+          transition={{
+            duration: 1.1,
+            delay: 0.15,
+            ease: [0.16, 1, 0.3, 1] as any,
+          }}
+          viewport={{ once: true, margin: '-80px' }}
         >
           {t('headline')}
         </motion.h2>
