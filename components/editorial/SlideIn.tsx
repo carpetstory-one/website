@@ -20,7 +20,7 @@ const directionMap = {
 
 /**
  * SlideIn — Wrap children in a directional slide animation.
- * Falls back to static rendering if reduced motion is preferred.
+ * Falls back to static rendering if reduced motion is preferred or on mobile.
  */
 export function SlideIn({
   children,
@@ -34,9 +34,14 @@ export function SlideIn({
   className?: string;
 }) {
   const prefersReducedMotion = useReducedMotion();
+  const [isMobile, setIsMobile] = React.useState(false);
 
-  if (prefersReducedMotion) {
-    return <div className={`slide-${direction} ${className}`}>{children}</div>;
+  React.useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+  }, []);
+
+  if (prefersReducedMotion || isMobile) {
+    return <div className={className}>{children}</div>;
   }
 
   // Clone variants to apply custom delay without mutating the shared object

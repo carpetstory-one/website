@@ -282,9 +282,9 @@ export function TradeContent() {
           </div>
         </Reveal>
 
-        <div className="flex flex-col gap-y-10 border-t border-[rgba(26,24,23,0.12)] pt-10 md:flex-row md:gap-x-7 md:pt-12">
+        <div className="process-container border-t border-[rgba(26,24,23,0.12)] pt-10 md:pt-12">
           {processSteps.map((item) => (
-            <div key={item.step} className="md:flex-1">
+            <div key={item.step} className="process-item">
               <span className="font-display text-accent mb-4 block text-[34px] leading-none font-light">
                 {item.step}
               </span>

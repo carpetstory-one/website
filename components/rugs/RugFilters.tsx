@@ -288,13 +288,20 @@ export function RugFilters(props: Props) {
         )}
       </div>
 
-      {/* ── Mobile full-screen sheet ───────────────────────────────────── */}
+      {/* ── Mobile bottom sheet (backdrop + 90vh sheet) ─────────────────── */}
       {sheetOpen && (
+        <>
+        <div
+          className="filx-sheet-backdrop"
+          aria-hidden="true"
+          onClick={() => setSheetOpen(false)}
+        />
         <div
           className="filx-sheet"
           role="dialog"
           aria-modal="true"
           aria-label={t('trigger')}
+          data-lenis-prevent
         >
           <div className="filx-sheet-head">
             <span className="filx-sheet-title">{t('trigger')}</span>
@@ -332,6 +339,7 @@ export function RugFilters(props: Props) {
             </button>
           </div>
         </div>
+        </>
       )}
     </>
   );

@@ -145,7 +145,7 @@ export function Hero() {
 
   return (
     <section
-      className={`cine-hero${reduced ? 'is-reduced' : ''}`}
+      className={`cine-hero${reduced ? ' is-reduced' : ''}`}
       aria-label={t('cta')}
       aria-roledescription="carousel"
       onTouchStart={onTouchStart}
@@ -156,7 +156,7 @@ export function Hero() {
         {SLIDES.map((s, i) => (
           <div
             key={s.img}
-            className={`cine-slide${active === i ? 'is-active' : ''}`}
+            className={`cine-slide${active === i ? ' is-active' : ''}`}
             aria-hidden={active !== i}
           >
             <div className="cine-ken">
@@ -212,30 +212,6 @@ export function Hero() {
             {t('cta')}
           </a>
         </div>
-      </div>
-
-      {/* Slide indicators (right-middle) */}
-      <div className="cine-indicators" role="tablist" aria-label={t('cta')}>
-        {SLIDES.map((s, i) => (
-          <button
-            key={s.img}
-            type="button"
-            role="tab"
-            aria-selected={active === i}
-            aria-label={`${t('goToSlide')} ${i + 1}`}
-            className={`cine-dot${active === i ? 'is-active' : ''}`}
-            onClick={() => go(i)}
-          >
-            <span className="cine-dot-num">
-              {String(i + 1).padStart(2, '0')}
-            </span>
-            <span className="cine-dot-track">
-              <span
-                className={`cine-dot-fill${active === i ? 'is-full' : ''}`}
-              />
-            </span>
-          </button>
-        ))}
       </div>
 
       {/* Prev / next controls (bottom-right) */}

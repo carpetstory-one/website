@@ -7,7 +7,7 @@ import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 /**
  * Reveal — Wrap children in a clip-path weave-in animation.
- * Falls back to static rendering if reduced motion is preferred.
+ * Falls back to static rendering if reduced motion is preferred or on mobile.
  */
 export function Reveal({
   children,
@@ -17,9 +17,14 @@ export function Reveal({
   className?: string;
 }) {
   const prefersReducedMotion = useReducedMotion();
+  const [isMobile, setIsMobile] = React.useState(false);
 
-  if (prefersReducedMotion) {
-    return <div className={`reveal ${className}`}>{children}</div>;
+  React.useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+  }, []);
+
+  if (prefersReducedMotion || isMobile) {
+    return <div className={className}>{children}</div>;
   }
 
   return (

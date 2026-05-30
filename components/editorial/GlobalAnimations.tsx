@@ -650,7 +650,8 @@ export function GlobalAnimations() {
         onScroll(() => {
           const rect = immSection.getBoundingClientRect();
           const total = rect.height - window.innerHeight;
-          let p = -rect.top / total;
+          const triggerOffset = window.innerHeight * 0.25; // start zoom 25% earlier
+          let p = (triggerOffset - rect.top) / (total + triggerOffset);
           p = Math.max(0, Math.min(1, p));
 
           const sm = isMobile;

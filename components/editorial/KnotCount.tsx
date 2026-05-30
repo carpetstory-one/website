@@ -63,16 +63,7 @@ export function KnotCount() {
   const t = useTranslations('Knot');
 
   return (
-    <section
-      className="knot-section knot-single"
-      aria-labelledby="knot-heading"
-      style={{
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-      }}
-    >
+    <section className="knot-section knot-single" aria-labelledby="knot-heading">
       <div
         className="knot-container"
         style={{ maxWidth: '1200px', margin: '0 auto', width: '100%' }}

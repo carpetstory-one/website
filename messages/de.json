@@ -485,9 +485,9 @@
     "sortOptions": {
       "curated": "Kuriert",
       "newest": "Neueste",
-      "priceAsc": "Preis: aufsteigend",
-      "priceDesc": "Preis: absteigend",
-      "nameAsc": "Name (A–Z)"
+      "price-asc": "Preis: aufsteigend",
+      "price-desc": "Preis: absteigend",
+      "name-asc": "Name (A–Z)"
     },
     "materials": {
       "Wool": "Wolle",

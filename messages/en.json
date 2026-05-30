@@ -453,9 +453,9 @@
     "sortOptions": {
       "curated": "Curated",
       "newest": "Newest",
-      "priceAsc": "Price: low to high",
-      "priceDesc": "Price: high to low",
-      "nameAsc": "Name (A–Z)"
+      "price-asc": "Price: low to high",
+      "price-desc": "Price: high to low",
+      "name-asc": "Name (A–Z)"
     },
     "materials": {
       "Wool": "Wool",

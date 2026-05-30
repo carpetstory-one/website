@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { EstimateTool } from './EstimateTool';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 const EASE = [0.32, 0.72, 0, 1] as const;
 
@@ -14,6 +15,13 @@ export function EstimateDrawer({
   onClose: () => void;
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
+
+  // Mobile: slide up as a bottom sheet (matches the filter sheet).
+  // Desktop: slide in from the right as a side drawer.
+  const slide = isMobile
+    ? { initial: { y: '100%' }, animate: { y: 0 }, exit: { y: '100%' } }
+    : { initial: { x: '100%' }, animate: { x: 0 }, exit: { x: '100%' } };
 
   useEffect(() => {
     if (!open) return;
@@ -49,9 +57,9 @@ export function EstimateDrawer({
             role="dialog"
             aria-modal="true"
             aria-label="Estimate your piece"
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
+            initial={slide.initial}
+            animate={slide.animate}
+            exit={slide.exit}
             transition={{ duration: 0.4, ease: EASE }}
             className="est-drawer"
             data-lenis-prevent

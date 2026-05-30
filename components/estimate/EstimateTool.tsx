@@ -151,7 +151,7 @@ export function EstimateTool({ source }: { source: 'rugs' | 'collection' }) {
                 key={o.id}
                 type="button"
                 aria-pressed={construction === o.id}
-                className={`est-card${construction === o.id ? 'is-on' : ''}`}
+                className={`est-card${construction === o.id ? ' is-on' : ''}`}
                 onClick={() => setConstruction(o.id)}
               >
                 <span className="est-card-title">{o.label}</span>
@@ -170,7 +170,7 @@ export function EstimateTool({ source }: { source: 'rugs' | 'collection' }) {
                 key={o.id}
                 type="button"
                 aria-pressed={material === o.id}
-                className={`est-chip${material === o.id ? 'is-on' : ''}`}
+                className={`est-chip${material === o.id ? ' is-on' : ''}`}
                 onClick={() => setMaterial(o.id)}
               >
                 {o.label}
@@ -190,7 +190,7 @@ export function EstimateTool({ source }: { source: 'rugs' | 'collection' }) {
                 key={p.label}
                 type="button"
                 aria-pressed={!custom && preset === p.label}
-                className={`est-size${!custom && preset === p.label ? 'is-on' : ''}`}
+                className={`est-size${!custom && preset === p.label ? ' is-on' : ''}`}
                 onClick={() => {
                   setCustom(false);
                   setPreset(p.label);
@@ -202,7 +202,7 @@ export function EstimateTool({ source }: { source: 'rugs' | 'collection' }) {
             <button
               type="button"
               aria-pressed={custom}
-              className={`est-size${custom ? 'is-on' : ''}`}
+              className={`est-size${custom ? ' is-on' : ''}`}
               onClick={() => setCustom(true)}
             >
               Custom
@@ -249,7 +249,7 @@ export function EstimateTool({ source }: { source: 'rugs' | 'collection' }) {
                   key={o.id}
                   type="button"
                   aria-pressed={knot === o.id}
-                  className={`est-chip${knot === o.id ? 'is-on' : ''}`}
+                  className={`est-chip${knot === o.id ? ' is-on' : ''}`}
                   onClick={() => setKnot(o.id)}
                 >
                   {o.label}
@@ -271,7 +271,7 @@ export function EstimateTool({ source }: { source: 'rugs' | 'collection' }) {
                 key={o.id}
                 type="button"
                 aria-pressed={complexity === o.id}
-                className={`est-chip${complexity === o.id ? 'is-on' : ''}`}
+                className={`est-chip${complexity === o.id ? ' is-on' : ''}`}
                 onClick={() => setComplexity(o.id)}
               >
                 {o.label}

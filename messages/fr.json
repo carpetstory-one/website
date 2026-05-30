@@ -485,9 +485,9 @@
     "sortOptions": {
       "curated": "Sélection",
       "newest": "Nouveautés",
-      "priceAsc": "Prix : croissant",
-      "priceDesc": "Prix : décroissant",
-      "nameAsc": "Nom (A–Z)"
+      "price-asc": "Prix : croissant",
+      "price-desc": "Prix : décroissant",
+      "name-asc": "Nom (A–Z)"
     },
     "materials": {
       "Wool": "Laine",
