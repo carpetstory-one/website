@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Nav } from '@/components/editorial/Nav';
 import { Hero } from '@/components/editorial/Hero';
 import { Collection } from '@/components/editorial/Collection';
@@ -28,7 +29,9 @@ export default function HomePage() {
       <World />
       <Testimonials />
       <Doors />
-      <Inquiry />
+      <Suspense fallback={<div className="py-24" />}>
+        <Inquiry />
+      </Suspense>
       <Footer />
     </>
   );

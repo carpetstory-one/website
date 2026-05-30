@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'motion/react';
-import { useSearchParams } from 'next/navigation';
 import { Link } from '@/i18n/routing';
 import { blurDataURL } from '@/lib/blur';
 import type { Collection, Rug } from '@/lib/collections';
@@ -50,6 +49,15 @@ function sameSet(a: string[], b: string[]): boolean {
   return b.every((x) => set.has(x));
 }
 
+/** Read the ?rugs= param directly from the browser URL (SSR-safe — returns [] on server). */
+function readRugsFromUrl(validSlugs: Set<string>): string[] {
+  if (typeof window === 'undefined') return [];
+  return parseRugFilter(
+    new URLSearchParams(window.location.search).get('rugs'),
+    validSlugs,
+  );
+}
+
 // ── Component ────────────────────────────────────────────────────────────────
 
 export function CollectionDetailContent({
@@ -61,19 +69,23 @@ export function CollectionDetailContent({
   locale: string;
   others: Collection[];
 }) {
-  const searchParams = useSearchParams();
   const validSlugs = useMemo(() => new Set(col.rugs.map((r) => r.slug)), [col.rugs]);
 
-  // Local filter state — URL is kept in sync with a debounced replaceState.
-  const [active, setActive] = useState<string[]>(() =>
-    parseRugFilter(searchParams.get('rugs'), validSlugs)
-  );
+  // Start empty on server; hydrate from URL on mount (avoids useSearchParams
+  // which forces the SSG page into dynamic rendering and breaks on Netlify).
+  const [active, setActive] = useState<string[]>([]);
 
-  // Adopt URL changes from outside (back/forward).
+  // Hydrate on mount + listen for back/forward via popstate.
   useEffect(() => {
-    const fromUrl = parseRugFilter(searchParams.get('rugs'), validSlugs);
-    setActive((prev) => (sameSet(prev, fromUrl) ? prev : fromUrl));
-  }, [searchParams, validSlugs]);
+    setActive(readRugsFromUrl(validSlugs));
+
+    const onPopState = () => {
+      const fromUrl = readRugsFromUrl(validSlugs);
+      setActive((prev) => (sameSet(prev, fromUrl) ? prev : fromUrl));
+    };
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, [validSlugs]);
 
   // Debounced shallow URL write (150ms, same as the collection index).
   const writeUrl = useRef(

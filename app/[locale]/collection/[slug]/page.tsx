@@ -1,4 +1,3 @@
-import { Suspense } from 'react';
 import Image from 'next/image';
 import { Nav } from '@/components/editorial/Nav';
 import { Footer } from '@/components/editorial/Footer';
@@ -15,6 +14,7 @@ import {
   jsonLd,
   SITE_URL,
 } from '@/lib/seo';
+import { setRequestLocale } from 'next-intl/server';
 import { CollectionDetailContent } from './CollectionDetailContent';
 
 type Props = {
@@ -50,6 +50,8 @@ export function generateStaticParams() {
 
 export default async function CollectionDetailPage({ params }: Props) {
   const { slug, locale } = await params;
+  setRequestLocale(locale);
+
   const col = getCollectionBySlug(slug);
 
   if (!col) notFound();
@@ -189,9 +191,7 @@ export default async function CollectionDetailPage({ params }: Props) {
       </div>
 
       <main className="flex-1">
-        <Suspense fallback={<div className="flex-1" />}>
-          <CollectionDetailContent col={col} locale={locale} others={others} />
-        </Suspense>
+        <CollectionDetailContent col={col} locale={locale} others={others} />
       </main>
 
       <Footer />

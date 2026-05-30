@@ -112,6 +112,12 @@ export const metadata: Metadata = {
   },
 };
 
+import { setRequestLocale } from 'next-intl/server';
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
 export default async function RootLayout({
   children,
   params
@@ -125,6 +131,9 @@ export default async function RootLayout({
   if (!routing.locales.includes(locale as any)) {
     notFound();
   }
+
+  // Required for static rendering in Next.js App Router (next-intl)
+  setRequestLocale(locale);
 
   // Providing all messages to the client
   // side is the easiest way to get started

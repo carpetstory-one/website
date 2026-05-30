@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Nav } from '@/components/editorial/Nav';
 import { Footer } from '@/components/editorial/Footer';
 import { Inquiry } from '@/components/editorial/Inquiry';
@@ -34,7 +35,9 @@ export default async function ContactPage({ params }: Props) {
       />
       <Nav />
       <main className="flex-1 pt-24 sm:pt-28">
-        <Inquiry />
+        <Suspense fallback={<div className="py-24" />}>
+          <Inquiry />
+        </Suspense>
       </main>
       <Footer />
     </div>

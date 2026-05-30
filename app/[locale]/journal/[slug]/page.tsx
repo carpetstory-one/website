@@ -11,7 +11,9 @@ import {
   articleSchema,
   breadcrumbSchema,
   jsonLd,
+  SITE_URL,
 } from '@/lib/seo';
+import { setRequestLocale } from 'next-intl/server';
 
 type Props = {
   params: Promise<{ slug: string; locale: string }>;
@@ -43,6 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function PostPage({ params }: Props) {
   const { slug, locale } = await params;
+  setRequestLocale(locale);
   let post: ReturnType<typeof getPostBySlug>;
   try {
     post = getPostBySlug(slug);

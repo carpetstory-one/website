@@ -13,6 +13,7 @@ import {
   jsonLd,
   SITE_URL,
 } from '@/lib/seo';
+import { setRequestLocale } from 'next-intl/server';
 import { RugDetailContent } from './RugDetailContent';
 
 type Props = {
@@ -52,6 +53,8 @@ export function generateStaticParams() {
 
 export default async function RugDetailPage({ params }: Props) {
   const { slug, rugSlug, locale } = await params;
+  setRequestLocale(locale);
+  
   const result = getRugBySlug(slug, rugSlug);
 
   if (!result) notFound();
