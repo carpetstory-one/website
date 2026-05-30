@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslations } from 'next-intl';
 import { RangeSlider } from './RangeSlider';
 import {
@@ -51,7 +52,11 @@ export function RugFilters(props: Props) {
   } = props;
   const [openFacet, setOpenFacet] = useState<string | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const barRef = useRef<HTMLDivElement>(null);
+
+  // Portal target is only available on the client.
+  useEffect(() => setMounted(true), []);
 
   // Desktop popover: close on outside click / ESC.
   useEffect(() => {
@@ -289,7 +294,10 @@ export function RugFilters(props: Props) {
       </div>
 
       {/* ── Mobile bottom sheet (backdrop + 90vh sheet) ─────────────────── */}
-      {sheetOpen && (
+      {/* Portaled to <body> so its position:fixed anchors to the viewport,
+          not the .rugx-filterwrap ancestor whose backdrop-filter would
+          otherwise become its containing block. */}
+      {mounted && sheetOpen && createPortal(
         <>
         <div
           className="filx-sheet-backdrop"
@@ -339,7 +347,8 @@ export function RugFilters(props: Props) {
             </button>
           </div>
         </div>
-        </>
+        </>,
+        document.body
       )}
     </>
   );

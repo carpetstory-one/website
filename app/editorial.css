@@ -5758,8 +5758,36 @@ nav.nav--home:not(.scrolled):not(.is-open) .nav-burger {
 
 .est-drawer-body {
   flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
+  display: flex;
+}
+
+/* Inside the drawer, the inputs scroll and the price output is pinned as a
+   footer at the bottom of the drawer (works for the desktop side drawer and
+   the mobile bottom sheet alike). */
+.est-drawer-body .est {
+  flex: 1;
+  min-height: 0;
+}
+
+.est-drawer-body .est-inputs {
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   padding: 24px;
+}
+
+.est-drawer-body .est-output {
+  flex-shrink: 0;
+  margin-top: 0;
+  padding: 20px 24px calc(20px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--ink-faint);
+  background: var(--canvas);
+  box-shadow: 0 -8px 24px -12px rgba(26, 24, 23, 0.25);
 }
 
 /* Estimate inline section (collection pages) */
@@ -5813,8 +5841,9 @@ nav.nav--home:not(.scrolled):not(.is-open) .nav-burger {
     max-height: 90vh;
   }
 
-  .est-section .est-output,
-  .est-drawer-body .est-output {
+  /* Inline tool (collection pages): output sticks to the viewport bottom as
+     the page scrolls. The drawer output is pinned via flexbox above. */
+  .est-section .est-output {
     position: sticky;
     bottom: 0;
     background: var(--canvas);
