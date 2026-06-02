@@ -66,7 +66,7 @@ export const analytics = {
     trackEvent('shared_shortlist_received', { item_count: itemCount }),
 
   // ── Estimate tool (Step 3) ────────────────────────────────────────
-  estimateToolOpened: (source: 'rugs' | 'collection') =>
+  estimateToolOpened: (source: 'rugs' | 'collection' | 'piece') =>
     trackEvent('estimate_tool_opened', { source }),
 
   estimateCalculated: (p: {

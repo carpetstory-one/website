@@ -3,6 +3,7 @@ import { Nav } from '@/components/editorial/Nav';
 import { Hero } from '@/components/editorial/Hero';
 import { Collection } from '@/components/editorial/Collection';
 import { PromiseSection } from '@/components/editorial/PromiseSection';
+import { WorldStage } from '@/components/editorial/WorldStage';
 import { MakingSection } from '@/components/editorial/MakingSection';
 import { KnotCount } from '@/components/editorial/KnotCount';
 import { Materials } from '@/components/editorial/Materials';
@@ -21,6 +22,7 @@ export default function HomePage() {
       <Hero />
       <Collection />
       <PromiseSection />
+      <WorldStage />
       <MakingSection />
       <KnotCount />
       <Materials />

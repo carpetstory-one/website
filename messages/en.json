@@ -19,11 +19,12 @@
     "whatsapp": "WhatsApp",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
-    "rugs": "All Pieces"
+    "rugs": "All Pieces",
+    "search": "Search"
   },
   "Hero": {
     "consultation": "Free Consultation",
-    "phone": "+1 (613) 883-1801",
+    "phone": "+91 96024 92022",
     "cta": "Collections",
     "slide1Eyebrow": "Crafting Luxury",
     "slide1Headline": "Weaving Dreams",
@@ -157,7 +158,7 @@
     "p1": "My grandfather wove. My father sold. I noticed, in between, that the world had stopped looking at the floor.",
     "p2": "Carpetstory is a small attempt to make people look down again. Not at the rug — at the eight months it took, and the hands that took them.",
     "signature": "Aashrit",
-    "signatureMeta": "Ashrit Garg, Founder"
+    "signatureMeta": "Aashrit Garg, Founder"
   },
   "World": {
     "label": "VII — In the world",
@@ -238,7 +239,7 @@
     "headlineStart": "Tell us about",
     "headlineItalic": "the space.",
     "name": "Your name",
-    "namePlaceholder": "Ashrit Garg",
+    "namePlaceholder": "Aashrit Garg",
     "email": "Email",
     "emailPlaceholder": "you@somewhere.com",
     "location": "Where in the world",
@@ -285,7 +286,7 @@
     "visit": "Visit",
     "visitAtelier": "Atelier — Jaipur, India",
     "visitAppointment": "By appointment",
-    "visitPhone": "+91 — on request",
+    "visitPhone": "+91 96024 92022",
     "follow": "Follow",
     "followInstagram": "Instagram",
     "followLinkedIn": "LinkedIn",
@@ -319,7 +320,8 @@
     "origin": "Origin",
     "inquireCTA": "Inquire about this piece →",
     "whatsappCTA": "WhatsApp us about this piece",
-    "moreFromCollection": "More from the {collection} collection"
+    "moreFromCollection": "More from the {collection} collection",
+    "priceNote": "Estimated price · Made to order"
   },
   "TradePage": {
     "eyebrow": "Manufacturing & Trade Partnerships",
@@ -515,5 +517,14 @@
     "title": "Journal",
     "readArticle": "Read article",
     "description": "Notes from the atelier. Writing on craft, colour, materials, and the people who weave Carpetstory rugs."
+  },
+  "WorldStage": {
+    "label": "On the World Stage",
+    "headline": "Shown at {italic}, on the world’s largest stage.",
+    "italic": "Domotex 2016",
+    "body": "In 2016 our hand-knotted rugs were selected for Domotex in Hannover — the world’s leading trade fair for carpets and floor coverings. Among thousands of makers from across the globe, our pieces were chosen to be shown.",
+    "videoTitle": "Carpetstory at Domotex 2016, Hannover",
+    "videoCaption": "Domotex 2016 · Hannover, Germany",
+    "comingSoon": "Film coming soon"
   }
 }

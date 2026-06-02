@@ -26,6 +26,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       'Jaipur rugs',
       'rug index',
       'Carpetstory pieces',
+      'buy carpet',
+      'buy carpet online',
+      'where to buy carpet',
+      'where can i buy carpet',
+      'how to buy carpet',
+      'cheapest place to buy carpet',
+      'best place to buy carpet',
+      'best time to buy carpet',
+      'when is the best time to buy carpet',
+      'where to buy carpet remnants',
     ],
   });
 }

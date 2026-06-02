@@ -14,7 +14,6 @@ import { Link } from '@/i18n/routing';
 import { blurDataURL } from '@/lib/blur';
 import type { Collection, Rug } from '@/lib/collections';
 import { ShortlistToggleButton } from '@/components/shortlist/ShortlistToggleButton';
-import { EstimateTool } from '@/components/estimate/EstimateTool';
 import { analytics } from '@/lib/analytics';
 import { debounce } from '@/lib/url';
 import { RugFilters } from '@/components/rugs/RugFilters';
@@ -457,17 +456,6 @@ export function CollectionDetailContent({
                             {rug.description}
                           </p>
                         )}
-                        {rug.priceLabel && (
-                          <span
-                            style={{
-                              fontSize: '13px',
-                              color: 'var(--ink-soft)',
-                              letterSpacing: '0.06em',
-                            }}
-                          >
-                            {rug.priceLabel}
-                          </span>
-                        )}
                       </Link>
                     </motion.article>
                   );
@@ -510,20 +498,6 @@ export function CollectionDetailContent({
           {tRugs('beginInquiry')}
         </Link>
       </div>
-
-      {/* ── Estimate your piece (inline) ──────────────────────────────── */}
-      <section className="est-section" aria-labelledby="estimate-heading">
-        <div className="est-section-head">
-          <span className="est-section-eyebrow">{tRugs('calcEyebrow')}</span>
-          <h2 id="estimate-heading" className="est-section-title">
-            {tRugs('calcTitle')}
-          </h2>
-          <p className="est-section-sub">
-            {tRugs('calcDesc')}
-          </p>
-        </div>
-        <EstimateTool source="collection" />
-      </section>
 
       {/* ── Other collections horizontal strip ────────────────────────── */}
       <div

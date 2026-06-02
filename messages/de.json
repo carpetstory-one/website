@@ -19,11 +19,12 @@
     "whatsapp": "WhatsApp",
     "openMenu": "Menü öffnen",
     "closeMenu": "Menü schließen",
-    "rugs": "Alle Stücke"
+    "rugs": "Alle Stücke",
+    "search": "Suche"
   },
   "Hero": {
     "consultation": "Kostenlose Beratung",
-    "phone": "+1 (613) 883-1801",
+    "phone": "+91 96024 92022",
     "cta": "Kollektionen",
     "slide1Eyebrow": "Luxus Schaffen",
     "slide1Headline": "Träume Weben",
@@ -171,7 +172,7 @@
     "p1": "Mein Großvater webte. Mein Vater verkaufte. Dazwischen bemerkte ich, dass die Welt aufgehört hatte, auf den Boden zu schauen.",
     "p2": "Carpetstory ist ein kleiner Versuch, die Menschen wieder nach unten schauen zu lassen. Nicht auf den Teppich — auf die acht Monate, die er brauchte, und die Hände, die sie auf sich nahmen.",
     "signature": "Aashrit",
-    "signatureMeta": "Ashrit Garg, Gründer"
+    "signatureMeta": "Aashrit Garg, Gründer"
   },
   "World": {
     "label": "VII — In der Welt",
@@ -270,7 +271,7 @@
     "headlineStart": "Erzählen Sie uns von",
     "headlineItalic": "dem Raum.",
     "name": "Ihr Name",
-    "namePlaceholder": "Ashrit Garg",
+    "namePlaceholder": "Aashrit Garg",
     "email": "E-Mail",
     "emailPlaceholder": "sie@irgendwo.com",
     "location": "Wo auf der Welt",
@@ -317,7 +318,7 @@
     "visit": "Besuchen",
     "visitAtelier": "Atelier — Jaipur, Indien",
     "visitAppointment": "Nach Vereinbarung",
-    "visitPhone": "+91 — auf Anfrage",
+    "visitPhone": "+91 96024 92022",
     "follow": "Folgen",
     "followInstagram": "Instagram",
     "followLinkedIn": "LinkedIn",
@@ -351,7 +352,8 @@
     "origin": "Herkunft",
     "inquireCTA": "Informationen zu diesem Stück anfordern →",
     "whatsappCTA": "Schreiben Sie uns auf WhatsApp zu diesem Stück",
-    "moreFromCollection": "Mehr aus der Kollektion {collection}"
+    "moreFromCollection": "Mehr aus der Kollektion {collection}",
+    "priceNote": "Geschätzter Preis · Auf Bestellung gefertigt"
   },
   "TradePage": {
     "eyebrow": "Herstellungs- und Fachhandelspartnerschaften",
@@ -547,5 +549,14 @@
     "title": "Journal",
     "readArticle": "Artikel lesen",
     "description": "Notizen aus dem Atelier. Beiträge über Handwerk, Farbe, Materialien und die Menschen, die Carpetstory-Teppiche weben."
+  },
+  "WorldStage": {
+    "label": "Auf der Weltbühne",
+    "headline": "Gezeigt auf der {italic}, auf der größten Bühne der Welt.",
+    "italic": "Domotex 2016",
+    "body": "2016 wurden unsere handgeknüpften Teppiche für die Domotex in Hannover ausgewählt — die weltweit führende Fachmesse für Teppiche und Bodenbeläge. Unter Tausenden Herstellern aus aller Welt wurden unsere Stücke zur Ausstellung ausgewählt.",
+    "videoTitle": "Carpetstory auf der Domotex 2016, Hannover",
+    "videoCaption": "Domotex 2016 · Hannover, Deutschland",
+    "comingSoon": "Video folgt in Kürze"
   }
 }

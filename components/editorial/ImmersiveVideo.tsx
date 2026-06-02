@@ -2,7 +2,7 @@ import React from 'react';
 import { LazyVideo } from './LazyVideo';
 
 const VIDEO_POSTER =
-  'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=1200&q=60&auto=format&fit=crop';
+  'https://i.pinimg.com/1200x/63/5e/fd/635efdfe1eb120e2b2a5a1948bfe528e.jpg';
 
 export function ImmersiveVideo() {
   return (

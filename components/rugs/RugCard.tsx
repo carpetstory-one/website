@@ -4,7 +4,6 @@ import Image from 'next/image';
 import { Link } from '@/i18n/routing';
 import { blurDataURL } from '@/lib/blur';
 import { ShortlistToggleButton } from '@/components/shortlist/ShortlistToggleButton';
-import { formatPrice } from '@/lib/utils';
 import type { FlatRug } from '@/lib/rugs';
 
 // Asymmetric sizing — every 3rd card is taller, mirroring the collection grid.
@@ -51,9 +50,6 @@ export function RugCard({
         </div>
         <span className="rugx-collection">{rug.collectionName}</span>
         <h3 className="rugx-name">{rug.name}</h3>
-        {typeof rug.priceUSD === 'number' && (
-          <span className="rugx-price">From {formatPrice(rug.priceUSD)}</span>
-        )}
       </Link>
     </article>
   );

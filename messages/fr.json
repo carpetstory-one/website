@@ -19,11 +19,12 @@
     "whatsapp": "WhatsApp",
     "openMenu": "Ouvrir le menu",
     "closeMenu": "Fermer le menu",
-    "rugs": "Toutes les pièces"
+    "rugs": "Toutes les pièces",
+    "search": "Rechercher"
   },
   "Hero": {
     "consultation": "Consultation Gratuite",
-    "phone": "+1 (613) 883-1801",
+    "phone": "+91 96024 92022",
     "cta": "Collections",
     "slide1Eyebrow": "L'Art du Luxe",
     "slide1Headline": "Tisser des Rêves",
@@ -171,7 +172,7 @@
     "p1": "Mon grand-père tissait. Mon père vendait. Entre les deux, j'ai remarqué que le monde avait cessé de regarder le sol.",
     "p2": "Carpetstory est une petite tentative pour amener les gens à regarder à nouveau vers le bas. Pas le tapis — les huit mois qu'il a fallu, et les mains qui les ont pris.",
     "signature": "Aashrit",
-    "signatureMeta": "Ashrit Garg, Fondateur"
+    "signatureMeta": "Aashrit Garg, Fondateur"
   },
   "World": {
     "label": "VII — Dans le monde",
@@ -270,7 +271,7 @@
     "headlineStart": "Parlez-nous de",
     "headlineItalic": "l'espace.",
     "name": "Votre nom",
-    "namePlaceholder": "Ashrit Garg",
+    "namePlaceholder": "Aashrit Garg",
     "email": "Email",
     "emailPlaceholder": "vous@quelquepart.com",
     "location": "Où dans le monde",
@@ -317,7 +318,7 @@
     "visit": "Visiter",
     "visitAtelier": "Atelier — Jaipur, Inde",
     "visitAppointment": "Sur rendez-vous",
-    "visitPhone": "+91 — sur demande",
+    "visitPhone": "+91 96024 92022",
     "follow": "Suivre",
     "followInstagram": "Instagram",
     "followLinkedIn": "LinkedIn",
@@ -341,7 +342,7 @@
     "german": "Deutsch"
   },
   "PiecePage": {
-"dimensions": "Dimensions",
+    "dimensions": "Dimensions",
     "materials": "Matériaux",
     "density": "Densité",
     "weaveTime": "Temps de tissage",
@@ -351,7 +352,8 @@
     "origin": "Origine",
     "inquireCTA": "Demander des informations sur cette pièce →",
     "whatsappCTA": "Nous contacter sur WhatsApp à propos de cette pièce",
-    "moreFromCollection": "Plus de la collection {collection}"
+    "moreFromCollection": "Plus de la collection {collection}",
+    "priceNote": "Prix estimé · Fabriqué sur commande"
   },
   "TradePage": {
     "eyebrow": "Partenariats de Fabrication & Professionnels",
@@ -547,5 +549,14 @@
     "title": "Journal",
     "readArticle": "Lire l'article",
     "description": "Notes de l'atelier. Écrits sur l'artisanat, la couleur, les matériaux et les personnes qui tissent les tapis Carpetstory."
+  },
+  "WorldStage": {
+    "label": "Sur la scène mondiale",
+    "headline": "Présentés au {italic}, sur la plus grande scène du monde.",
+    "italic": "Domotex 2016",
+    "body": "En 2016, nos tapis noués main ont été sélectionnés pour le Domotex de Hanovre — le premier salon mondial du tapis et des revêtements de sol. Parmi des milliers d’artisans du monde entier, nos pièces ont été choisies pour être exposées.",
+    "videoTitle": "Carpetstory au Domotex 2016, Hanovre",
+    "videoCaption": "Domotex 2016 · Hanovre, Allemagne",
+    "comingSoon": "Vidéo à venir"
   }
 }

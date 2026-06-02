@@ -282,7 +282,7 @@ export function Inquiry() {
             <div className="whatsapp-alt">
               {t('orWriteOn')}
               <a
-                href="https://wa.me/919876543210"
+                href="https://wa.me/919602492022"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="wa-link link magnetic"

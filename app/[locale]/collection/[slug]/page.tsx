@@ -38,8 +38,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       col.name,
       `${col.name} rugs`,
       `${col.name} carpets`,
+      `${col.name} carpets for sale`,
+      `antique ${col.name} carpets`,
+      `buy ${col.name} carpet online`,
       'hand-knotted rug',
       'Jaipur rug',
+      'where to buy carpet',
       'Carpetstory',
     ],
   });

@@ -121,7 +121,7 @@ export const organizationSchema = {
   foundingDate: '2014',
   founder: {
     '@type': 'Person',
-    name: 'Ashrit Garg',
+    name: 'Aashrit Garg',
   },
   address: {
     '@type': 'PostalAddress',

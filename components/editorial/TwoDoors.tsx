@@ -38,7 +38,7 @@ export function TwoDoors() {
             {t('commissionBody')}
           </p>
           <a
-            href="https://wa.me/919876543210"
+            href="https://wa.me/919602492022"
             target="_blank"
             rel="noopener noreferrer"
             className="text-accent hover:text-accent-soft inline-flex min-h-[44px] items-center gap-2 text-[12px] font-medium tracking-[0.16em] uppercase transition-colors"

@@ -19,7 +19,8 @@ const WhatsAppIcon = ({ className = '' }: { className?: string }) => (
   </svg>
 );
 
-const WHATSAPP_HREF = 'https://wa.me/919876543210';
+
+const WHATSAPP_HREF = 'https://wa.me/919602492022';
 
 // Primary nav destinations — single source of truth for desktop links + the
 // mobile overlay menu so the two can never drift apart.
@@ -118,6 +119,34 @@ export function Nav() {
         aria-label="Primary"
         className={`${isHome ? 'nav--home' : ''} ${scrolled ? 'scrolled' : ''} ${menuOpen ? 'is-open' : ''}`}
       >
+        {/* Left — primary links (desktop) + burger (mobile) */}
+        <div className="nav-left">
+          {/* Mobile burger — visible below the `sm` breakpoint only. */}
+          <button
+            ref={burgerRef}
+            type="button"
+            className={`nav-burger lg:hidden ${menuOpen ? 'is-open' : ''}`}
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            onClick={() => setMenuOpen((v) => !v)}
+          >
+            <span className="nav-burger-line" />
+            <span className="nav-burger-line" />
+          </button>
+
+          {NAV_LINKS.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              className="nav-trade link hidden lg:inline-block"
+            >
+              {label(l.key, l.key[0].toUpperCase() + l.key.slice(1))}
+            </Link>
+          ))}
+        </div>
+
+        {/* Center — brand logo */}
         <a
           href="/"
           className="brand"
@@ -127,16 +156,8 @@ export function Nav() {
           <BrandLogo size="sm" />
         </a>
 
-        <div className="nav-right flex items-center gap-3 sm:gap-5 lg:gap-7">
-          {NAV_LINKS.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              className="nav-trade link hidden sm:inline-block"
-            >
-              {label(l.key, l.key[0].toUpperCase() + l.key.slice(1))}
-            </Link>
-          ))}
+        {/* Right — WhatsApp, language */}
+        <div className="nav-right flex items-center gap-3 sm:gap-5 lg:gap-6">
           <a
             href={WHATSAPP_HREF}
             target="_blank"
@@ -146,25 +167,11 @@ export function Nav() {
             suppressHydrationWarning
           >
             <WhatsAppIcon />
-            <span className="hidden sm:inline">
+            <span className="hidden lg:inline">
               {label('whatsapp', 'WhatsApp')}
             </span>
           </a>
           <LocaleSwitcher />
-
-          {/* Mobile burger — visible below the `sm` breakpoint only. */}
-          <button
-            ref={burgerRef}
-            type="button"
-            className={`nav-burger sm:hidden ${menuOpen ? 'is-open' : ''}`}
-            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={menuOpen}
-            aria-controls="mobile-menu"
-            onClick={() => setMenuOpen((v) => !v)}
-          >
-            <span className="nav-burger-line" />
-            <span className="nav-burger-line" />
-          </button>
         </div>
       </nav>
 
@@ -176,7 +183,6 @@ export function Nav() {
         role="dialog"
         aria-modal="true"
         aria-label="Site menu"
-        hidden={!menuOpen}
         data-lenis-prevent
       >
         <nav className="mobile-menu-links" aria-label="Mobile">
@@ -185,7 +191,7 @@ export function Nav() {
               key={l.href}
               href={l.href}
               className="mobile-menu-link"
-              style={{ transitionDelay: `${0.06 + i * 0.05}s` }}
+              style={{ transitionDelay: menuOpen ? `${0.22 + i * 0.06}s` : '0s' }}
               onClick={() => setMenuOpen(false)}
             >
               {label(l.key, l.key[0].toUpperCase() + l.key.slice(1))}

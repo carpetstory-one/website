@@ -11,7 +11,6 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useTranslations } from 'next-intl';
 import { RugCard } from '@/components/rugs/RugCard';
 import { RugFilters } from '@/components/rugs/RugFilters';
-import { EstimateDrawer } from '@/components/estimate/EstimateDrawer';
 import { debounce } from '@/lib/url';
 import {
   getAllRugs,
@@ -58,7 +57,6 @@ export function RugsContent() {
 
   const [filters, setFilters] = useState<Filters>(() => emptyFilters());
   const [visible, setVisible] = useState(PAGE);
-  const [estimateOpen, setEstimateOpen] = useState(false);
 
   // Hydrate from URL on mount + adopt back/forward.
   useEffect(() => {
@@ -134,15 +132,6 @@ export function RugsContent() {
         <p className="rugx-hero-sub">
           {t('subtitle', { total, count: collectionCount })}
         </p>
-        <div className="rugx-hero-actions">
-          <button
-            type="button"
-            className="rugx-estimate-btn"
-            onClick={() => setEstimateOpen(true)}
-          >
-            {t('estimateCTA')}
-          </button>
-        </div>
       </header>
 
       {/* Sticky filter bar */}
@@ -207,11 +196,6 @@ export function RugsContent() {
           <span className="rugx-spinner" />
         </div>
       )}
-
-      <EstimateDrawer
-        open={estimateOpen}
-        onClose={() => setEstimateOpen(false)}
-      />
     </>
   );
 }

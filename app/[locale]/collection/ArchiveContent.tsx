@@ -24,12 +24,7 @@ export function ArchiveContent() {
 
         <div className="grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 sm:gap-y-20 lg:grid-cols-3">
           {allPieces.map((piece, i) => (
-            <PieceCard
-              key={piece.slug}
-              piece={piece}
-              index={i}
-              fromLabel={t('from')}
-            />
+            <PieceCard key={piece.slug} piece={piece} index={i} />
           ))}
         </div>
       </div>

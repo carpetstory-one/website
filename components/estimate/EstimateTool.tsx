@@ -71,7 +71,11 @@ const usd = (n: number) =>
     maximumFractionDigits: 0,
   }).format(n);
 
-export function EstimateTool({ source }: { source: 'rugs' | 'collection' }) {
+export function EstimateTool({
+  source,
+}: {
+  source: 'rugs' | 'collection' | 'piece';
+}) {
   const [construction, setConstruction] = useState<Construction | null>(null);
   const [material, setMaterial] = useState<EstMaterial | null>(null);
   const [preset, setPreset] = useState<string | null>(null);

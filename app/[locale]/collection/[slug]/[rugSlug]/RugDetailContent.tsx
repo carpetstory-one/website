@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl';
 import { blurDataURL } from '@/lib/blur';
 import type { Collection, Rug } from '@/lib/collections';
 import { ShortlistToggleButton } from '@/components/shortlist/ShortlistToggleButton';
+import { EstimateTool } from '@/components/estimate/EstimateTool';
 
 const slideUp = {
   hidden: { opacity: 0, y: 60 },
@@ -34,6 +35,7 @@ export function RugDetailContent({
   inquiryMessage: string;
 }) {
   const t = useTranslations('PiecePage');
+  const tRugs = useTranslations('RugsPage');
   // Analytics
   React.useEffect(() => {
     if (typeof window !== 'undefined' && (window as any).gtag) {
@@ -138,17 +140,37 @@ export function RugDetailContent({
             </p>
           )}
 
-          {/* Price */}
+          {/* Price — prominent, product-level (Apple-style) */}
           {rug.price && (
             <div
               style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: '22px',
-                color: 'var(--ink)',
+                borderTop: '1px solid var(--ink-faint)',
+                paddingTop: '24px',
                 marginBottom: '28px',
               }}
             >
-              {rug.price}
+              <div
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontWeight: 400,
+                  fontSize: 'clamp(28px, 3vw, 34px)',
+                  lineHeight: 1.1,
+                  letterSpacing: '-0.01em',
+                  color: 'var(--ink)',
+                }}
+              >
+                {rug.price}
+              </div>
+              <div
+                style={{
+                  fontSize: '12px',
+                  letterSpacing: '0.06em',
+                  color: 'var(--ink-soft)',
+                  marginTop: '8px',
+                }}
+              >
+                {t('priceNote')}
+              </div>
             </div>
           )}
 
@@ -388,7 +410,7 @@ export function RugDetailContent({
             />
 
             <a
-              href={`https://wa.me/919876543210?text=${inquiryMessage}`}
+              href={`https://wa.me/919602492022?text=${inquiryMessage}`}
               target="_blank"
               rel="noopener noreferrer"
               style={{
@@ -415,6 +437,18 @@ export function RugDetailContent({
           </div>
         </motion.div>
       </div>
+
+      {/* ── Estimate this piece ───────────────────────────────────── */}
+      <section className="est-section" aria-labelledby="estimate-heading">
+        <div className="est-section-head">
+          <span className="est-section-eyebrow">{tRugs('calcEyebrow')}</span>
+          <h2 id="estimate-heading" className="est-section-title">
+            {tRugs('calcTitle')}
+          </h2>
+          <p className="est-section-sub">{tRugs('calcDesc')}</p>
+        </div>
+        <EstimateTool source="piece" />
+      </section>
 
       {/* ── More from this collection ──────────────────────────────── */}
       {siblings.length > 0 && (

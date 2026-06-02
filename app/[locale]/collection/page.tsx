@@ -31,6 +31,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       'tribal rugs',
       'silk rugs',
       'Carpetstory collections',
+      'persian carpets',
+      'persian carpets for sale',
+      'antique persian carpets',
+      'what are persian carpets made of',
+      'persian carpets and rugs',
+      'indian carpets',
+      'where to buy carpet',
+      'best place to buy carpet',
+      'buy carpet online',
     ],
   });
 }

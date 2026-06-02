@@ -88,7 +88,7 @@ export const collections: Collection[] = [
         description: 'Indigo corner brackets on a sand field.',
         price: 'From $12,800',
         priceUSD: 12800,
-        image: u('photo-1606744888344-493238951221', 900, 1200),
+        image: u('photo-1646092646542-6404620730d2', 900, 1200),
       },
       {
         slug: 'rug-03',
@@ -96,7 +96,7 @@ export const collections: Collection[] = [
         description: 'Walnut ground, pomegranate border.',
         price: 'From $16,200',
         priceUSD: 16200,
-        image: u('photo-1567016376408-0226e4d0c1ea', 900, 1200),
+        image: u('photo-1600166898405-da9535204843', 900, 1200),
       },
       {
         slug: 'rug-04',
@@ -104,7 +104,7 @@ export const collections: Collection[] = [
         description: 'Ivory field, madder-detailed border.',
         price: 'From $11,600',
         priceUSD: 11600,
-        image: u('photo-1555041469-a586c61ea9bc', 900, 1200),
+        image: u('photo-1580229064033-d6cf020b2cf2', 900, 1200),
       },
       {
         slug: 'rug-05',
@@ -112,7 +112,7 @@ export const collections: Collection[] = [
         description: 'Midnight indigo with silk highlights.',
         price: 'From $18,400',
         priceUSD: 18400,
-        image: u('photo-1567016526105-22da7c13161a', 900, 1200),
+        image: u('photo-1702675990996-bd9e01288488', 900, 1200),
       },
       {
         slug: 'rug-06',
@@ -120,7 +120,7 @@ export const collections: Collection[] = [
         description: 'Rose madder on an undyed wool ground.',
         price: 'From $13,200',
         priceUSD: 13200,
-        image: u('photo-1581873372796-635b67ca2008', 900, 1200),
+        image: u('photo-1691071715735-cb7dcd31f9c6', 900, 1200),
       },
     ],
   },
@@ -132,7 +132,7 @@ export const collections: Collection[] = [
     tagline: 'For rooms that argue with the past.',
     description:
       'Geometric, spare, deliberate. The Modern collection takes the hand-knotted format and strips it of ornament, leaving only structure. Flat planes of colour, sharp-edged borders, negative space used as a compositional element. The craft is unchanged. The visual language is entirely now.',
-    heroImage: u('photo-1586023492125-27b2c045efd7'),
+    heroImage: u('photo-1531835551805-16d864c8d311'),
     featured: true,
     meta: {
       origin: 'Jaipur, Rajasthan',
@@ -147,7 +147,7 @@ export const collections: Collection[] = [
         description: 'Three horizontal bands — ash, ivory, charcoal.',
         price: 'From $9,800',
         priceUSD: 9800,
-        image: u('photo-1586023492125-27b2c045efd7', 900, 1200),
+        image: u('photo-1531835551805-16d864c8d311', 900, 1200),
       },
       {
         slug: 'rug-02',
@@ -155,7 +155,7 @@ export const collections: Collection[] = [
         description: 'Single-field deep charcoal. No border.',
         price: 'From $8,600',
         priceUSD: 8600,
-        image: u('photo-1505691938895-1758d7feb511', 900, 1200),
+        image: u('photo-1702675990996-bd9e01288488', 900, 1200),
       },
       {
         slug: 'rug-03',
@@ -163,7 +163,7 @@ export const collections: Collection[] = [
         description: 'Offset grid in dusty rose and flax.',
         price: 'From $11,200',
         priceUSD: 11200,
-        image: u('photo-1502005229762-cf1b2da7c5d6', 900, 1200),
+        image: u('photo-1531835551805-16d864c8d311', 900, 1200),
       },
       {
         slug: 'rug-04',
@@ -171,7 +171,7 @@ export const collections: Collection[] = [
         description: 'Stepped diamond on an undyed ground.',
         price: 'From $10,400',
         priceUSD: 10400,
-        image: u('photo-1581009146145-b5ef050c2e1e', 900, 1200),
+        image: u('photo-1594040226829-7f251ab46d80', 900, 1200),
       },
       {
         slug: 'rug-05',
@@ -179,7 +179,7 @@ export const collections: Collection[] = [
         description: 'Two-tone vertical stripe — ink and linen.',
         price: 'From $9,200',
         priceUSD: 9200,
-        image: u('photo-1493663284031-b7e3aefcae8e', 900, 1200),
+        image: u('photo-1702675990996-bd9e01288488', 900, 1200),
       },
       {
         slug: 'rug-06',
@@ -187,7 +187,7 @@ export const collections: Collection[] = [
         description: 'Abstract field: fog on a dark ground.',
         price: 'From $12,400',
         priceUSD: 12400,
-        image: u('photo-1554995207-c18c203602cb', 900, 1200),
+        image: u('photo-1551105378-78e609e1d468', 900, 1200),
       },
     ],
   },
@@ -199,7 +199,7 @@ export const collections: Collection[] = [
     tagline: 'Made by hand. Made for use. Made to last a lifetime.',
     description:
       'The Tribal collection is built on the weaving traditions of nomadic cultures — Qashqai, Berber, Baluch. The patterns are geometric because geometry can be woven without a cartoon; the proportions are imperfect because they were measured by eye. Heavy wool pile, tight knot density, the kind of construction that was made to survive a migration.',
-    heroImage: u('photo-1606744888344-493238951221'),
+    heroImage: u('photo-1646092646542-6404620730d2'),
     featured: true,
     meta: {
       origin: 'Jaipur, Rajasthan',
@@ -214,7 +214,7 @@ export const collections: Collection[] = [
         description: 'Double medallion on a madder ground.',
         price: 'From $7,400',
         priceUSD: 7400,
-        image: u('photo-1555041469-a586c61ea9bc', 900, 1200),
+        image: u('photo-1580229064033-d6cf020b2cf2', 900, 1200),
       },
       {
         slug: 'rug-02',
@@ -222,7 +222,7 @@ export const collections: Collection[] = [
         description: 'Gul motifs on a deep walnut field.',
         price: 'From $8,200',
         priceUSD: 8200,
-        image: u('photo-1503602642458-232111445657', 900, 1200),
+        image: u('photo-1594040226829-7f251ab46d80', 900, 1200),
       },
       {
         slug: 'rug-03',
@@ -230,7 +230,7 @@ export const collections: Collection[] = [
         description: 'Hooked borders, tribal red.',
         price: 'From $6,800',
         priceUSD: 6800,
-        image: u('photo-1581873372796-635b67ca2008', 900, 1200),
+        image: u('photo-1691071715735-cb7dcd31f9c6', 900, 1200),
       },
       {
         slug: 'rug-04',
@@ -238,7 +238,7 @@ export const collections: Collection[] = [
         description: 'Diamond lattice in undyed and madder.',
         price: 'From $7,200',
         priceUSD: 7200,
-        image: u('photo-1567016376408-0226e4d0c1ea', 900, 1200),
+        image: u('photo-1600166898405-da9535204843', 900, 1200),
       },
       {
         slug: 'rug-05',
@@ -246,7 +246,7 @@ export const collections: Collection[] = [
         description: 'Running dog border, ivory field.',
         price: 'From $8,600',
         priceUSD: 8600,
-        image: u('photo-1506439773649-6e0eb8cfb237', 900, 1200),
+        image: u('photo-1691071715735-cb7dcd31f9c6', 900, 1200),
       },
       {
         slug: 'rug-06',
@@ -254,7 +254,7 @@ export const collections: Collection[] = [
         description: 'Bold lozenge field, walnut ground.',
         price: 'From $9,400',
         priceUSD: 9400,
-        image: u('photo-1558618666-fcd25c85cd64', 900, 1200),
+        image: u('photo-1646092646542-6404620730d2', 900, 1200),
       },
     ],
   },
@@ -266,7 +266,7 @@ export const collections: Collection[] = [
     tagline: 'One thread catches the light differently at every hour.',
     description:
       'Pure mulberry silk, hand-knotted at the highest density we produce. These pieces change with the day — luminous in morning light, muted at dusk, glowing under evening lamp. They are the most technically demanding pieces in our workshop, woven by a small number of artisans with the patience the material demands. Not made for heavy traffic. Made for rooms that are looked at.',
-    heroImage: u('photo-1605296867304-46d5465a13f1'),
+    heroImage: u('photo-1600166898405-da9535204843'),
     featured: true,
     meta: {
       origin: 'Jaipur, Rajasthan',
@@ -281,7 +281,7 @@ export const collections: Collection[] = [
         description: 'Ivory field with silk floral medallion.',
         price: 'From $22,400',
         priceUSD: 22400,
-        image: u('photo-1605296867304-46d5465a13f1', 900, 1200),
+        image: u('photo-1600166898405-da9535204843', 900, 1200),
       },
       {
         slug: 'rug-02',
@@ -289,7 +289,7 @@ export const collections: Collection[] = [
         description: 'Champagne ground, platinum highlights.',
         price: 'From $24,800',
         priceUSD: 24800,
-        image: u('photo-1567016526105-22da7c13161a', 900, 1200),
+        image: u('photo-1702675990996-bd9e01288488', 900, 1200),
       },
       {
         slug: 'rug-03',
@@ -297,7 +297,7 @@ export const collections: Collection[] = [
         description: 'Deep teal field, gold silk accents.',
         price: 'From $26,200',
         priceUSD: 26200,
-        image: u('photo-1554995207-c18c203602cb', 900, 1200),
+        image: u('photo-1551105378-78e609e1d468', 900, 1200),
       },
       {
         slug: 'rug-04',
@@ -305,7 +305,7 @@ export const collections: Collection[] = [
         description: 'Pearl white on white — texture by light only.',
         price: 'From $28,400',
         priceUSD: 28400,
-        image: u('photo-1493663284031-b7e3aefcae8e', 900, 1200),
+        image: u('photo-1702675990996-bd9e01288488', 900, 1200),
       },
       {
         slug: 'rug-05',
@@ -313,7 +313,7 @@ export const collections: Collection[] = [
         description: 'Rose and gold arabesque on ivory.',
         price: 'From $21,600',
         priceUSD: 21600,
-        image: u('photo-1604147495798-57beb5d6af73', 900, 1200),
+        image: u('photo-1551105378-78e609e1d468', 900, 1200),
       },
       {
         slug: 'rug-06',
@@ -321,7 +321,7 @@ export const collections: Collection[] = [
         description: 'Midnight blue, copper botanical detail.',
         price: 'From $23,200',
         priceUSD: 23200,
-        image: u('photo-1581009146145-b5ef050c2e1e', 900, 1200),
+        image: u('photo-1594040226829-7f251ab46d80', 900, 1200),
       },
     ],
   },
@@ -333,7 +333,7 @@ export const collections: Collection[] = [
     tagline: 'The hand-knotted format, rethought without nostalgia.',
     description:
       "Contemporary doesn't mean trend-driven. It means the designer started with a blank cartoon and a clear intention. These pieces borrow nothing from the archive — they are made in Jaipur, by the same hands, using the same materials, but the pattern belongs entirely to now. Geometric abstractions, painterly fields, compositions drawn from architecture rather than botany.",
-    heroImage: u('photo-1502005229762-cf1b2da7c5d6'),
+    heroImage: u('photo-1531835551805-16d864c8d311'),
     featured: true,
     meta: {
       origin: 'Jaipur, Rajasthan',
@@ -348,7 +348,7 @@ export const collections: Collection[] = [
         description: 'Bold vertical plane division.',
         price: 'From $11,200',
         priceUSD: 11200,
-        image: u('photo-1502005229762-cf1b2da7c5d6', 900, 1200),
+        image: u('photo-1531835551805-16d864c8d311', 900, 1200),
       },
       {
         slug: 'rug-02',
@@ -356,7 +356,7 @@ export const collections: Collection[] = [
         description: 'Radiating arc from lower left corner.',
         price: 'From $12,800',
         priceUSD: 12800,
-        image: u('photo-1505691938895-1758d7feb511', 900, 1200),
+        image: u('photo-1702675990996-bd9e01288488', 900, 1200),
       },
       {
         slug: 'rug-03',
@@ -364,7 +364,7 @@ export const collections: Collection[] = [
         description: 'Wash of colour, indigo bleeding into sand.',
         price: 'From $13,400',
         priceUSD: 13400,
-        image: u('photo-1554995207-c18c203602cb', 900, 1200),
+        image: u('photo-1551105378-78e609e1d468', 900, 1200),
       },
       {
         slug: 'rug-04',
@@ -372,7 +372,7 @@ export const collections: Collection[] = [
         description: 'Single diagonal band on ivory.',
         price: 'From $10,400',
         priceUSD: 10400,
-        image: u('photo-1586023492125-27b2c045efd7', 900, 1200),
+        image: u('photo-1531835551805-16d864c8d311', 900, 1200),
       },
       {
         slug: 'rug-05',
@@ -380,7 +380,7 @@ export const collections: Collection[] = [
         description: 'Terracotta half-circle on linen ground.',
         price: 'From $11,600',
         priceUSD: 11600,
-        image: u('photo-1604147495798-57beb5d6af73', 900, 1200),
+        image: u('photo-1551105378-78e609e1d468', 900, 1200),
       },
       {
         slug: 'rug-06',
@@ -388,7 +388,7 @@ export const collections: Collection[] = [
         description: 'Abstract brushstroke in walnut wool.',
         price: 'From $14,200',
         priceUSD: 14200,
-        image: u('photo-1493663284031-b7e3aefcae8e', 900, 1200),
+        image: u('photo-1702675990996-bd9e01288488', 900, 1200),
       },
     ],
   },
@@ -423,7 +423,7 @@ export const collections: Collection[] = [
         description: 'Floral field, triple border system.',
         price: 'From $22,400',
         priceUSD: 22400,
-        image: u('photo-1581873372796-635b67ca2008', 900, 1200),
+        image: u('photo-1691071715735-cb7dcd31f9c6', 900, 1200),
       },
       {
         slug: 'rug-03',
@@ -431,7 +431,7 @@ export const collections: Collection[] = [
         description: 'Vine-scroll border, deep indigo ground.',
         price: 'From $18,200',
         priceUSD: 18200,
-        image: u('photo-1555041469-a586c61ea9bc', 900, 1200),
+        image: u('photo-1580229064033-d6cf020b2cf2', 900, 1200),
       },
       {
         slug: 'rug-04',
@@ -439,7 +439,7 @@ export const collections: Collection[] = [
         description: 'Hunting scene in madder and walnut.',
         price: 'From $24,600',
         priceUSD: 24600,
-        image: u('photo-1567016376408-0226e4d0c1ea', 900, 1200),
+        image: u('photo-1600166898405-da9535204843', 900, 1200),
       },
       {
         slug: 'rug-05',
@@ -447,7 +447,7 @@ export const collections: Collection[] = [
         description: 'Knotted palmette border on ivory.',
         price: 'From $16,800',
         priceUSD: 16800,
-        image: u('photo-1567016526105-22da7c13161a', 900, 1200),
+        image: u('photo-1702675990996-bd9e01288488', 900, 1200),
       },
       {
         slug: 'rug-06',
@@ -455,7 +455,7 @@ export const collections: Collection[] = [
         description: 'Herati pattern, saffron-gold field.',
         price: 'From $21,200',
         priceUSD: 21200,
-        image: u('photo-1606744888344-493238951221', 900, 1200),
+        image: u('photo-1646092646542-6404620730d2', 900, 1200),
       },
     ],
   },
@@ -467,7 +467,7 @@ export const collections: Collection[] = [
     tagline: 'Neither modern nor traditional. Exactly right for most rooms.',
     description:
       "The Transitional collection is for the room that doesn't commit to a period. Traditional motifs simplified until the ornament becomes texture. Contemporary restraint softened by warmth. These pieces work with older furniture and newer architecture equally — which is why they are the most consistently specified by interior designers who need something that doesn't demand the room revolve around it.",
-    heroImage: u('photo-1581873372796-635b67ca2008'),
+    heroImage: u('photo-1691071715735-cb7dcd31f9c6'),
     featured: false,
     meta: {
       origin: 'Jaipur, Rajasthan',
@@ -482,7 +482,7 @@ export const collections: Collection[] = [
         description: 'Faded Persian floral on a neutral ground.',
         price: 'From $10,200',
         priceUSD: 10200,
-        image: u('photo-1581873372796-635b67ca2008', 900, 1200),
+        image: u('photo-1691071715735-cb7dcd31f9c6', 900, 1200),
       },
       {
         slug: 'rug-02',
@@ -490,7 +490,7 @@ export const collections: Collection[] = [
         description: 'Abstracted medallion, dusty palette.',
         price: 'From $11,400',
         priceUSD: 11400,
-        image: u('photo-1505691938895-1758d7feb511', 900, 1200),
+        image: u('photo-1702675990996-bd9e01288488', 900, 1200),
       },
       {
         slug: 'rug-03',
@@ -498,7 +498,7 @@ export const collections: Collection[] = [
         description: 'Tonal botanical scatter on oatmeal.',
         price: 'From $9,600',
         priceUSD: 9600,
-        image: u('photo-1554995207-c18c203602cb', 900, 1200),
+        image: u('photo-1551105378-78e609e1d468', 900, 1200),
       },
       {
         slug: 'rug-04',
@@ -506,7 +506,7 @@ export const collections: Collection[] = [
         description: 'Simplified lattice in muted rust.',
         price: 'From $10,800',
         priceUSD: 10800,
-        image: u('photo-1606744888344-493238951221', 900, 1200),
+        image: u('photo-1646092646542-6404620730d2', 900, 1200),
       },
       {
         slug: 'rug-05',
@@ -514,7 +514,7 @@ export const collections: Collection[] = [
         description: 'Vintage-washed field, flax ground.',
         price: 'From $12,200',
         priceUSD: 12200,
-        image: u('photo-1493663284031-b7e3aefcae8e', 900, 1200),
+        image: u('photo-1702675990996-bd9e01288488', 900, 1200),
       },
       {
         slug: 'rug-06',
@@ -522,7 +522,7 @@ export const collections: Collection[] = [
         description: 'Pale indigo, botanical border at ease.',
         price: 'From $11,000',
         priceUSD: 11000,
-        image: u('photo-1555041469-a586c61ea9bc', 900, 1200),
+        image: u('photo-1580229064033-d6cf020b2cf2', 900, 1200),
       },
     ],
   },
@@ -534,7 +534,7 @@ export const collections: Collection[] = [
     tagline: 'The benchmark construction. Everything else is a shortcut.',
     description:
       "Hand-knotted is the production method, not the style — but we give it its own collection because it's worth distinguishing. These pieces are woven on a vertical loom with individual knots tied by hand on every warp thread. At ten knots per inch, a single square metre takes three weeks. At sixteen, it takes eight. There are no shortcuts and no machines involved at any stage.",
-    heroImage: u('photo-1567016526105-22da7c13161a'),
+    heroImage: u('photo-1702675990996-bd9e01288488'),
     featured: false,
     meta: {
       origin: 'Jaipur, Rajasthan',
@@ -549,7 +549,7 @@ export const collections: Collection[] = [
         description: 'Deep pile, hand-spun wool, ochre ground.',
         price: 'From $8,800',
         priceUSD: 8800,
-        image: u('photo-1567016526105-22da7c13161a', 900, 1200),
+        image: u('photo-1702675990996-bd9e01288488', 900, 1200),
       },
       {
         slug: 'rug-02',
@@ -557,7 +557,7 @@ export const collections: Collection[] = [
         description: 'Brick red, 100% hand-spun highland wool.',
         price: 'From $9,400',
         priceUSD: 9400,
-        image: u('photo-1503602642458-232111445657', 900, 1200),
+        image: u('photo-1594040226829-7f251ab46d80', 900, 1200),
       },
       {
         slug: 'rug-03',
@@ -565,7 +565,7 @@ export const collections: Collection[] = [
         description: 'Ivory ground, full cut pile at 14mm.',
         price: 'From $10,200',
         priceUSD: 10200,
-        image: u('photo-1581009146145-b5ef050c2e1e', 900, 1200),
+        image: u('photo-1594040226829-7f251ab46d80', 900, 1200),
       },
       {
         slug: 'rug-04',
@@ -573,7 +573,7 @@ export const collections: Collection[] = [
         description: 'Charcoal with short-cut pile finish.',
         price: 'From $11,600',
         priceUSD: 11600,
-        image: u('photo-1558618666-fcd25c85cd64', 900, 1200),
+        image: u('photo-1646092646542-6404620730d2', 900, 1200),
       },
       {
         slug: 'rug-05',
@@ -581,7 +581,7 @@ export const collections: Collection[] = [
         description: 'Dense knot, walnut vegetable dye.',
         price: 'From $12,400',
         priceUSD: 12400,
-        image: u('photo-1555041469-a586c61ea9bc', 900, 1200),
+        image: u('photo-1580229064033-d6cf020b2cf2', 900, 1200),
       },
       {
         slug: 'rug-06',
@@ -589,7 +589,7 @@ export const collections: Collection[] = [
         description: 'Undyed highland wool, raw texture.',
         price: 'From $7,800',
         priceUSD: 7800,
-        image: u('photo-1506439773649-6e0eb8cfb237', 900, 1200),
+        image: u('photo-1691071715735-cb7dcd31f9c6', 900, 1200),
       },
     ],
   },
@@ -601,7 +601,7 @@ export const collections: Collection[] = [
     tagline: 'No pile. No padding. Just the pattern and the floor.',
     description:
       'Flatweave — dhurrie — is the oldest form of rug we make. No knots, no pile: the warp and weft are the surface. These pieces are thin, reversible, and more honest about what they are than a pile rug with a backing. They belong in kitchens, terraces, summer rooms, and anywhere a deep pile would feel excessive. The patterns are crisp because the construction demands precision.',
-    heroImage: u('photo-1503602642458-232111445657'),
+    heroImage: u('photo-1594040226829-7f251ab46d80'),
     featured: false,
     meta: {
       origin: 'Jaipur, Rajasthan',
@@ -616,7 +616,7 @@ export const collections: Collection[] = [
         description: 'Fine cotton dhurrie, graphic stripe.',
         price: 'From $2,800',
         priceUSD: 2800,
-        image: u('photo-1555041469-a586c61ea9bc', 900, 1200),
+        image: u('photo-1580229064033-d6cf020b2cf2', 900, 1200),
       },
       {
         slug: 'rug-02',
@@ -624,7 +624,7 @@ export const collections: Collection[] = [
         description: 'Wool flatweave, checker in madder.',
         price: 'From $3,400',
         priceUSD: 3400,
-        image: u('photo-1554995207-c18c203602cb', 900, 1200),
+        image: u('photo-1551105378-78e609e1d468', 900, 1200),
       },
       {
         slug: 'rug-03',
@@ -632,7 +632,7 @@ export const collections: Collection[] = [
         description: 'Diamond kilim in walnut and ivory.',
         price: 'From $4,200',
         priceUSD: 4200,
-        image: u('photo-1581873372796-635b67ca2008', 900, 1200),
+        image: u('photo-1691071715735-cb7dcd31f9c6', 900, 1200),
       },
       {
         slug: 'rug-04',
@@ -640,7 +640,7 @@ export const collections: Collection[] = [
         description: 'Reversible, natural dye, undyed warp.',
         price: 'From $3,800',
         priceUSD: 3800,
-        image: u('photo-1505691938895-1758d7feb511', 900, 1200),
+        image: u('photo-1702675990996-bd9e01288488', 900, 1200),
       },
       {
         slug: 'rug-05',
@@ -648,7 +648,7 @@ export const collections: Collection[] = [
         description: 'Cotton slit-weave, indigo on cream.',
         price: 'From $2,600',
         priceUSD: 2600,
-        image: u('photo-1493663284031-b7e3aefcae8e', 900, 1200),
+        image: u('photo-1702675990996-bd9e01288488', 900, 1200),
       },
       {
         slug: 'rug-06',
@@ -656,7 +656,7 @@ export const collections: Collection[] = [
         description: 'Wool kelim, bold ochre field.',
         price: 'From $4,600',
         priceUSD: 4600,
-        image: u('photo-1558618666-fcd25c85cd64', 900, 1200),
+        image: u('photo-1646092646542-6404620730d2', 900, 1200),
       },
     ],
   },
@@ -668,7 +668,7 @@ export const collections: Collection[] = [
     tagline: 'The texture that makes an interior feel like it was lived in.',
     description:
       'The Moroccan collection is built on the Beni Ourain tradition — deep ivory pile, bold lozenge fields, the kind of texture that photographs well and feels better underfoot. Our versions are woven in Jaipur in the Moroccan knot, using undyed wool from highland sheep. The pile is long, the knot density is intentionally loose, and the irregularity is the point.',
-    heroImage: u('photo-1558618666-fcd25c85cd64'),
+    heroImage: u('photo-1646092646542-6404620730d2'),
     featured: false,
     meta: {
       origin: 'Jaipur, Rajasthan',
@@ -683,7 +683,7 @@ export const collections: Collection[] = [
         description: 'Classic Beni lozenge field, ivory on ivory.',
         price: 'From $5,800',
         priceUSD: 5800,
-        image: u('photo-1558618666-fcd25c85cd64', 900, 1200),
+        image: u('photo-1646092646542-6404620730d2', 900, 1200),
       },
       {
         slug: 'rug-02',
@@ -691,7 +691,7 @@ export const collections: Collection[] = [
         description: 'Deep pile diamond lattice, undyed.',
         price: 'From $6,400',
         priceUSD: 6400,
-        image: u('photo-1606744888344-493238951221', 900, 1200),
+        image: u('photo-1646092646542-6404620730d2', 900, 1200),
       },
       {
         slug: 'rug-03',
@@ -699,7 +699,7 @@ export const collections: Collection[] = [
         description: 'Long pile cream, charcoal-washed lozenge.',
         price: 'From $7,200',
         priceUSD: 7200,
-        image: u('photo-1493663284031-b7e3aefcae8e', 900, 1200),
+        image: u('photo-1702675990996-bd9e01288488', 900, 1200),
       },
       {
         slug: 'rug-04',
@@ -707,7 +707,7 @@ export const collections: Collection[] = [
         description: 'Undyed wool, loose knot, generous pile.',
         price: 'From $5,400',
         priceUSD: 5400,
-        image: u('photo-1581873372796-635b67ca2008', 900, 1200),
+        image: u('photo-1691071715735-cb7dcd31f9c6', 900, 1200),
       },
       {
         slug: 'rug-05',
@@ -715,7 +715,7 @@ export const collections: Collection[] = [
         description: 'Ivory ground, thin black grid, minimal.',
         price: 'From $6,800',
         priceUSD: 6800,
-        image: u('photo-1503602642458-232111445657', 900, 1200),
+        image: u('photo-1594040226829-7f251ab46d80', 900, 1200),
       },
       {
         slug: 'rug-06',
@@ -723,7 +723,7 @@ export const collections: Collection[] = [
         description: 'Natural un-dyed, shaggy long pile.',
         price: 'From $4,800',
         priceUSD: 4800,
-        image: u('photo-1555041469-a586c61ea9bc', 900, 1200),
+        image: u('photo-1580229064033-d6cf020b2cf2', 900, 1200),
       },
     ],
   },
@@ -735,7 +735,7 @@ export const collections: Collection[] = [
     tagline: 'The rug as painting. Intentional. Unrepeatable.',
     description:
       'These are the hardest pieces to sell and the longest to stay with. Each begins with a painting or a loose drawing — not a technical cartoon — and is interpreted by the weaver as they knot. The imprecision is structural. Two weavers given the same drawing will produce different rugs. That is considered a feature. These pieces are made in editions of one.',
-    heroImage: u('photo-1554995207-c18c203602cb'),
+    heroImage: u('photo-1551105378-78e609e1d468'),
     featured: false,
     meta: {
       origin: 'Jaipur, Rajasthan',
@@ -750,7 +750,7 @@ export const collections: Collection[] = [
         description: 'Two-colour field, brushstroke border.',
         price: 'From $14,800',
         priceUSD: 14800,
-        image: u('photo-1493663284031-b7e3aefcae8e', 900, 1200),
+        image: u('photo-1702675990996-bd9e01288488', 900, 1200),
       },
       {
         slug: 'rug-02',
@@ -758,7 +758,7 @@ export const collections: Collection[] = [
         description: 'Madder wash on undyed ground.',
         price: 'From $12,400',
         priceUSD: 12400,
-        image: u('photo-1503602642458-232111445657', 900, 1200),
+        image: u('photo-1594040226829-7f251ab46d80', 900, 1200),
       },
       {
         slug: 'rug-03',
@@ -766,7 +766,7 @@ export const collections: Collection[] = [
         description: 'Indigo cloud on ivory, edge to edge.',
         price: 'From $16,200',
         priceUSD: 16200,
-        image: u('photo-1581009146145-b5ef050c2e1e', 900, 1200),
+        image: u('photo-1594040226829-7f251ab46d80', 900, 1200),
       },
       {
         slug: 'rug-04',
@@ -774,7 +774,7 @@ export const collections: Collection[] = [
         description: 'Ochre and walnut, no defined pattern.',
         price: 'From $13,600',
         priceUSD: 13600,
-        image: u('photo-1604147495798-57beb5d6af73', 900, 1200),
+        image: u('photo-1551105378-78e609e1d468', 900, 1200),
       },
       {
         slug: 'rug-05',
@@ -782,7 +782,7 @@ export const collections: Collection[] = [
         description: 'Rose-dyed ground, black incidental mark.',
         price: 'From $15,400',
         priceUSD: 15400,
-        image: u('photo-1506439773649-6e0eb8cfb237', 900, 1200),
+        image: u('photo-1691071715735-cb7dcd31f9c6', 900, 1200),
       },
       {
         slug: 'rug-06',
@@ -790,7 +790,7 @@ export const collections: Collection[] = [
         description: 'Charcoal and cream, deliberate asymmetry.',
         price: 'From $17,200',
         priceUSD: 17200,
-        image: u('photo-1555041469-a586c61ea9bc', 900, 1200),
+        image: u('photo-1580229064033-d6cf020b2cf2', 900, 1200),
       },
     ],
   },
@@ -802,7 +802,7 @@ export const collections: Collection[] = [
     tagline: 'Archive patterns. Reproduced exactly or not at all.',
     description:
       'The Heritage collection is drawn from pattern books and documented pieces going back to the early twentieth century. These are not interpretations — they are reproductions, as technically faithful to the original as our weavers can make them. For rooms with older furniture, for collectors, for those who want to own a piece of the archive rather than a piece that gestures at it.',
-    heroImage: u('photo-1606744888344-493238951221'),
+    heroImage: u('photo-1646092646542-6404620730d2'),
     featured: false,
     meta: {
       origin: 'Jaipur, Rajasthan',
@@ -817,7 +817,7 @@ export const collections: Collection[] = [
         description: 'Archive medallion, 1920s Tabriz pattern.',
         price: 'From $18,800',
         priceUSD: 18800,
-        image: u('photo-1606744888344-493238951221', 900, 1200),
+        image: u('photo-1646092646542-6404620730d2', 900, 1200),
       },
       {
         slug: 'rug-02',
@@ -833,7 +833,7 @@ export const collections: Collection[] = [
         description: 'Tribal archive, Qashqai pattern.',
         price: 'From $14,600',
         priceUSD: 14600,
-        image: u('photo-1567016526105-22da7c13161a', 900, 1200),
+        image: u('photo-1702675990996-bd9e01288488', 900, 1200),
       },
       {
         slug: 'rug-04',
@@ -841,7 +841,7 @@ export const collections: Collection[] = [
         description: 'Mughal floral, original 17th-century proportions.',
         price: 'From $26,800',
         priceUSD: 26800,
-        image: u('photo-1567016376408-0226e4d0c1ea', 900, 1200),
+        image: u('photo-1600166898405-da9535204843', 900, 1200),
       },
       {
         slug: 'rug-05',
@@ -849,7 +849,7 @@ export const collections: Collection[] = [
         description: 'Chinese cloud-band, heritage palette.',
         price: 'From $19,200',
         priceUSD: 19200,
-        image: u('photo-1555041469-a586c61ea9bc', 900, 1200),
+        image: u('photo-1580229064033-d6cf020b2cf2', 900, 1200),
       },
       {
         slug: 'rug-06',
@@ -857,7 +857,7 @@ export const collections: Collection[] = [
         description: 'Caucasian village rug, documented 1905.',
         price: 'From $16,400',
         priceUSD: 16400,
-        image: u('photo-1581873372796-635b67ca2008', 900, 1200),
+        image: u('photo-1691071715735-cb7dcd31f9c6', 900, 1200),
       },
     ],
   },

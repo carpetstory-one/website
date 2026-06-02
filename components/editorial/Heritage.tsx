@@ -14,7 +14,7 @@ export function Heritage() {
       label: t('archive1'),
       beamHost: true,
       beamDelay: '0s',
-      src: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=700&q=80&fm=webp',
+      src: 'https://images.unsplash.com/photo-1646092646542-6404620730d2?w=700&q=80&auto=format&fit=crop',
       filter: undefined,
     },
     {
