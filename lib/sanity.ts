@@ -6,7 +6,7 @@ export const sanityClient = createClient({
   projectId: 'f9neojf8',
   dataset: 'production',
   apiVersion: '2026-05-15',
-  useCdn: false, // Set to false to bypass cache and always get fresh data when editing/publishing
+  useCdn: true, // Use Sanity API CDN for cached, ultra-fast responses
 });
 
 const builder = imageUrlBuilder(sanityClient);
@@ -45,7 +45,11 @@ export async function getSanityCollections(): Promise<Collection[]> {
     }
   }`;
   
-  const data = await sanityClient.fetch(query);
+  const data = await sanityClient.fetch(
+    query,
+    {},
+    { next: { revalidate: 300 } } // Revalidate cache every 5 minutes (ISR)
+  );
   return mapCollections(data);
 }
 
