@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
+import { SanityImage } from '@/components/SanityImage';
 import { motion } from 'motion/react';
 import { X, Bookmark } from 'lucide-react';
 import { useRouter } from '@/i18n/routing';
@@ -206,7 +206,7 @@ export function ShortlistDrawer({
                       style={{ background: 'var(--canvas-muted, #f0ece3)' }}
                     >
                       {rug.image ? (
-                        <Image
+                        <SanityImage
                           src={rug.image}
                           alt={rug.name}
                           fill

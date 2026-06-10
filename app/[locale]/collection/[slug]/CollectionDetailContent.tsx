@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import Image from 'next/image';
+import { SanityImage } from '@/components/SanityImage';
 import { motion } from 'motion/react';
 import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
@@ -301,6 +301,36 @@ export function CollectionDetailContent({
               )}
             </dl>
           )}
+
+          {/* PDF Download Button */}
+          <div style={{ marginTop: '32px' }}>
+            <a
+              href={`/api/pdf/collection/${col.slug}`}
+              download={`${col.slug}-collection.pdf`}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                fontSize: '11px',
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: 'var(--ink)',
+                textDecoration: 'none',
+                borderBottom: '1px solid var(--ink)',
+                paddingBottom: '4px',
+                transition: 'opacity 0.2s ease',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.6')}
+              onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              Download Collection (PDF)
+            </a>
+          </div>
         </motion.div>
 
         {/* Right Column: Narrative Description */}
@@ -399,7 +429,7 @@ export function CollectionDetailContent({
                           }}
                         >
                           {rug.image ? (
-                            <Image
+                            <SanityImage
                               src={rug.image}
                               alt={rug.name}
                               fill
@@ -500,7 +530,7 @@ export function CollectionDetailContent({
                   }}
                 >
                   {other.heroImage ? (
-                    <Image
+                    <SanityImage
                       src={other.heroImage}
                       alt={other.name}
                       fill

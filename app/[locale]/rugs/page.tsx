@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { Suspense } from 'react';
 import { setRequestLocale } from 'next-intl/server';
 import { Nav } from '@/components/editorial/Nav';
 import { Footer } from '@/components/editorial/Footer';
@@ -11,44 +12,29 @@ import {
 import {
   getAllRugs,
   getCollectionOptions,
-  filterAndSort,
-  parseFiltersFromParams,
-  parsePageParam,
-  paginate,
-  toURLSearchParams,
   priceBounds,
   availableMaterials,
   availableMakes,
   PER_PAGE,
 } from '@/lib/rugs';
-import { parseShortlistParam, itemKey } from '@/lib/shortlist';
 import { getRugCatalogue } from '@/lib/sanity';
-import { RugsContent } from './RugsContent';
+import { RugsContent, RugsStatic } from './RugsContent';
 
-// The catalogue fetch is cached for 5 min; revalidate the route on the same
-// cadence so paginated/filtered variants stay fresh without re-fetching Sanity
-// on every navigation.
+// Fully static + ISR: this route reads no searchParams on the server, so the
+// HTML shell is prerendered and CDN-cacheable, revalidating every 5 minutes in
+// step with the Sanity data cache. Filtering, sorting and pagination run
+// client-side in RugsContent over the field-trimmed catalogue below.
 export const revalidate = 300;
 
-type SearchParams = Record<string, string | string[] | undefined>;
 type Props = {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<SearchParams>;
 };
 
-export async function generateMetadata({
-  params,
-  searchParams,
-}: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const sp = await searchParams;
-  const page = parsePageParam(sp.page);
 
-  const base = generatePageMetadata({
-    title:
-      page > 1
-        ? `All Pieces — Page ${page} — Carpetstory`
-        : 'All Pieces — Carpetstory',
+  return generatePageMetadata({
+    title: 'All Pieces — Carpetstory',
     description: 'Every handmade rug in the Carpetstory workshop.',
     path: '/rugs',
     locale,
@@ -70,41 +56,25 @@ export async function generateMetadata({
       'where to buy carpet remnants',
     ],
   });
-
-  // Self-referencing canonical so each paginated page is its own indexable URL
-  // (Google's recommended pattern — no rel=prev/next, no noindex).
-  if (page > 1 && base.alternates) {
-    base.alternates.canonical = `${SITE_URL}/${locale}/rugs?page=${page}`;
-  }
-  return base;
 }
 
-export default async function RugsPage({ params, searchParams }: Props) {
+export default async function RugsPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const sp = await searchParams;
 
   const collections = await getRugCatalogue();
-  const allRugs = getAllRugs(collections);
 
-  // Filters + sort come entirely from the URL → this page is the single source
-  // of truth for what's shown. Pagination is applied after filter+sort.
-  const filters = parseFiltersFromParams(toURLSearchParams(sp));
-  const filtered = filterAndSort(allRugs, filters);
-  const pageData = paginate(filtered, parsePageParam(sp.page), PER_PAGE);
+  // Strip fields the /rugs UI never renders before the catalogue is
+  // serialized to the client: description only feeds the server-side colour
+  // derivation inside getAllRugs, and priceLabel isn't shown anywhere.
+  const allRugs = getAllRugs(collections).map((rug) => {
+    const clientRug = { ...rug };
+    delete clientRug.description;
+    delete clientRug.priceLabel;
+    return clientRug;
+  });
 
-  // Shared-shortlist view: when the URL carries ?shortlist=, resolve those exact
-  // pieces server-side so the client can render the shared subset. The list is
-  // tiny (≤50) so the extra payload is negligible.
-  const sharedItems = parseShortlistParam(
-    typeof sp.shortlist === 'string' ? sp.shortlist : undefined
-  );
-  const sharedKeys = new Set(sharedItems.map(itemKey));
-  const sharedRugs = sharedKeys.size
-    ? allRugs.filter((r) => sharedKeys.has(r.id))
-    : [];
-
-  // Facet option lists are derived from the full catalogue, not the page slice.
+  // Facet option lists are derived from the full catalogue.
   const facets = {
     bounds: priceBounds(allRugs),
     materials: availableMaterials(allRugs),
@@ -119,16 +89,17 @@ export default async function RugsPage({ params, searchParams }: Props) {
     { name: 'All Pieces', url: `/${locale}/rugs` },
   ]);
 
-  // ItemList reflects the current page so each paginated URL describes its own
-  // slice with correctly-offset positions.
+  // The static HTML always carries the first page (curated order); deeper
+  // pages are client-paginated, so the ItemList describes the catalogue head
+  // with the full count.
   const itemList = {
     '@type': 'ItemList',
     name: 'All Carpetstory Pieces',
     itemListOrder: 'https://schema.org/ItemListOrderAscending',
-    numberOfItems: pageData.total,
-    itemListElement: pageData.items.map((r, i) => ({
+    numberOfItems: allRugs.length,
+    itemListElement: allRugs.slice(0, PER_PAGE).map((r, i) => ({
       '@type': 'ListItem',
-      position: pageData.start + i,
+      position: i + 1,
       url: `${SITE_URL}/${locale}${r.href}`,
       name: `${r.collectionName} — ${r.name}`,
     })),
@@ -144,17 +115,12 @@ export default async function RugsPage({ params, searchParams }: Props) {
       />
       <Nav />
       <main className="flex-1" style={{ backgroundColor: '#ffffff' }}>
-        <RugsContent
-          pageRugs={pageData.items}
-          sharedRugs={sharedRugs}
-          filters={filters}
-          page={pageData.page}
-          totalPages={pageData.totalPages}
-          matchingTotal={pageData.total}
-          rangeStart={pageData.start}
-          rangeEnd={pageData.end}
-          facets={facets}
-        />
+        {/* useSearchParams() suspends RugsContent during prerendering; the
+            fallback bakes the identical default view (page 1, no filters)
+            into the static HTML so the grid stays server-rendered. */}
+        <Suspense fallback={<RugsStatic rugs={allRugs} facets={facets} />}>
+          <RugsContent rugs={allRugs} facets={facets} />
+        </Suspense>
       </main>
       <Footer />
     </div>

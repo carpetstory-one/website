@@ -134,7 +134,7 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-import { getSanityCollections } from '@/lib/sanity';
+import { getShortlistCatalogue } from '@/lib/sanity';
 import Script from 'next/script';
 
 export default async function RootLayout({
@@ -158,14 +158,10 @@ export default async function RootLayout({
   // side is the easiest way to get started
   const messages = await getMessages();
 
-  // The shortlist drawer only needs slugs, names and thumbnails. Passing the
-  // full catalogue here would serialize it into the payload of every page.
-  const collections = await getSanityCollections();
-  const shortlistCatalogue = collections.map((c) => ({
-    slug: c.slug,
-    name: c.name,
-    rugs: c.rugs.map((r) => ({ slug: r.slug, name: r.name, image: r.image })),
-  }));
+  // The shortlist drawer only needs slugs, names and thumbnails, so the
+  // layout fetches the dedicated lightweight projection instead of dragging
+  // the full collection payload into every page render.
+  const shortlistCatalogue = await getShortlistCatalogue();
 
   return (
     <html

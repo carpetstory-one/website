@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { Nav } from '@/components/editorial/Nav';
 import { Footer } from '@/components/editorial/Footer';
-import { getSanityCollections } from '@/lib/sanity';
+import { getSanityCollections, urlForOptimized } from '@/lib/sanity';
 import { blurDataURL } from '@/lib/blur';
 import { notFound } from 'next/navigation';
 import { Link } from '@/i18n/routing';
@@ -37,7 +37,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       `${rug.name} from the Carpetstory ${collection.name} collection. Hand-knotted in Jaipur, Rajasthan.`,
     path: `/collection/${slug}/${rugSlug}`,
     locale,
-    ogImage: rug.image,
+    // rug.image is a bare CDN URL; og scrapers don't negotiate formats, so
+    // request an explicit 1200w rendition (matches the pre-loader behavior).
+    ogImage: urlForOptimized(rug.image, 1200),
     keywords: [
       rug.name,
       collection.name,
@@ -84,7 +86,7 @@ export default async function RugDetailPage({ params }: Props) {
     description:
       rug.description ||
       `${rug.name} from the Carpetstory ${collection.name} collection.`,
-    image: rug.image,
+    image: urlForOptimized(rug.image, 1200),
     price: rug.priceUSD,
     priceCurrency: 'USD',
     url: `/${locale}/collection/${slug}/${rugSlug}`,

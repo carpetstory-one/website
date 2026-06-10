@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import Image from 'next/image';
+import { SanityImage } from '@/components/SanityImage';
 import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { collections as allCollections } from '@/lib/collections';
@@ -176,7 +176,7 @@ export function Inquiry({
                     }}
                   >
                     {rug.image ? (
-                      <Image
+                      <SanityImage
                         src={rug.image}
                         alt={`${rug.name} — ${collection.name}`}
                         fill

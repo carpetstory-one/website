@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import { SanityImage } from '@/components/SanityImage';
 import { Nav } from '@/components/editorial/Nav';
 import { Footer } from '@/components/editorial/Footer';
 import { blurDataURL } from '@/lib/blur';
@@ -204,7 +204,7 @@ export default async function CollectionDetailPage({
           }}
         >
           {col.heroImage ? (
-            <Image
+            <SanityImage
               src={col.heroImage}
               alt={`${col.name} collection`}
               fill

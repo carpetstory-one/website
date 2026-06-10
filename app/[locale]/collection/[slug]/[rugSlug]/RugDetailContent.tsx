@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
+import { SanityImage } from '@/components/SanityImage';
+import { sanityImageUrl, isSanityImageUrl } from '@/lib/sanity-image';
 import { motion } from 'motion/react';
 import { Link } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
@@ -198,7 +199,7 @@ export function RugDetailContent({
                 }}
               >
                 {rug.image ? (
-                  <Image
+                  <SanityImage
                     src={rug.image}
                     alt={`${rug.name} — ${collection.name} collection`}
                     fill
@@ -448,7 +449,7 @@ export function RugDetailContent({
                       }}
                     >
                       {sib.image ? (
-                        <Image
+                        <SanityImage
                           src={sib.image}
                           alt={sib.name}
                           fill
@@ -512,7 +513,13 @@ export function RugDetailContent({
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={rug.image}
+              src={
+                // rug.image is a bare CDN URL now; size the lightbox copy so
+                // zooming doesn't pull the full-resolution original.
+                isSanityImageUrl(rug.image)
+                  ? sanityImageUrl(rug.image, 1200)
+                  : rug.image
+              }
               alt={`${rug.name} — ${collection.name} collection`}
               draggable={false}
             />

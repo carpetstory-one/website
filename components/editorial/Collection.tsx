@@ -10,7 +10,7 @@
  */
 
 import React from 'react';
-import Image from 'next/image';
+import { SanityImage } from '@/components/SanityImage';
 import { motion } from 'motion/react';
 import { Link } from '@/i18n/routing';
 import { blurDataURL } from '@/lib/blur';
@@ -117,7 +117,7 @@ export function Collection({ collections = [] }: { collections?: CollectionType[
                 >
                   <div className="bm-img">
                     {col.heroImage ? (
-                      <Image
+                      <SanityImage
                         src={col.heroImage}
                         alt={`${col.name} collection — ${col.tagline}`}
                         fill

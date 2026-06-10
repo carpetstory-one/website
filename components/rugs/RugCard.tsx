@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import { SanityImage } from '@/components/SanityImage';
 import { Link } from '@/i18n/routing';
 import { blurDataURL } from '@/lib/blur';
 import { ShortlistToggleButton } from '@/components/shortlist/ShortlistToggleButton';
@@ -32,7 +32,7 @@ export function RugCard({
           }}
         >
           {rug.image ? (
-            <Image
+            <SanityImage
               src={rug.image}
               alt={`${rug.name} — ${rug.collectionName} collection`}
               fill

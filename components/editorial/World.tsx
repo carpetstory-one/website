@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import { SanityImage } from '@/components/SanityImage';
 import { motion } from 'motion/react';
 import { useTranslations } from 'next-intl';
 import { blurDataURL } from '@/lib/blur';
@@ -101,7 +101,7 @@ export function World({ collections = [] }: WorldProps) {
                 className={`ph ${item.cls} group relative mb-3 aspect-[16/10] w-full overflow-hidden md:mb-4`}
                 style={{ backgroundColor: 'var(--canvas-warmer)' }}
               >
-                <Image
+                <SanityImage
                   src={item.src}
                   alt={item.caption}
                   fill

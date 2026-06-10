@@ -7,7 +7,7 @@ import React, {
   useState,
   useCallback,
 } from 'react';
-import Image from 'next/image';
+import { SanityImage } from '@/components/SanityImage';
 import { motion, AnimatePresence } from 'motion/react';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
@@ -216,7 +216,7 @@ export function CollectionsGrid({ collections = [] }: { collections?: Collection
                     >
                       <div className="feat-img">
                         {col.heroImage ? (
-                          <Image
+                          <SanityImage
                             src={col.heroImage}
                             alt={`${col.name} collection — ${col.tagline}`}
                             fill
