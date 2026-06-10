@@ -26,9 +26,8 @@ const nextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'images.unsplash.com' },
       { protocol: 'https', hostname: 'plus.unsplash.com' },
-      // Pinterest hotlinks — Pinterest may block the optimizer in production.
-      // If these 404/403 live, re-host the 9 i.pinimg.com images locally.
       { protocol: 'https', hostname: 'i.pinimg.com' },
+      { protocol: 'https', hostname: 'cdn.sanity.io' },
     ],
   },
 

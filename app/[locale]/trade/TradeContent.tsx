@@ -172,7 +172,7 @@ export function TradeContent() {
     errors[field] ? { borderBottomColor: 'var(--accent)' } : {};
 
   return (
-    <div className="space-y-24 md:space-y-32">
+    <div className="flex flex-col gap-6 md:gap-8 pt-8">
       {/* 1. Header ───────────────────────────────────────────── */}
       <Reveal>
         <header className="text-center">
@@ -182,15 +182,15 @@ export function TradeContent() {
           <h1 className="font-display text-ink mx-auto max-w-[14ch] text-[38px] leading-[1.04] font-light tracking-[-0.03em] sm:text-[56px] lg:text-[76px]">
             {t('title')}
           </h1>
-          <p className="body-md text-ink-soft mx-auto mt-8 max-w-[58ch] leading-relaxed font-light">
+          <p className="body-md text-ink-soft mx-auto mt-4 max-w-[58ch] leading-relaxed font-light">
             {t('intro')}
           </p>
-          <div className="bg-accent mx-auto mt-10 h-px w-12" />
+          <div className="bg-accent mx-auto mt-6 h-px w-12" />
         </header>
       </Reveal>
 
       {/* 2. Philosophy pillars ───────────────────────────────── */}
-      <div className="grid grid-cols-1 gap-x-10 gap-y-12 md:grid-cols-3 lg:gap-x-14">
+      <div className="grid grid-cols-1 gap-x-10 gap-y-6 md:grid-cols-3 lg:gap-x-14">
         {[
           {
             num: 'I',
@@ -222,10 +222,10 @@ export function TradeContent() {
       </div>
 
       {/* 3. Who we partner with ──────────────────────────────── */}
-      <section className="space-y-12 md:space-y-16">
+      <div className="flex flex-col gap-4 md:gap-6">
         <Reveal>
           <div className="text-center">
-            <span className="text-ink-soft mb-4 block text-[11px] tracking-[0.22em] uppercase">
+            <span className="text-ink-soft mb-2 block text-[11px] tracking-[0.22em] uppercase">
               {t('collaborators')}
             </span>
             <h2 className="font-display text-ink text-[32px] leading-[1.05] font-light tracking-[-0.02em] md:text-[46px]">
@@ -242,17 +242,17 @@ export function TradeContent() {
               delay={i % 2 === 0 ? 0 : 100}
               className="h-full"
             >
-              <div className="hover:border-accent flex h-full flex-col border border-[rgba(26,24,23,0.1)] p-8 transition-colors duration-500 md:p-10">
-                <span className="font-display text-accent mb-5 text-[26px] leading-none font-light">
+              <div className="hover:border-accent flex h-full flex-col border border-[rgba(26,24,23,0.1)] p-6 transition-colors duration-500 md:p-8">
+                <span className="font-display text-accent mb-3 text-[26px] leading-none font-light">
                   {card.num}
                 </span>
-                <h3 className="text-ink mb-3 text-[17px] font-medium tracking-[0.01em]">
+                <h3 className="text-ink mb-2 text-[17px] font-medium tracking-[0.01em]">
                   {card.title}
                 </h3>
-                <p className="text-ink-soft mb-8 flex-1 text-[14px] leading-relaxed font-light">
+                <p className="text-ink-soft mb-4 flex-1 text-[14px] leading-relaxed font-light">
                   {card.body}
                 </p>
-                <ul className="space-y-2.5 border-t border-[rgba(26,24,23,0.08)] pt-6">
+                <ul className="flex flex-col gap-2.5 border-t border-[rgba(26,24,23,0.08)] pt-4">
                   {card.bullets.map((b) => (
                     <li
                       key={b}
@@ -267,13 +267,13 @@ export function TradeContent() {
             </SlideIn>
           ))}
         </div>
-      </section>
+      </div>
 
       {/* 4. Our process ──────────────────────────────────────── */}
-      <section className="space-y-12 md:space-y-16">
+      <div className="flex flex-col gap-4 md:gap-6">
         <Reveal>
           <div className="text-center">
-            <span className="text-accent mb-4 block text-[11px] tracking-[0.22em] uppercase">
+            <span className="text-accent mb-2 block text-[11px] tracking-[0.22em] uppercase">
               {t('howWeWork')}
             </span>
             <h2 className="font-display text-ink text-[32px] leading-[1.05] font-light tracking-[-0.02em] md:text-[46px]">
@@ -282,7 +282,7 @@ export function TradeContent() {
           </div>
         </Reveal>
 
-        <div className="process-container border-t border-[rgba(26,24,23,0.12)] pt-10 md:pt-12">
+        <div className="process-container border-t border-[rgba(26,24,23,0.12)] pt-4 md:pt-6">
           {processSteps.map((item) => (
             <div key={item.step} className="process-item">
               <span className="font-display text-accent mb-4 block text-[34px] leading-none font-light">
@@ -297,15 +297,15 @@ export function TradeContent() {
             </div>
           ))}
         </div>
-      </section>
+      </div>
 
       {/* 5. Markets we supply ────────────────────────────────── */}
       <SlideIn direction="u">
-        <div className="overflow-hidden border-y border-[rgba(26,24,23,0.1)] py-14 text-center md:py-16">
-          <span className="text-ink-soft mb-5 block text-[10px] tracking-[0.26em] uppercase">
+        <div className="overflow-hidden border-y border-[rgba(26,24,23,0.1)] py-6 text-center md:py-8">
+          <span className="text-ink-soft mb-2 block text-[10px] tracking-[0.26em] uppercase">
             {t('globalLogistics')}
           </span>
-          <h3 className="font-display text-ink mb-12 text-[26px] font-light tracking-[-0.02em] md:text-[34px]">
+          <h3 className="font-display text-ink mb-6 text-[26px] font-light tracking-[-0.02em] md:text-[34px]">
             {t('marketsWeSupply')}
           </h3>
 
@@ -439,28 +439,27 @@ export function TradeContent() {
       </SlideIn>
 
       {/* 6. Submit query form ────────────────────────────────── */}
-      <div
-        id="query-form"
-        className="inquiry mb-10 md:mb-10"
-        style={{ padding: 0 }}
-      >
+      <div id="query-form" className="flex justify-center">
         {submitted ? (
           <div
-            className="inquiry-form"
+            className="inquiry-form text-center"
             role="status"
             aria-live="polite"
-            style={{ textAlign: 'center' }}
           >
-            <h2>{t('received')}</h2>
-            <p style={{ marginTop: '24px', color: 'var(--ink-soft)' }}>
+            <h2 className="font-display text-ink text-[32px] leading-[1.05] font-light tracking-[-0.02em] md:text-[46px]">
+              {t('received')}
+            </h2>
+            <p className="body-md text-ink-soft mx-auto mt-4 max-w-[48ch] leading-relaxed font-light">
               {t('successMessage')}
             </p>
           </div>
         ) : (
           <form className="inquiry-form" onSubmit={handleSubmit} noValidate>
-            <h2>
+            <h2 className="font-display text-ink mb-6 text-center text-[32px] leading-[1.05] font-light tracking-[-0.02em] md:text-[46px]">
               {t('submitQuery').split(' ')[0]}{' '}
-              <span className="it">{t('submitQuery').split(' ')[1]}</span>
+              <span className="text-accent italic">
+                {t('submitQuery').split(' ')[1]}
+              </span>
             </h2>
 
             <div className="row-2">
@@ -625,7 +624,7 @@ export function TradeContent() {
               />
             </div>
 
-            <div className="mt-14 flex justify-center">
+            <div className="mt-10 flex justify-center">
               <button
                 className="btn-send magnetic"
                 type="submit"
@@ -655,19 +654,19 @@ export function TradeContent() {
       {/* 7. Sample kit ───────────────────────────────────────── */}
       <SlideIn direction="u">
         <div className="bg-accent flex flex-col text-white lg:flex-row lg:items-stretch">
-          <div className="flex-1 p-10 md:p-14 lg:p-16">
-            <span className="mb-6 block text-[11px] tracking-[0.22em] text-white/55 uppercase">
+          <div className="flex-1 p-8 md:p-10 lg:p-12">
+            <span className="mb-3 block text-[11px] tracking-[0.22em] text-white/55 uppercase">
               {t('sampleKitDesc').split(' — ')[0] || t('eyebrow')}
             </span>
-            <h2 className="font-display mb-6 text-[30px] leading-[1.08] font-light md:text-[42px]">
+            <h2 className="font-display mb-2 text-[30px] leading-[1.08] font-light md:text-[42px]">
               {t('notReady')}
               <br />
               <span className="italic">{t('startWithSample')}</span>
             </h2>
-            <p className="mb-8 max-w-[52ch] text-[14.5px] leading-relaxed font-light text-white/80">
+            <p className="mb-4 max-w-[52ch] text-[14.5px] leading-relaxed font-light text-white/80">
               {t('sampleKitDesc')}
             </p>
-            <ul className="space-y-3">
+            <ul className="flex flex-col gap-3">
               {[
                 t('sampleKitBullet1'),
                 t('sampleKitBullet2'),

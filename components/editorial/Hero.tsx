@@ -43,12 +43,12 @@ const SLIDES: SlideDef[] = [
     alt: 'A refined, dimly lit interior with a rug and softly glowing artwork',
   },
   {
-    img: '/hero/slide4.jpg',
+    img: '/hero/slide7.jpg',
     headlineKey: 'slide4Headline',
     alt: 'A warm, high-end library room with bookshelf walls, a fireplace, and a detailed maroon hand-knotted carpet',
   },
   {
-    img: '/hero/slide5.jpg',
+    img: '/hero/slide8.jpg',
     headlineKey: 'slide5Headline',
     alt: 'A bright, minimalist Japandi penthouse living room grounded by a neutral hand-knotted carpet in soft sunlight',
   },

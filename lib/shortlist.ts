@@ -9,7 +9,7 @@
  * non-existent rugs into the UI.
  */
 
-import { getRugBySlug, type Collection, type Rug } from '@/lib/collections';
+import { type Collection, type Rug } from '@/lib/collections';
 
 export const SHORTLIST_STORAGE_KEY = 'carpetstory_shortlist';
 export const SHORTLIST_PARAM = 'shortlist';
@@ -37,7 +37,6 @@ function sanitize(pairs: ShortlistItem[]): ShortlistItem[] {
     if (!collectionSlug || !rugSlug) continue;
     const key = `${collectionSlug}.${rugSlug}`;
     if (seen.has(key)) continue;
-    if (!getRugBySlug(collectionSlug, rugSlug)) continue; // validate against data
     seen.add(key);
     out.push({ collectionSlug, rugSlug });
     if (out.length >= SHORTLIST_LIMIT) break;
@@ -89,12 +88,15 @@ export type ResolvedShortlistItem = { collection: Collection; rug: Rug };
 
 /** Resolve slug pairs into full data for rendering. Order preserved. */
 export function resolveShortlist(
-  items: ShortlistItem[]
+  items: ShortlistItem[],
+  collectionsList: Collection[]
 ): ResolvedShortlistItem[] {
   const out: ResolvedShortlistItem[] = [];
   for (const item of items) {
-    const found = getRugBySlug(item.collectionSlug, item.rugSlug);
-    if (found) out.push(found);
+    const col = collectionsList.find(c => c.slug === item.collectionSlug);
+    if (!col) continue;
+    const rug = col.rugs.find(r => r.slug === item.rugSlug);
+    if (rug) out.push({ collection: col, rug });
   }
   return out;
 }

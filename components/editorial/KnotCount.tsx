@@ -4,58 +4,164 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { CountUp } from './CountUp';
 
-const COLS = 40;
+const COLS = 80;
 const ROWS = 40;
 const TOTAL_DOTS = COLS * ROWS;
 
+function hexToRgb(hex: string): string {
+  const rgbFallback = '110, 31, 35';
+  if (!hex) return rgbFallback;
+  const clean = hex.trim();
+  if (!clean.startsWith('#')) {
+    const match = clean.match(/\d+,\s*\d+,\s*\d+/);
+    return match ? match[0] : rgbFallback;
+  }
+  try {
+    const sanitized = clean.replace('#', '');
+    if (sanitized.length === 3) {
+      const r = parseInt(sanitized[0] + sanitized[0], 16);
+      const g = parseInt(sanitized[1] + sanitized[1], 16);
+      const b = parseInt(sanitized[2] + sanitized[2], 16);
+      return `${r}, ${g}, ${b}`;
+    }
+    const r = parseInt(sanitized.substring(0, 2), 16);
+    const g = parseInt(sanitized.substring(2, 4), 16);
+    const b = parseInt(sanitized.substring(4, 6), 16);
+    return `${r}, ${g}, ${b}`;
+  } catch {
+    return rgbFallback;
+  }
+}
+
 function AnimatedDotGrid() {
-  const [visible, setVisible] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+
+    let dpr = window.devicePixelRatio || 1;
+    let dotSize = 4;
+    let gap = 3;
+    let width = 557;
+    let height = 277;
+    let accentColor = '#6e1f23';
+    let accentRgb = '110, 31, 35';
+
+    const updateDimensions = () => {
+      const style = getComputedStyle(el);
+      dotSize = parseFloat(style.getPropertyValue('--dot-size')) || 4;
+      gap = parseFloat(style.getPropertyValue('--grid-gap')) || 3;
+      accentColor = style.getPropertyValue('--accent').trim() || '#6e1f23';
+      accentRgb = hexToRgb(accentColor);
+      width = COLS * dotSize + (COLS - 1) * gap;
+      height = ROWS * dotSize + (ROWS - 1) * gap;
+
+      dpr = window.devicePixelRatio || 1;
+      el.width = width * dpr;
+      el.height = height * dpr;
+      el.style.width = `${width}px`;
+      el.style.height = `${height}px`;
+
+      const ctx = el.getContext('2d');
+      if (ctx) {
+        ctx.setTransform(1, 0, 0, 1, 0, 0); // reset scale
+        ctx.scale(dpr, dpr);
+      }
+    };
+
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+
+    let startTimestamp: number | null = null;
+    let animationFrameId: number;
+    let animating = false;
+
+    const drawFinalState = () => {
+      const ctx = el.getContext('2d');
+      if (!ctx) return;
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = `rgba(${accentRgb}, 0.75)`;
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const x = c * (dotSize + gap) + dotSize / 2;
+          const y = r * (dotSize + gap) + dotSize / 2;
+          ctx.beginPath();
+          ctx.arc(x, y, dotSize / 2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    };
+
+    const animate = (timestamp: number) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const elapsed = timestamp - startTimestamp;
+      const ctx = el.getContext('2d');
+      if (!ctx) return;
+
+      ctx.clearRect(0, 0, width, height);
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const delay = ((r + c) / (ROWS + COLS)) * 800;
+          let opacity = 0;
+          if (elapsed >= delay) {
+            const transitionTime = 150;
+            opacity = Math.min(0.75, ((elapsed - delay) / transitionTime) * 0.75);
+          }
+          if (opacity > 0) {
+            const x = c * (dotSize + gap) + dotSize / 2;
+            const y = r * (dotSize + gap) + dotSize / 2;
+            ctx.beginPath();
+            ctx.arc(x, y, dotSize / 2, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${accentRgb}, ${opacity})`;
+            ctx.fill();
+          }
+        }
+      }
+
+      if (elapsed < 800 + 150) {
+        animationFrameId = requestAnimationFrame(animate);
+      } else {
+        animating = false;
+        drawFinalState();
+      }
+    };
+
+    const startAnimation = () => {
+      if (animating) return;
+      animating = true;
+      startTimestamp = null;
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setVisible(true);
+          startAnimation();
           obs.disconnect();
         }
       },
       { threshold: 0.3 }
     );
     obs.observe(el);
-    return () => obs.disconnect();
+
+    return () => {
+      obs.disconnect();
+      window.removeEventListener('resize', updateDimensions);
+      cancelAnimationFrame(animationFrameId);
+    };
   }, []);
 
   return (
-    <div
+    <canvas
       ref={ref}
       className="knot-dot-grid"
       aria-hidden="true"
       style={{
-        display: 'grid',
-        gridTemplateColumns: `repeat(${COLS}, 1fr)`,
-        gap: '3px',
-        width: '100%',
-        maxWidth: '280px',
+        display: 'block',
+        maxWidth: '100%',
       }}
-    >
-      {Array.from({ length: TOTAL_DOTS }).map((_, i) => (
-        <span
-          key={i}
-          style={{
-            display: 'block',
-            width: '4px',
-            height: '4px',
-            borderRadius: '50%',
-            backgroundColor: 'var(--accent)',
-            opacity: visible ? 0.75 : 0,
-            transition: `opacity 0.15s ease ${(i / TOTAL_DOTS) * 2000}ms`,
-          }}
-        />
-      ))}
-    </div>
+    />
   );
 }
 

@@ -5,6 +5,7 @@ import { Inquiry } from '@/components/editorial/Inquiry';
 import { Metadata } from 'next';
 import { generatePageMetadata, breadcrumbSchema, jsonLd } from '@/lib/seo';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
+import { getSanityCollections } from '@/lib/sanity';
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -34,6 +35,8 @@ export default async function InquiryPage({ params }: Props) {
     { name: tInquiry('title'), url: `/${locale}/inquiry` },
   ]);
 
+  const collections = await getSanityCollections();
+
   return (
     <div className="bg-canvas relative flex min-h-screen flex-col">
       <script
@@ -41,9 +44,9 @@ export default async function InquiryPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumb) }}
       />
       <Nav />
-      <main className="flex-1 pt-24 sm:pt-28">
+      <main className="flex-1 pt-28 sm:pt-32">
         <Suspense fallback={<div className="py-24" />}>
-          <Inquiry />
+          <Inquiry collections={collections} />
         </Suspense>
       </main>
       <Footer />

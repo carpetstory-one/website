@@ -3,7 +3,7 @@
 /**
  * WorldStage — credibility / recognition moment on the home page.
  *
- * Showcases that Carpetstory's rugs were featured at Domotex 2016 (Hannover),
+ * Showcases that Carpetstory's rugs were featured at Domotex 2012 (Hannover),
  * the world's leading trade fair for carpets and floor coverings, via a YouTube
  * embed.
  *
@@ -18,8 +18,8 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { blurDataURL } from '@/lib/blur';
 
-// ⬇️ Paste the Domotex 2016 YouTube video ID here, e.g. 'dQw4w9WgXcQ'.
-const YOUTUBE_VIDEO_ID = '';
+// ⬇️ Paste the Domotex 2012 YouTube video ID here, e.g. 'dQw4w9WgXcQ'.
+const YOUTUBE_VIDEO_ID = 'WI80G3OpDrA';
 
 // Poster shown behind the play button until the video ID is set.
 const POSTER_IMAGE =
@@ -79,7 +79,7 @@ export function WorldStage() {
             {YOUTUBE_VIDEO_ID ? (
               <iframe
                 className="stage-iframe"
-                src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_VIDEO_ID}?rel=0`}
+                src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_VIDEO_ID}?rel=0&autoplay=1&mute=1&start=28&loop=1&playlist=${YOUTUBE_VIDEO_ID}`}
                 title={t('videoTitle')}
                 loading="lazy"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

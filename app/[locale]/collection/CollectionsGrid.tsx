@@ -12,12 +12,13 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { blurDataURL } from '@/lib/blur';
-import { collections } from '@/lib/collections';
+import type { Collection } from '@/lib/collections';
 import { analytics } from '@/lib/analytics';
 import { debounce } from '@/lib/url';
 import { RugFilters } from '@/components/rugs/RugFilters';
 import {
   getAllRugs,
+  getCollectionOptions,
   filterAndSort,
   emptyFilters,
   hasActiveFilters,
@@ -38,9 +39,7 @@ const slideUp = {
   }),
 };
 
-const ORDER = new Map(collections.map((c, i) => [c.slug, i]));
-
-export function CollectionsGrid() {
+export function CollectionsGrid({ collections = [] }: { collections?: Collection[] }) {
   const t = useTranslations('CollectionsPage');
 
   const [filters, setFilters] = useState<Filters>(() => emptyFilters());
@@ -96,10 +95,11 @@ export function CollectionsGrid() {
     writeUrl(cleared);
   }, [writeUrl]);
 
-  const allRugs = useMemo(() => getAllRugs(), []);
-  const bounds = useMemo(() => priceBounds(), []);
-  const materials = useMemo(() => availableMaterials(), []);
-  const makes = useMemo(() => availableMakes(), []);
+  const allRugs = useMemo(() => getAllRugs(collections), [collections]);
+  const bounds = useMemo(() => priceBounds(allRugs), [allRugs]);
+  const materials = useMemo(() => availableMaterials(allRugs), [allRugs]);
+  const makes = useMemo(() => availableMakes(allRugs), [allRugs]);
+  const collectionOpts = useMemo(() => getCollectionOptions(collections), [collections]);
 
   const visible = useMemo(() => {
     if (!hasActiveFilters(filters)) return collections;
@@ -108,10 +108,10 @@ export function CollectionsGrid() {
       const matchingRugs = filterAndSort(colRugs, filters);
       return matchingRugs.length > 0;
     });
-  }, [filters, allRugs]);
+  }, [filters, allRugs, collections]);
 
   return (
-    <main className="flex-1 px-5 pt-28 pb-16 sm:px-8 sm:pt-36 sm:pb-24 lg:px-12">
+    <main className="flex-1 px-5 pt-28 pb-16 sm:px-8 sm:pt-32 sm:pb-24 lg:px-12">
       <div className="mx-auto max-w-[1400px]">
         {/* Page header */}
         <motion.header
@@ -160,20 +160,6 @@ export function CollectionsGrid() {
           </p>
         </motion.header>
 
-        {/* Sticky filter bar */}
-        <div className="rugx-filterwrap mb-10">
-          <RugFilters
-            filters={filters}
-            update={update}
-            matchingCount={visible.length}
-            onClearAll={clearAll}
-            bounds={bounds}
-            materials={materials}
-            makes={makes}
-            hideFacets={['collection', 'sort']}
-          />
-        </div>
-
         {/* Grid / empty state */}
         {visible.length === 0 ? (
           <div className="py-20 text-center" role="status">
@@ -191,23 +177,21 @@ export function CollectionsGrid() {
           <motion.div layout="position" className="col-grid">
             <AnimatePresence mode="popLayout">
               {visible.map((col, vi) => {
-                const idx = ORDER.get(col.slug) ?? vi;
+                const idx = vi;
                 const eyebrow = `${String(idx + 1).padStart(2, '0')} — ${col.name.toUpperCase()}`;
                 const isEager = vi < 6;
 
                 return (
                   <motion.article
                     key={col.slug}
-                    id={`collection-card-${col.slug}`}
-                    className="feat-card"
-                    layout="position"
-                    initial={{ opacity: 0, scale: 0.98 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.98 }}
+                    layout
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -40 }}
                     transition={{
-                      duration: 0.35,
-                      delay: (vi % 3) * 0.04,
-                      ease: [0.32, 0.72, 0, 1],
+                      duration: 0.8,
+                      delay: (vi % 3) * 0.12,
+                      ease: [0.16, 1, 0.3, 1] as const,
                     }}
                   >
                     <Link
@@ -220,28 +204,30 @@ export function CollectionsGrid() {
                           (window as any).gtag
                         ) {
                           (window as any).gtag(
-                              'event',
-                              'collection_card_clicked',
-                              {
-                                collection_slug: col.slug,
-                                source: 'index',
-                              }
+                            'event',
+                            'collection_card_clicked',
+                            {
+                              collection_slug: col.slug,
+                              source: 'index',
+                            }
                           );
                         }
                       }}
                     >
                       <div className="feat-img">
-                        <Image
-                          src={col.heroImage}
-                          alt={`${col.name} collection — ${col.tagline}`}
-                          fill
-                          loading={isEager ? 'eager' : 'lazy'}
-                          fetchPriority={vi < 3 ? 'high' : undefined}
-                          sizes="(max-width: 560px) 50vw, (max-width: 1024px) 50vw, 33vw"
-                          placeholder="blur"
-                          blurDataURL={blurDataURL()}
-                          style={{ objectFit: 'cover' }}
-                        />
+                        {col.heroImage ? (
+                          <Image
+                            src={col.heroImage}
+                            alt={`${col.name} collection — ${col.tagline}`}
+                            fill
+                            loading={isEager ? 'eager' : 'lazy'}
+                            fetchPriority={vi < 3 ? 'high' : undefined}
+                            sizes="(max-width: 560px) 50vw, (max-width: 1024px) 50vw, 33vw"
+                            placeholder="blur"
+                            blurDataURL={blurDataURL()}
+                            style={{ objectFit: 'cover' }}
+                          />
+                        ) : null}
                       </div>
 
                       <div className="feat-scrim" aria-hidden="true" />

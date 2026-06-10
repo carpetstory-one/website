@@ -8,7 +8,7 @@ import {
   jsonLd,
   SITE_URL,
 } from '@/lib/seo';
-import { collections } from '@/lib/collections';
+import { getSanityCollections } from '@/lib/sanity';
 import { CollectionsGrid } from './CollectionsGrid';
 
 type Props = {
@@ -46,6 +46,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CollectionIndexPage({ params }: Props) {
   const { locale } = await params;
+  const collections = await getSanityCollections();
 
   const breadcrumb = breadcrumbSchema([
     { name: 'Home', url: `/${locale}` },
@@ -75,7 +76,7 @@ export default async function CollectionIndexPage({ params }: Props) {
       />
       <Nav />
       <Suspense fallback={<div className="flex-1" />}>
-        <CollectionsGrid />
+        <CollectionsGrid collections={collections} />
       </Suspense>
       <Footer />
     </div>

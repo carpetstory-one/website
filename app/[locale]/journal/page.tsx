@@ -52,7 +52,7 @@ export default async function JournalIndex({ params }: Props) {
       />
       <Nav />
 
-      <main className="flex-1 px-5 pt-32 pb-16 sm:px-7 sm:pt-40 sm:pb-24 lg:px-12">
+      <main className="flex-1 px-5 pt-28 pb-16 sm:px-7 sm:pt-32 sm:pb-24 lg:px-12">
         <div className="mx-auto max-w-5xl">
           <Reveal>
             <h1 className="font-display text-ink mb-12 text-[40px] leading-[1] font-light tracking-[-0.02em] sm:mb-20 sm:text-[56px] md:text-[80px]">

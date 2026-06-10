@@ -11,7 +11,9 @@ import { resolveShortlist, serializeShortlist } from '@/lib/shortlist';
 
 const EASE = [0.32, 0.72, 0, 1] as const;
 
-export function ShortlistDrawer() {
+import type { Collection } from '@/lib/collections';
+
+export function ShortlistDrawer({ collections }: { collections: Collection[] }) {
   const router = useRouter();
   const { shortlist, count, remove, clear, closeDrawer, notify } =
     useShortlist();
@@ -20,13 +22,26 @@ export function ShortlistDrawer() {
   const panelRef = useRef<HTMLDivElement>(null);
   const previouslyFocused = useRef<HTMLElement | null>(null);
 
-  const resolved = resolveShortlist(shortlist);
+  const resolved = resolveShortlist(shortlist, collections);
 
-  // ── Body scroll lock + focus management + ESC + focus trap.
+
   useEffect(() => {
     previouslyFocused.current = document.activeElement as HTMLElement | null;
-    const prevOverflow = document.body.style.overflow;
+    const scrollY = window.scrollY;
+    const prev = {
+      overflow: document.body.style.overflow,
+      position: document.body.style.position,
+      top: document.body.style.top,
+      left: document.body.style.left,
+      right: document.body.style.right,
+      width: document.body.style.width,
+    };
     document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
 
     // Move focus into the drawer.
     const focusFirst = () => {
@@ -63,7 +78,13 @@ export function ShortlistDrawer() {
     return () => {
       cancelAnimationFrame(raf);
       document.removeEventListener('keydown', onKeyDown, true);
-      document.body.style.overflow = prevOverflow;
+      document.body.style.overflow = prev.overflow;
+      document.body.style.position = prev.position;
+      document.body.style.top = prev.top;
+      document.body.style.left = prev.left;
+      document.body.style.right = prev.right;
+      document.body.style.width = prev.width;
+      window.scrollTo(0, scrollY);
       previouslyFocused.current?.focus?.();
     };
   }, [closeDrawer]);
@@ -74,8 +95,6 @@ export function ShortlistDrawer() {
   };
 
   const handleShare = async () => {
-    // Build the share URL explicitly so it is correct even if the debounced
-    // URL sync hasn't flushed yet.
     const url = new URL(window.location.href);
     url.searchParams.set('shortlist', serializeShortlist(shortlist));
     try {
@@ -150,7 +169,10 @@ export function ShortlistDrawer() {
         </div>
 
         {/* List */}
-        <div className="flex-1 overflow-y-auto px-6 py-4">
+        <div
+          data-lenis-prevent
+          className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 py-4"
+        >
           {resolved.length === 0 ? (
             <p
               className="mt-6 italic"
@@ -180,13 +202,15 @@ export function ShortlistDrawer() {
                       className="relative block h-[60px] w-[60px] shrink-0 overflow-hidden"
                       style={{ background: 'var(--canvas-muted, #f0ece3)' }}
                     >
-                      <Image
-                        src={rug.image}
-                        alt={rug.name}
-                        fill
-                        sizes="60px"
-                        className="object-cover"
-                      />
+                      {rug.image ? (
+                        <Image
+                          src={rug.image}
+                          alt={rug.name}
+                          fill
+                          sizes="60px"
+                          className="object-cover"
+                        />
+                      ) : null}
                     </span>
                     <span className="min-w-0">
                       <span

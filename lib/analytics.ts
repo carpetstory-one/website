@@ -82,4 +82,10 @@ export const analytics = {
       range_low: rangeLow,
       range_high: rangeHigh,
     }),
+
+  // ── Lead-Capture Popup ────────────────────────────────────────
+  popupShown: () => trackEvent('popup_shown'),
+  popupClosed: () => trackEvent('popup_closed'),
+  popupFormSubmitted: () => trackEvent('popup_form_submitted'),
+  popupDontShowAgain: () => trackEvent('popup_dont_show_again'),
 };

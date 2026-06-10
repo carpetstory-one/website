@@ -79,7 +79,7 @@
     "frame8Caption": "Et puis, après huit mois — le sol."
   },
   "Knot": {
-    "label": "IV — Une étude d'échelle",
+    "label": "III — Une étude d'échelle",
     "one": "Un nœud.",
     "ten": "Dix.",
     "hundred": "Cent.",
@@ -98,17 +98,17 @@
     "madeByValue": "Un artisan"
   },
   "Materials": {
-    "label": "V — Les matériaux",
+    "label": "IV — Les matériaux",
     "headline": "Une liste courte et réfléchie de choses qui touchent le sol.",
     "woolName": "Laine",
-    "woolDesc": "Provenant de moutons des hauts plateaux de Bikaner, où la laine est à fibres longues, riche en lanoline et naturellement lustrée. Filée à la main, jamais cardée à la machine.",
-    "woolOrigin": "Bikaner, Rajasthan",
+    "woolDesc": "Importée de moutons des hauts plateaux de Nouvelle-Zélande, où la laine est à fibres longues, riche en lanoline et naturellement lustrée. Filée à la main, jamais cardée à la machine.",
+    "woolOrigin": "Nouvelle-Zélande",
     "silkName": "Soie",
-    "silkDesc": "Soie de mûrier tirée du Karnataka. Utilisée comme fils d'accent dans le champ, où elle attrape la lumière différemment au cours de la journée. Réservée aux tissages les plus fins.",
-    "silkOrigin": "Channapatna, Karnataka",
+    "silkDesc": "Soie de mûrier importée de Chine. Utilisée comme fils d'accent dans le champ, où elle attrape la lumière différemment au cours de la journée. Réservée aux tissages les plus fins.",
+    "silkOrigin": "Chine",
     "cottonName": "Coton",
-    "cottonDesc": "La chaîne. L'architecture sous le poil. Coton à longues fibres, tordu à une densité qui maintient les nœuds pendant cent ans s'il est entretenu.",
-    "cottonOrigin": "Coimbatore, Tamil Nadu",
+    "cottonDesc": "La chaîne. L'architecture sous le poil. Coton à longues fibres importé de diverses régions de l'Inde, tordu à une densité qui maintient les nœuds pendant cent ans s'il est entretenu.",
+    "cottonOrigin": "Diverses régions de l'Inde",
     "dyesLabel": "La couleur",
     "dyesHeadline": "Trois plantes. Une rivière. Un toit.",
     "dyesBody": "Chaque couleur d'une pièce Carpetstory commence par une plante, broyée, bouillie ou fermentée, puis trempée, séchée et trempée à nouveau jusqu'à ce que la laine n'en accepte plus.",
@@ -155,7 +155,7 @@
     "aaraamPrice": "À partir de 11 200 $"
   },
   "Heritage": {
-    "label": "VI — Héritage",
+    "label": "V — Héritage",
     "headline": "Quatre générations à garder la poussière hors de la teinture.",
     "p1Year": "1924.",
     "p1Body": "Tout a commencé avec un seul métier à tisser dans une cour de Jaipur. Mon arrière-grand-père tissait des pièces pour les marchands locaux. Il était connu pour un rouge garance spécifique que personne d'autre ne pouvait reproduire.",
@@ -175,7 +175,7 @@
     "signatureMeta": "Aashrit Garg, Fondateur"
   },
   "World": {
-    "label": "VII — Dans le monde",
+    "label": "VI — Dans le monde",
     "headline": "Où ils vivent.",
     "caption1": "Khwab dans une maison de ville de Brooklyn — Quincy Architects",
     "caption2": "Aaraam dans un salon de Hampstead — Studio Iro",
@@ -183,7 +183,7 @@
     "caption4": "Naqsh dans un pied-à-terre parisien — Studio Marais"
   },
   "Testimonials": {
-    "label": "VIII — Voix",
+    "label": "VII — Voix",
     "prev": "Témoignage précédent",
     "next": "Témoignage suivant",
     "q1": "Il est arrivé dans une caisse en bois qui sentait le cèdre. Le tapis sentait la laine et le soleil. Huit mois plus tard, les deux le sentent toujours.",
@@ -353,7 +353,11 @@
     "inquireCTA": "Demander des informations sur cette pièce →",
     "whatsappCTA": "Nous contacter sur WhatsApp à propos de cette pièce",
     "moreFromCollection": "Plus de la collection {collection}",
-    "priceNote": "Prix estimé · Fabriqué sur commande"
+    "priceNote": "Prix estimé · Fabriqué sur commande",
+    "aboutHeading": "La pièce",
+    "zoomHint": "Agrandir",
+    "zoomIn": "Cliquez pour agrandir",
+    "zoomFit": "Cliquez pour ajuster"
   },
   "TradePage": {
     "eyebrow": "Partenariats de Fabrication & Professionnels",
@@ -451,7 +455,7 @@
   },
   "CollectionsPage": {
     "eyebrow": "Les Collections",
-    "headline": "Douze maisons. Un atelier.",
+    "headline": "De nombreuses maisons. Un atelier.",
     "description": "Des motifs d'archives persans aux longs poils marocains, chaque collection est tissée à Jaipur selon les mêmes normes de fabrication.",
     "noCollections": "Aucune collection ne correspond à ces filtres.",
     "clearFilters": "Effacer les filtres",
@@ -463,6 +467,7 @@
     "subtitle": "{total} tapis dans {count} collections. Filtrez, sauvegardez et partagez.",
     "estimateCTA": "Estimer votre pièce →",
     "showing": "Affichage de {shown} sur {total} pièces",
+    "range": "Affichage de {start}–{end} sur {total} pièces",
     "noRugs": "Aucune pièce ne correspond à ces filtres.",
     "clearFilters": "Effacer les filtres",
     "calcEyebrow": "Un calculateur silencieux",
@@ -471,6 +476,13 @@
     "otherCollections": "Autres collections",
     "explore": "Explorer →",
     "beginInquiry": "Commencer une demande →"
+  },
+  "Pagination": {
+    "label": "Pagination",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "goToPage": "Aller à la page {page}",
+    "status": "Page {page} sur {total}"
   },
   "Filters": {
     "collection": "Collection",
@@ -553,10 +565,19 @@
   "WorldStage": {
     "label": "Sur la scène mondiale",
     "headline": "Présentés au {italic}, sur la plus grande scène du monde.",
-    "italic": "Domotex 2016",
-    "body": "En 2016, nos tapis noués main ont été sélectionnés pour le Domotex de Hanovre — le premier salon mondial du tapis et des revêtements de sol. Parmi des milliers d’artisans du monde entier, nos pièces ont été choisies pour être exposées.",
-    "videoTitle": "Carpetstory au Domotex 2016, Hanovre",
-    "videoCaption": "Domotex 2016 · Hanovre, Allemagne",
+    "italic": "Domotex 2012",
+    "body": "En 2012, nos tapis noués main ont été présentés au Domotex de Hanovre — le premier salon mondial du tapis et des revêtements de sol, présenté sur Fashion TV. Nous y avions la plus grande exposition de tapis, et notre collection phare était Shalimar.",
+    "videoTitle": "Carpetstory au Domotex 2012, Hanovre",
+    "videoCaption": "Domotex 2012 · Hanovre, Allemagne",
     "comingSoon": "Vidéo à venir"
+  },
+  "LeadCapturePopup": {
+    "eyebrow": "Offre Exclusive",
+    "headline": "10 % de réduction sur votre première commande",
+    "description": "Soumettez vos coordonnées et bénéficiez d'une remise exclusive de 10 % sur votre premier achat de tapis.",
+    "close": "Fermer",
+    "dontShowAgain": "Ne plus afficher",
+    "successTitle": "Merci.",
+    "successBody": "Votre réduction de 10 % sera appliquée à votre première commande. Nous vous contacterons sous peu."
   }
 }

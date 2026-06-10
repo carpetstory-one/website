@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import { Nav } from '@/components/editorial/Nav';
 import { Footer } from '@/components/editorial/Footer';
-import { getCollectionBySlug, collections } from '@/lib/collections';
 import { blurDataURL } from '@/lib/blur';
 import { notFound } from 'next/navigation';
+import { getSanityCollections } from '@/lib/sanity';
 import { Reveal } from '@/components/editorial/Reveal';
 import { SlideIn } from '@/components/editorial/SlideIn';
 import { Link } from '@/i18n/routing';
@@ -15,21 +15,49 @@ import {
   SITE_URL,
 } from '@/lib/seo';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
+import {
+  getAllRugs,
+  getCollectionOptions,
+  filterAndSort,
+  parseFiltersFromParams,
+  parsePageParam,
+  paginate,
+  toURLSearchParams,
+  priceBounds,
+  availableMaterials,
+  availableMakes,
+  PER_PAGE,
+} from '@/lib/rugs';
 import { CollectionDetailContent } from './CollectionDetailContent';
 
+// Paginated/filtered variants are dynamic; revalidate the cached data the same
+// way the rest of the catalogue does.
+export const revalidate = 300;
+
+type SearchParams = Record<string, string | string[] | undefined>;
 type Props = {
   params: Promise<{ slug: string; locale: string }>;
+  searchParams: Promise<SearchParams>;
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+  searchParams,
+}: Props): Promise<Metadata> {
   const { slug, locale } = await params;
-  const col = getCollectionBySlug(slug);
+  const sp = await searchParams;
+  const page = parsePageParam(sp.page);
+  const collections = await getSanityCollections();
+  const col = collections.find((c) => c.slug === slug);
 
   if (!col)
     return { title: 'Not Found', robots: { index: false, follow: false } };
 
-  return generatePageMetadata({
-    title: `${col.name} Collection — Carpetstory`,
+  const base = generatePageMetadata({
+    title:
+      page > 1
+        ? `${col.name} Collection — Page ${page} — Carpetstory`
+        : `${col.name} Collection — Carpetstory`,
     description: col.tagline + ' ' + col.description.slice(0, 100) + '…',
     path: `/collection/${col.slug}`,
     locale,
@@ -47,20 +75,50 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       'Carpetstory',
     ],
   });
+
+  if (page > 1 && base.alternates) {
+    base.alternates.canonical = `${SITE_URL}/${locale}/collection/${col.slug}?page=${page}`;
+  }
+  return base;
 }
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const collections = await getSanityCollections();
   return collections.map((col) => ({ slug: col.slug }));
 }
 
-export default async function CollectionDetailPage({ params }: Props) {
+export default async function CollectionDetailPage({
+  params,
+  searchParams,
+}: Props) {
   const { slug, locale } = await params;
   setRequestLocale(locale);
+  const sp = await searchParams;
 
+  const collections = await getSanityCollections();
   const tCommon = await getTranslations('Common');
-  const col = getCollectionBySlug(slug);
+  const col = collections.find((c) => c.slug === slug);
 
   if (!col) notFound();
+
+  // Other collections (for bottom strip + facet derivation context)
+  const others = collections.filter((c) => c.slug !== col.slug);
+
+  // Build this collection's flat rugs, filter + sort from the URL, then slice
+  // to the current page — all server-side, so only one page renders.
+  const allRugs = getAllRugs(collections);
+  const collectionRugs = allRugs.filter((r) => r.collectionSlug === col.slug);
+  const filters = parseFiltersFromParams(toURLSearchParams(sp));
+  const filtered = filterAndSort(collectionRugs, filters);
+  const pageData = paginate(filtered, parsePageParam(sp.page), PER_PAGE);
+
+  // Facets are derived from the whole catalogue so the chip sets stay stable.
+  const facets = {
+    bounds: priceBounds(allRugs),
+    materials: availableMaterials(allRugs),
+    makes: availableMakes(allRugs),
+    collectionOptions: getCollectionOptions(collections),
+  };
 
   const breadcrumb = breadcrumbSchema([
     { name: tCommon('home'), url: `/${locale}` },
@@ -72,17 +130,14 @@ export default async function CollectionDetailPage({ params }: Props) {
     '@type': 'ItemList',
     name: `${col.name} Collection`,
     itemListOrder: 'https://schema.org/ItemListOrderAscending',
-    numberOfItems: col.rugs.length,
-    itemListElement: col.rugs.map((r, i) => ({
+    numberOfItems: pageData.total,
+    itemListElement: pageData.items.map((r, i) => ({
       '@type': 'ListItem',
-      position: i + 1,
-      url: `${SITE_URL}/${locale}/collection/${col.slug}/${r.slug}`,
+      position: pageData.start + i,
+      url: `${SITE_URL}/${locale}${r.href}`,
       name: r.name,
     })),
   };
-
-  // Other collections (for bottom strip)
-  const others = collections.filter((c) => c.slug !== col.slug);
 
   return (
     <div className="bg-canvas relative flex min-h-screen flex-col">
@@ -148,17 +203,19 @@ export default async function CollectionDetailPage({ params }: Props) {
             animation: 'collHeroZoom 14s ease-out forwards',
           }}
         >
-          <Image
-            src={col.heroImage}
-            alt={`${col.name} collection`}
-            fill
-            priority
-            fetchPriority="high"
-            sizes="100vw"
-            placeholder="blur"
-            blurDataURL={blurDataURL()}
-            style={{ objectFit: 'cover' }}
-          />
+          {col.heroImage ? (
+            <Image
+              src={col.heroImage}
+              alt={`${col.name} collection`}
+              fill
+              priority
+              fetchPriority="high"
+              sizes="100vw"
+              placeholder="blur"
+              blurDataURL={blurDataURL()}
+              style={{ objectFit: 'cover' }}
+            />
+          ) : null}
         </div>
         {/* Overlay */}
         <div
@@ -218,8 +275,18 @@ export default async function CollectionDetailPage({ params }: Props) {
         </div>
       </div>
 
-      <main className="flex-1">
-        <CollectionDetailContent col={col} locale={locale} others={others} />
+      <main className="flex-1" style={{ backgroundColor: '#ffffff' }}>
+        <CollectionDetailContent
+          col={col}
+          locale={locale}
+          others={others}
+          pageRugs={pageData.items}
+          filters={filters}
+          page={pageData.page}
+          totalPages={pageData.totalPages}
+          matchingTotal={pageData.total}
+          facets={facets}
+        />
       </main>
 
       <Footer />

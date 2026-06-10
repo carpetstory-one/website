@@ -79,7 +79,7 @@
     "frame8Caption": "Und dann, nach acht Monaten — der Boden."
   },
   "Knot": {
-    "label": "IV — Eine Studie über Maßstab",
+    "label": "III — Eine Studie über Maßstab",
     "one": "Ein Knoten.",
     "ten": "Zehn.",
     "hundred": "Einhundert.",
@@ -98,17 +98,17 @@
     "madeByValue": "Einem Kunsthandwerker"
   },
   "Materials": {
-    "label": "V — Die Materialien",
+    "label": "IV — Die Materialien",
     "headline": "Eine kurze und bedachte Liste der Dinge, die den Boden berühren.",
     "woolName": "Wolle",
-    "woolDesc": "Bezogen von Hochlandschafen in Bikaner, wo die Wolle langfaserig, lanolinreich und natürlich glänzend ist. Handgesponnen, niemals maschinell kardiert.",
-    "woolOrigin": "Bikaner, Rajasthan",
+    "woolDesc": "Bezogen von Hochlandschafen in Neuseeland, wo die Wolle langfaserig, lanolinreich und natürlich glänzend ist. Handgesponnen, niemals maschinell kardiert.",
+    "woolOrigin": "Neuseeland",
     "silkName": "Seide",
-    "silkDesc": "Maulbeerseide aus Karnataka. Wird als Akzentfäden im Feld verwendet, wo sie das Licht im Laufe des Tages unterschiedlich einfängt. Den feineren Geweben vorbehalten.",
-    "silkOrigin": "Channapatna, Karnataka",
+    "silkDesc": "Maulbeerseide importiert aus China. Wird als Akzentfäden im Feld verwendet, wo sie das Licht im Laufe des Tages unterschiedlich einfängt. Den feineren Geweben vorbehalten.",
+    "silkOrigin": "China",
     "cottonName": "Baumwolle",
-    "cottonDesc": "Die Kette. Die Architektur unter dem Flor. Langstapelige Baumwolle, zu einer Dichte gedreht, die die Knoten bei richtiger Pflege hundert Jahre lang hält.",
-    "cottonOrigin": "Coimbatore, Tamil Nadu",
+    "cottonDesc": "Die Kette. Die Architektur unter dem Flor. Langstapelige Baumwolle, importiert aus verschiedenen Regionen Indiens und zu einer Dichte gedreht, die die Knoten bei richtiger Pflege hundert Jahre lang hält.",
+    "cottonOrigin": "Verschiedene Regionen Indiens",
     "dyesLabel": "Die Farbe",
     "dyesHeadline": "Drei Pflanzen. Ein Fluss. Ein Dach.",
     "dyesBody": "Jede Farbe in einem Carpetstory-Stück beginnt als Pflanze, zerstoßen, gekocht oder fermentiert, dann getaucht, getrocknet und wieder getaucht, bis die Wolle keine mehr annimmt.",
@@ -155,7 +155,7 @@
     "aaraamPrice": "Ab 11.200 $"
   },
   "Heritage": {
-    "label": "VI — Geschichte",
+    "label": "V — Geschichte",
     "headline": "Vier Generationen, die den Staub aus der Farbe halten.",
     "p1Year": "1924.",
     "p1Body": "Es begann mit einem einzigen Webstuhl in einem Innenhof in Jaipur. Mein Urgroßvater webte Stücke für die örtlichen Händler. Er war bekannt für ein bestimmtes Krapprot, das niemand sonst nachahmen konnte.",
@@ -175,7 +175,7 @@
     "signatureMeta": "Aashrit Garg, Gründer"
   },
   "World": {
-    "label": "VII — In der Welt",
+    "label": "VI — In der Welt",
     "headline": "Wo sie leben.",
     "caption1": "Khwab in einem Stadthaus in Brooklyn — Quincy Architects",
     "caption2": "Aaraam in einem Salon in Hampstead — Studio Iro",
@@ -183,7 +183,7 @@
     "caption4": "Naqsh in einem Pariser pied-à-terre — Studio Marais"
   },
   "Testimonials": {
-    "label": "VIII — Stimmen",
+    "label": "VII — Stimmen",
     "prev": "Vorheriges Zeugnis",
     "next": "Nächstes Zeugnis",
     "q1": "Er kam in einer Holzkiste an, die nach Zedernholz roch. Der Teppich roch nach Wolle und Sonne. Acht Monate später tun beide das immer noch.",
@@ -353,7 +353,11 @@
     "inquireCTA": "Informationen zu diesem Stück anfordern →",
     "whatsappCTA": "Schreiben Sie uns auf WhatsApp zu diesem Stück",
     "moreFromCollection": "Mehr aus der Kollektion {collection}",
-    "priceNote": "Geschätzter Preis · Auf Bestellung gefertigt"
+    "priceNote": "Geschätzter Preis · Auf Bestellung gefertigt",
+    "aboutHeading": "Das Stück",
+    "zoomHint": "Vergrößern",
+    "zoomIn": "Zum Vergrößern klicken",
+    "zoomFit": "Klicken zum Anpassen"
   },
   "TradePage": {
     "eyebrow": "Herstellungs- und Fachhandelspartnerschaften",
@@ -451,7 +455,7 @@
   },
   "CollectionsPage": {
     "eyebrow": "Die Kollektionen",
-    "headline": "Zwölf Häuser. Eine Werkstatt.",
+    "headline": "Viele Häuser. Eine Werkstatt.",
     "description": "Von persischen Archivmustern bis hin zu marokkanischem Hochflor wird jede Kollektion in Jaipur nach demselben Konstruktionsstandard gewebt.",
     "noCollections": "Keine Kollektionen entsprechen diesen Filtern.",
     "clearFilters": "Filter löschen",
@@ -463,6 +467,7 @@
     "subtitle": "{total} Teppiche in {count} Kollektionen. Filtern, merken und teilen.",
     "estimateCTA": "Teppich schätzen →",
     "showing": "Zeige {shown} von {total} Stücken",
+    "range": "Zeige {start}–{end} von {total} Stücken",
     "noRugs": "Keine Stücke entsprechen diesen Filtern.",
     "clearFilters": "Filter löschen",
     "calcEyebrow": "Ein leiser Rechner",
@@ -471,6 +476,13 @@
     "otherCollections": "Andere Kollektionen",
     "explore": "Entdecken →",
     "beginInquiry": "Anfrage beginnen →"
+  },
+  "Pagination": {
+    "label": "Seitennummerierung",
+    "previous": "Zurück",
+    "next": "Weiter",
+    "goToPage": "Zur Seite {page}",
+    "status": "Seite {page} von {total}"
   },
   "Filters": {
     "collection": "Kollektion",
@@ -553,10 +565,19 @@
   "WorldStage": {
     "label": "Auf der Weltbühne",
     "headline": "Gezeigt auf der {italic}, auf der größten Bühne der Welt.",
-    "italic": "Domotex 2016",
-    "body": "2016 wurden unsere handgeknüpften Teppiche für die Domotex in Hannover ausgewählt — die weltweit führende Fachmesse für Teppiche und Bodenbeläge. Unter Tausenden Herstellern aus aller Welt wurden unsere Stücke zur Ausstellung ausgewählt.",
-    "videoTitle": "Carpetstory auf der Domotex 2016, Hannover",
-    "videoCaption": "Domotex 2016 · Hannover, Deutschland",
+    "italic": "Domotex 2012",
+    "body": "2012 wurden unsere handgeknüpften Teppiche auf der Domotex in Hannover präsentiert — der weltweit führenden Fachmesse für Teppiche und Bodenbeläge, gezeigt auf Fashion TV. Wir hatten dort die größte Teppichpräsentation, und unsere Hauptkollektion war Shalimar.",
+    "videoTitle": "Carpetstory auf der Domotex 2012, Hannover",
+    "videoCaption": "Domotex 2012 · Hannover, Deutschland",
     "comingSoon": "Video folgt in Kürze"
+  },
+  "LeadCapturePopup": {
+    "eyebrow": "Exklusives Angebot",
+    "headline": "10 % Rabatt auf Ihre erste Bestellung",
+    "description": "Senden Sie Ihre Daten und erhalten Sie einen exklusiven Rabatt von 10 % auf Ihren ersten Teppichkauf.",
+    "close": "Schließen",
+    "dontShowAgain": "Nicht mehr anzeigen",
+    "successTitle": "Vielen Dank.",
+    "successBody": "Ihr 10 %-Rabatt wird auf Ihre erste Bestellung angewendet. Wir melden uns in Kürze."
   }
 }

@@ -1,8 +1,16 @@
+packages:
+  - '.'
+  - 'studio-carpetstory'
+
 allowBuilds:
   '@parcel/watcher': true
   '@swc/core': true
+  esbuild: true
   sharp: true
   unrs-resolver: true
 ignoredBuiltDependencies:
   - sharp
   - unrs-resolver
+minimumReleaseAgeExclude:
+  - '@sanity/*'
+  - 'sanity'

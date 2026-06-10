@@ -78,7 +78,7 @@
     "frame8Caption": "And then, after eight months — the floor."
   },
   "Knot": {
-    "label": "IV — A study in scale",
+    "label": "III — A study in scale",
     "one": "One knot.",
     "ten": "Ten.",
     "hundred": "One hundred.",
@@ -97,17 +97,17 @@
     "madeByValue": "One artisan"
   },
   "Materials": {
-    "label": "V — The materials",
+    "label": "IV — The materials",
     "headline": "A short and considered list of things that touch the floor.",
     "woolName": "Wool",
-    "woolDesc": "Sourced from highland sheep in Bikaner, where the wool is long-fibered, lanolin-rich, and naturally lustrous. Hand-spun, never machine-carded.",
-    "woolOrigin": "Bikaner, Rajasthan",
+    "woolDesc": "Imported from highland sheep in New Zealand, where the wool is long-fibered, lanolin-rich, and naturally lustrous. Hand-spun, never machine-carded.",
+    "woolOrigin": "New Zealand",
     "silkName": "Silk",
-    "silkDesc": "Mulberry silk drawn from Karnataka. Used as accent threads in the field, where it catches light differently across the day. Reserved for the finer weaves.",
-    "silkOrigin": "Channapatna, Karnataka",
+    "silkDesc": "Mulberry silk imported from China. Used as accent threads in the field, where it catches light differently across the day. Reserved for the finer weaves.",
+    "silkOrigin": "China",
     "cottonName": "Cotton",
-    "cottonDesc": "The warp. The architecture beneath the pile. Long-staple cotton, twisted to a density that holds the knots for a hundred years if cared for.",
-    "cottonOrigin": "Coimbatore, Tamil Nadu",
+    "cottonDesc": "The warp. The architecture beneath the pile. Long-staple cotton imported from various parts of India, twisted to a density that holds the knots for a hundred years if cared for.",
+    "cottonOrigin": "Various parts of India",
     "dyesLabel": "The colour",
     "dyesHeadline": "Three plants. A river. A roof.",
     "dyesBody": "Every colour in a Carpetstory piece begins as a plant, ground or boiled or fermented, then dipped, dried, and dipped again until the wool refuses any more.",
@@ -141,7 +141,7 @@
     "aaraamPrice": "From $11,200"
   },
   "Heritage": {
-    "label": "VI — Heritage",
+    "label": "V — Heritage",
     "headline": "Four generations of keeping the dust out of the dye.",
     "p1Year": "1924.",
     "p1Body": "It started with a single loom in a courtyard in Jaipur. My great-grandfather wove pieces for the local merchants. He was known for a specific madder red that no one else could replicate.",
@@ -161,7 +161,7 @@
     "signatureMeta": "Aashrit Garg, Founder"
   },
   "World": {
-    "label": "VII — In the world",
+    "label": "VI — In the world",
     "headline": "Where they live.",
     "caption1": "Khwab in a Brooklyn townhouse — Quincy Architects",
     "caption2": "Aaraam in a Hampstead drawing room — Studio Iro",
@@ -169,7 +169,7 @@
     "caption4": "Naqsh in a Parisian pied-à-terre — Studio Marais"
   },
   "Testimonials": {
-    "label": "VIII — Voices",
+    "label": "VII — Voices",
     "prev": "Previous testimonial",
     "next": "Next testimonial",
     "q1": "It arrived in a wooden crate that smelled of cedar. The rug smelled of wool and sun. Eight months later, both still do.",
@@ -321,7 +321,11 @@
     "inquireCTA": "Inquire about this piece →",
     "whatsappCTA": "WhatsApp us about this piece",
     "moreFromCollection": "More from the {collection} collection",
-    "priceNote": "Estimated price · Made to order"
+    "priceNote": "Estimated price · Made to order",
+    "aboutHeading": "The piece",
+    "zoomHint": "Zoom",
+    "zoomIn": "Click image to zoom",
+    "zoomFit": "Click to fit screen"
   },
   "TradePage": {
     "eyebrow": "Manufacturing & Trade Partnerships",
@@ -419,7 +423,7 @@
   },
   "CollectionsPage": {
     "eyebrow": "The Collections",
-    "headline": "Twelve houses. One workshop.",
+    "headline": "Many houses. One workshop.",
     "description": "From Persian archive patterns to Moroccan long pile, every collection is woven in Jaipur to the same standard of construction.",
     "noCollections": "No collections match these filters.",
     "clearFilters": "Clear filters",
@@ -431,6 +435,7 @@
     "subtitle": "{total} rugs across {count} collections. Filter, shortlist, and share.",
     "estimateCTA": "Estimate your piece →",
     "showing": "Showing {shown} of {total} pieces",
+    "range": "Showing {start}–{end} of {total} pieces",
     "noRugs": "No pieces match these filters.",
     "clearFilters": "Clear filters",
     "calcEyebrow": "A quiet calculator",
@@ -439,6 +444,13 @@
     "otherCollections": "Other collections",
     "explore": "Explore →",
     "beginInquiry": "Begin an inquiry →"
+  },
+  "Pagination": {
+    "label": "Pagination",
+    "previous": "Previous",
+    "next": "Next",
+    "goToPage": "Go to page {page}",
+    "status": "Page {page} of {total}"
   },
   "Filters": {
     "collection": "Collection",
@@ -521,10 +533,19 @@
   "WorldStage": {
     "label": "On the World Stage",
     "headline": "Shown at {italic}, on the world’s largest stage.",
-    "italic": "Domotex 2016",
-    "body": "In 2016 our hand-knotted rugs were selected for Domotex in Hannover — the world’s leading trade fair for carpets and floor coverings. Among thousands of makers from across the globe, our pieces were chosen to be shown.",
-    "videoTitle": "Carpetstory at Domotex 2016, Hannover",
-    "videoCaption": "Domotex 2016 · Hannover, Germany",
+    "italic": "Domotex 2012",
+    "body": "In 2012 our hand-knotted rugs were showcased at Domotex in Hannover — the world’s leading trade fair for carpets and floor coverings, featured on Fashion TV. We had the biggest carpet showcase there, and our key collection was Shalimar.",
+    "videoTitle": "Carpetstory at Domotex 2012, Hannover",
+    "videoCaption": "Domotex 2012 · Hannover, Germany",
     "comingSoon": "Film coming soon"
+  },
+  "LeadCapturePopup": {
+    "eyebrow": "Exclusive Offer",
+    "headline": "Get 10% Off Your First Order",
+    "description": "Submit your details and receive an exclusive 10% discount on your first carpet purchase.",
+    "close": "Close",
+    "dontShowAgain": "Don't show again",
+    "successTitle": "Thank you.",
+    "successBody": "Your 10% discount will be applied to your first order. We'll be in touch shortly."
   }
 }

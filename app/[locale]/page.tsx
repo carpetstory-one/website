@@ -14,25 +14,28 @@ import { Testimonials } from '@/components/editorial/Testimonials';
 import { Doors } from '@/components/editorial/Doors';
 import { Inquiry } from '@/components/editorial/Inquiry';
 import { Footer } from '@/components/editorial/Footer';
+import { getSanityCollections } from '@/lib/sanity';
 
-export default function HomePage() {
+export default async function HomePage() {
+  const collections = await getSanityCollections();
+
   return (
     <>
       <Nav />
       <Hero />
-      <Collection />
+      <Collection collections={collections} />
       <PromiseSection />
-      <WorldStage />
-      <MakingSection />
+      {/* <WorldStage /> */}
+      {/* <MakingSection /> */}
       <KnotCount />
       <Materials />
       <Heritage />
       <Letter />
-      <World />
+      <World collections={collections} />
       <Testimonials />
       <Doors />
       <Suspense fallback={<div className="py-24" />}>
-        <Inquiry />
+        <Inquiry collections={collections} />
       </Suspense>
       <Footer />
     </>

@@ -4,15 +4,24 @@ import { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
-import { collections } from '@/lib/collections';
+import { collections as allCollections } from '@/lib/collections';
 import { parseShortlistParam, resolveShortlist } from '@/lib/shortlist';
+import type { Collection } from '@/lib/collections';
 
 type Errors = { name?: string; email?: string; message?: string };
 
-export function Inquiry() {
+export function Inquiry({
+  collections = allCollections,
+  onSuccess,
+}: {
+  collections?: Collection[];
+  onSuccess?: () => void;
+}) {
   const t = useTranslations('Inquiry');
   const searchParams = useSearchParams();
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const [errors, setErrors] = useState<Errors>({});
 
   // Prefill from query params (set when coming from a rug page)
@@ -22,8 +31,8 @@ export function Inquiry() {
 
   // Shortlist context (set when coming from the shortlist drawer)
   const shortlistResolved = useMemo(
-    () => resolveShortlist(parseShortlistParam(shortlistParam)),
-    [shortlistParam]
+    () => resolveShortlist(parseShortlistParam(shortlistParam), collections),
+    [shortlistParam, collections]
   );
 
   const shortlistMessage = useMemo(() => {
@@ -84,11 +93,53 @@ export function Inquiry() {
         <form
           className="inquiry-form"
           noValidate
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            const errs = validate(e.currentTarget);
+            if (isSubmitting) return;
+            const form = e.currentTarget;
+            const errs = validate(form);
             setErrors(errs);
-            if (Object.keys(errs).length === 0) setSubmitted(true);
+            if (Object.keys(errs).length > 0) return;
+
+            setIsSubmitting(true);
+            setSubmitError('');
+
+            const formData = new FormData(form);
+            const data: any = {
+              name: formData.get('name') as string,
+              email: formData.get('email') as string,
+              location: formData.get('location') as string,
+              space: formData.get('space') as string,
+              collection: formData.get('collection') as string,
+              message: formData.get('message') as string,
+              pageUrl: typeof window !== 'undefined' ? window.location.href : '',
+            };
+
+            if (shortlistResolved.length > 0) {
+              // Send the first item as the primary product context
+              data.productName = shortlistResolved[0].rug.name;
+              data.productSlug = shortlistResolved[0].rug.slug;
+            }
+
+            try {
+              const res = await fetch('/api/inquiry', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+              });
+
+              if (!res.ok) {
+                const errData = await res.json();
+                throw new Error(errData.error || 'Failed to submit inquiry');
+              }
+
+              setSubmitted(true);
+              onSuccess?.();
+            } catch (err: any) {
+              setSubmitError(err.message || 'An error occurred. Please try again or use WhatsApp.');
+            } finally {
+              setIsSubmitting(false);
+            }
           }}
         >
           <h2 id="inquiry-heading">
@@ -124,13 +175,15 @@ export function Inquiry() {
                       background: 'var(--canvas-muted, #f0ece3)',
                     }}
                   >
-                    <Image
-                      src={rug.image}
-                      alt={`${rug.name} — ${collection.name}`}
-                      fill
-                      sizes="64px"
-                      style={{ objectFit: 'cover' }}
-                    />
+                    {rug.image ? (
+                      <Image
+                        src={rug.image}
+                        alt={`${rug.name} — ${collection.name}`}
+                        fill
+                        sizes="64px"
+                        style={{ objectFit: 'cover' }}
+                      />
+                    ) : null}
                   </div>
                 ))}
               </div>
@@ -257,13 +310,21 @@ export function Inquiry() {
             )}
           </div>
 
+          {submitError && (
+            <div style={{ color: 'var(--accent)', fontSize: '14px', marginBottom: '16px' }}>
+              {submitError}
+            </div>
+          )}
+
           <div className="submit-row">
             <button
               className="btn-send magnetic"
               type="submit"
+              disabled={isSubmitting}
+              style={{ opacity: isSubmitting ? 0.7 : 1, cursor: isSubmitting ? 'not-allowed' : 'pointer' }}
               suppressHydrationWarning
             >
-              {t('send')}
+              {isSubmitting ? 'Sending...' : t('send')}
               <svg
                 width="16"
                 height="10"

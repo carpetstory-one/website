@@ -147,7 +147,7 @@ export default async function CraftPage({ params }: Props) {
       />
       <Nav />
       <main className="flex-1">
-        <div className="mx-auto max-w-4xl px-5 pt-20 pb-10 text-center sm:px-7 sm:pt-24 sm:pb-12 lg:px-12">
+        <div className="mx-auto max-w-4xl px-5 pt-28 pb-10 text-center sm:px-7 sm:pt-32 sm:pb-12 lg:px-12">
           <h1 className="font-display text-ink mb-4 text-[40px] leading-[1] font-light tracking-[-0.02em] sm:mb-6 sm:text-[56px] md:text-[80px]">
             {tCraft('title')}
           </h1>

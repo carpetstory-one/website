@@ -43,13 +43,18 @@ export function GlobalAnimations() {
       let lenis: any = null;
       if (!prefersReducedMotion) {
         lenis = new Lenis({
-          duration: 1.2,
-          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          // lerp mode (not duration mode): each frame moves a fraction of the
+          // remaining distance toward the target. This reacts to wheel input
+          // immediately and settles quickly — smooth but fast/snappy — instead
+          // of gliding to a stop over a fixed duration (the old "slow" feel).
+          lerp: 0.10,
           smoothWheel: true,
+          // Each wheel notch travels a touch further so the page covers ground
+          // faster without losing smoothness.
+          wheelMultiplier: 1.15,
           // syncTouch:false === smoothTouch:false — keep native momentum on
           // mobile, where smoothed touch scrolling feels worse than the OS.
           syncTouch: false,
-          wheelMultiplier: 1.0,
           touchMultiplier: 2.0,
         });
 
@@ -60,7 +65,7 @@ export function GlobalAnimations() {
             const target = document.querySelector(id);
             if (target) {
               e.preventDefault();
-              lenis.scrollTo(target, { offset: 0, duration: 1.4 });
+              lenis.scrollTo(target, { offset: 0, duration: 0.9 });
             }
           });
         });

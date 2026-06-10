@@ -1,11 +1,7 @@
 import Image from 'next/image';
 import { Nav } from '@/components/editorial/Nav';
 import { Footer } from '@/components/editorial/Footer';
-import {
-  getCollectionBySlug,
-  getRugBySlug,
-  collections,
-} from '@/lib/collections';
+import { getSanityCollections } from '@/lib/sanity';
 import { blurDataURL } from '@/lib/blur';
 import { notFound } from 'next/navigation';
 import { Link } from '@/i18n/routing';
@@ -26,11 +22,13 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, rugSlug, locale } = await params;
-  const result = getRugBySlug(slug, rugSlug);
+  const collections = await getSanityCollections();
+  
+  const collection = collections.find((c) => c.slug === slug);
+  const rug = collection?.rugs.find((r) => r.slug === rugSlug);
 
-  if (!result)
+  if (!collection || !rug)
     return { title: 'Not Found', robots: { index: false, follow: false } };
-  const { collection, rug } = result;
 
   return generatePageMetadata({
     title: `${rug.name} — ${collection.name} — Carpetstory`,
@@ -50,7 +48,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 }
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const collections = await getSanityCollections();
   return collections.flatMap((col) =>
     col.rugs.map((rug) => ({ slug: col.slug, rugSlug: rug.slug }))
   );
@@ -62,10 +61,11 @@ export default async function RugDetailPage({ params }: Props) {
 
   const tCommon = await getTranslations('Common');
 
-  const result = getRugBySlug(slug, rugSlug);
+  const collections = await getSanityCollections();
+  const collection = collections.find((c) => c.slug === slug);
+  const rug = collection?.rugs.find((r) => r.slug === rugSlug);
 
-  if (!result) notFound();
-  const { collection, rug } = result;
+  if (!collection || !rug) notFound();
 
   // Sibling rugs (other 3–4 in the collection)
   const siblings = collection.rugs
@@ -144,7 +144,7 @@ export default async function RugDetailPage({ params }: Props) {
         <span style={{ color: 'var(--ink)' }}>{rug.name}</span>
       </div>
 
-      <main className="flex-1">
+      <main className="flex-1" style={{ backgroundColor: '#ffffff' }}>
         <RugDetailContent
           rug={rug}
           collection={collection}

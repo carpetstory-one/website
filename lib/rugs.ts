@@ -1,25 +1,14 @@
 /**
  * lib/rugs.ts — Flat, faceted view over every rug in every collection.
  *
- * The /rugs page is a single flat index of all rugs (12 collections × 6 =
- * 72 pieces), complementing /collection which groups them by theme. Each card
- * still links to the existing rug detail route /collection/[slug]/[rugSlug].
+ * The /rugs page is a single flat index of all rugs, complementing /collection
+ * which groups them by theme. Each card still links to the existing rug detail
+ * route /collection/[slug]/[rugSlug].
  *
- * The seed data in lib/collections.ts only carries name / description / price /
- * image per rug; material, construction, size and colour live at the collection
- * level or not at all. So this module DERIVES the missing facets:
- *   • material  ← collection.meta.materials  (deterministic)
- *   • make      ← collection slug            (deterministic)
- *   • size      ← deterministic per-rug dimension (placeholder pool)
- *   • colours   ← keywords in the description, else a deterministic pick
- *
- * ⚠️ The synthesized size / colour values are PLACEHOLDERS so the filters are
- * fully functional today. Replace them with real per-rug data (add `dimensions`
- * and `colors` to each rug in lib/collections.ts) when the founder supplies it —
- * `buildFlatRug` already prefers any real field that is present.
+ * All collection data is now fetched dynamically from Sanity Studio.
  */
 
-import { collections, type Collection, type Rug } from '@/lib/collections';
+import { type Collection, type Rug } from '@/lib/collections';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Facet option lists (the canonical chip/swatch sets)
@@ -264,45 +253,43 @@ function buildFlatRug(col: Collection, rug: Rug, order: number): FlatRug {
   };
 }
 
-// ── module-level memoized flat list ──────────────────────────────────────────
+// ── module-level helper functions ──────────────────────────────────────────
 
-let _all: FlatRug[] | null = null;
-
-export function getAllRugs(): FlatRug[] {
-  if (_all) return _all;
+export function getAllRugs(collectionsList: Collection[]): FlatRug[] {
   const out: FlatRug[] = [];
   let order = 0;
-  for (const col of collections) {
+  for (const col of collectionsList) {
     for (const rug of col.rugs) {
       out.push(buildFlatRug(col, rug, order++));
     }
   }
-  _all = out;
   return out;
 }
 
-export const COLLECTION_OPTIONS = collections.map((c) => ({
-  slug: c.slug,
-  name: c.name,
-}));
+export function getCollectionOptions(collectionsList: Collection[]) {
+  return collectionsList.map((c) => ({
+    slug: c.slug,
+    name: c.name,
+  }));
+}
 
 /** Material values actually present in the data (for the chip set). */
-export function availableMaterials(): Material[] {
+export function availableMaterials(allRugs: FlatRug[]): Material[] {
   const present = new Set<string>();
-  getAllRugs().forEach((r) => r.material && present.add(r.material));
+  allRugs.forEach((r) => r.material && present.add(r.material));
   return MATERIAL_OPTIONS.filter((m) => present.has(m));
 }
 
 /** Make values actually present in the data. */
-export function availableMakes(): Make[] {
+export function availableMakes(allRugs: FlatRug[]): Make[] {
   const present = new Set<string>();
-  getAllRugs().forEach((r) => present.add(r.make));
+  allRugs.forEach((r) => present.add(r.make));
   return MAKE_OPTIONS.filter((m) => present.has(m));
 }
 
 /** Min / max price across rugs that carry a price, snapped to $500. */
-export function priceBounds(): { min: number; max: number } {
-  const prices = getAllRugs()
+export function priceBounds(allRugs: FlatRug[]): { min: number; max: number } {
+  const prices = allRugs
     .map((r) => r.priceUSD)
     .filter((p): p is number => typeof p === 'number');
   if (prices.length === 0) return { min: 0, max: 0 };
@@ -311,7 +298,57 @@ export function priceBounds(): { min: number; max: number } {
   return { min, max };
 }
 
-export const collectionCount = collections.length;
+// ─────────────────────────────────────────────────────────────────────────────
+// Pagination (server-side limit/offset over the flat, filtered catalogue)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** Products per page. */
+export const PER_PAGE = 24;
+
+/** Read & clamp the ?page= search param to a positive integer (1-based). */
+export function parsePageParam(raw: string | string[] | undefined): number {
+  const value = Array.isArray(raw) ? raw[0] : raw;
+  const n = Number.parseInt(value ?? '1', 10);
+  return Number.isFinite(n) && n > 1 ? n : 1;
+}
+
+export type Paginated<T> = {
+  items: T[];
+  page: number; // clamped, 1-based
+  perPage: number;
+  total: number; // total matching items (across all pages)
+  totalPages: number;
+  start: number; // 1-based index of first item on this page (0 when empty)
+  end: number; // 1-based index of last item on this page
+};
+
+/**
+ * Slice a flat list into one page. The `start`/`perPage` slice is the in-memory
+ * equivalent of a SQL `OFFSET … LIMIT …` — applied here because the facets
+ * (colour/size/material) are derived in JS and therefore can't be expressed as
+ * a Sanity/GROQ predicate. The list is still cut server-side, so only one
+ * page's worth of data is serialised to the client.
+ */
+export function paginate<T>(
+  all: T[],
+  page: number,
+  perPage: number = PER_PAGE
+): Paginated<T> {
+  const total = all.length;
+  const totalPages = Math.max(1, Math.ceil(total / perPage));
+  const safePage = Math.min(Math.max(1, page), totalPages);
+  const offset = (safePage - 1) * perPage;
+  const items = all.slice(offset, offset + perPage);
+  return {
+    items,
+    page: safePage,
+    perPage,
+    total,
+    totalPages,
+    start: total === 0 ? 0 : offset + 1,
+    end: offset + items.length,
+  };
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Filter state + pure filter/sort
@@ -362,7 +399,7 @@ export function activeFilterCount(f: RugFilters): number {
 }
 
 export function filterAndSort(rugs: FlatRug[], f: RugFilters): FlatRug[] {
-  const bounds = priceBounds();
+  const bounds = priceBounds(rugs);
   const out = rugs.filter((r) => {
     if (f.collection.length && !f.collection.includes(r.collectionSlug))
       return false;
@@ -410,7 +447,6 @@ export function filterAndSort(rugs: FlatRug[], f: RugFilters): FlatRug[] {
 // URL (de)serialization — shareable, restores state exactly
 // ─────────────────────────────────────────────────────────────────────────────
 
-const VALID_COLLECTIONS = new Set(COLLECTION_OPTIONS.map((c) => c.slug));
 const VALID_MATERIALS = new Set<string>(MATERIAL_OPTIONS);
 const VALID_MAKES = new Set<string>(MAKE_OPTIONS);
 const VALID_SIZES = new Set<string>(SIZE_OPTIONS);
@@ -429,9 +465,27 @@ function csv(raw: string | null, valid: Set<string>): string[] {
   );
 }
 
-export function parseFiltersFromParams(params: URLSearchParams): RugFilters {
+/**
+ * Parse filter state from URL search params.
+ * @param params — URLSearchParams from the current URL
+ * @param validCollectionSlugs — optional set of valid collection slugs for validation
+ */
+export function parseFiltersFromParams(
+  params: URLSearchParams,
+  validCollectionSlugs?: Set<string>
+): RugFilters {
   const f = emptyFilters();
-  f.collection = csv(params.get('collection'), VALID_COLLECTIONS);
+  if (validCollectionSlugs) {
+    f.collection = csv(params.get('collection'), validCollectionSlugs);
+  } else {
+    // No validation — accept any collection slug from the URL
+    const raw = params.get('collection');
+    if (raw) {
+      f.collection = Array.from(
+        new Set(raw.split(',').map((s) => s.trim().toLowerCase()).filter(Boolean))
+      );
+    }
+  }
   // materials may contain spaces / ampersands → match case-insensitively
   if (params.get('material')) {
     const wanted = params
@@ -465,6 +519,18 @@ export function parseFiltersFromParams(params: URLSearchParams): RugFilters {
   const sort = (params.get('sort') || '').trim().toLowerCase();
   f.sort = (VALID_SORTS.has(sort) ? sort : 'curated') as SortId;
   return f;
+}
+
+/** Convert Next's plain searchParams object into a URLSearchParams instance. */
+export function toURLSearchParams(
+  sp: Record<string, string | string[] | undefined>
+): URLSearchParams {
+  const out = new URLSearchParams();
+  for (const [key, value] of Object.entries(sp)) {
+    if (Array.isArray(value)) value.forEach((v) => out.append(key, v));
+    else if (value != null) out.set(key, value);
+  }
+  return out;
 }
 
 /** Serialize active filters to a query string (no leading '?'). Empty when clean. */

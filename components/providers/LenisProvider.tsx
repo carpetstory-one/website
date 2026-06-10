@@ -16,9 +16,10 @@ export function LenisProvider({ children }: { children: any }) {
     <ReactLenis
       root
       options={{
-        duration: 1.15,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // match CSS --ease-out approx
+        // lerp mode for a fast/snappy-but-smooth feel — see GlobalAnimations.
+        lerp: 0.12,
         smoothWheel: true,
+        wheelMultiplier: 1.15,
         syncTouch: false,
       }}
     >

@@ -50,7 +50,7 @@ export function generatePageMetadata({
     description.length > 155 ? description.slice(0, 152) + '…' : description;
 
   const languages = Object.fromEntries(
-    routing.locales.map((l) => [
+    routing.locales.map((l: any) => [
       l,
       `${SITE_URL}/${l}${cleanPath === '/' ? '' : cleanPath}`,
     ])
@@ -74,8 +74,8 @@ export function generatePageMetadata({
       type,
       locale: OG_LOCALE[canonicalLocale] || OG_LOCALE.en,
       alternateLocale: routing.locales
-        .filter((l) => l !== canonicalLocale)
-        .map((l) => OG_LOCALE[l] || l),
+        .filter((l: any) => l !== canonicalLocale)
+        .map((l: any) => OG_LOCALE[l] || l),
       ...(ogImage && {
         images: [
           {
@@ -143,7 +143,7 @@ export const websiteSchema = {
   name: SITE_NAME,
   url: SITE_URL,
   publisher: { '@id': `${SITE_URL}/#organization` },
-  inLanguage: routing.locales.map((l) => OG_LOCALE[l] || l),
+  inLanguage: routing.locales.map((l:any) => OG_LOCALE[l] || l),
   potentialAction: {
     '@type': 'SearchAction',
     target: {

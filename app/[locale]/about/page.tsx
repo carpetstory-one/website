@@ -47,7 +47,7 @@ export default async function AboutPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumb) }}
       />
       <Nav />
-      <main className="flex-1 pt-24 sm:pt-28">
+      <main className="flex-1 pt-28 sm:pt-32">
         <Heritage />
         <Letter />
       </main>

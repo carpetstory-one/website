@@ -9,7 +9,7 @@ export function ArchiveContent() {
   const t = useTranslations('Archive');
 
   return (
-    <main className="flex-1 px-5 pt-28 pb-16 sm:px-8 sm:pt-36 sm:pb-24 lg:px-12">
+    <main className="flex-1 px-5 pt-28 pb-16 sm:px-8 sm:pt-32 sm:pb-24 lg:px-12">
       <div className="mx-auto max-w-[1400px]">
         <Reveal>
           <header className="mx-auto mb-16 max-w-2xl text-center sm:mb-24">

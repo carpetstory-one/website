@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'motion/react';
 import { Link } from '@/i18n/routing';
@@ -19,6 +19,29 @@ const slideUp = {
   }),
 };
 
+const specDt: React.CSSProperties = {
+  fontSize: '11px',
+  letterSpacing: '0.14em',
+  textTransform: 'uppercase',
+  color: 'var(--ink-soft)',
+  marginBottom: '5px',
+};
+const specDd: React.CSSProperties = {
+  fontSize: '14px',
+  color: 'var(--ink)',
+  fontWeight: 500,
+};
+
+function Spec({ label, value }: { label: string; value?: string }) {
+  if (!value) return null;
+  return (
+    <div>
+      <dt style={specDt}>{label}</dt>
+      <dd style={specDd}>{value}</dd>
+    </div>
+  );
+}
+
 export function RugDetailContent({
   rug,
   collection,
@@ -36,8 +59,32 @@ export function RugDetailContent({
 }) {
   const t = useTranslations('PiecePage');
   const tRugs = useTranslations('RugsPage');
+
+  // Lightbox (enlarge / zoom the carpet)
+  const [lightbox, setLightbox] = useState(false);
+  const [zoomed, setZoomed] = useState(false);
+
+  const closeLightbox = () => {
+    setLightbox(false);
+    setZoomed(false);
+  };
+
+  useEffect(() => {
+    if (!lightbox) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeLightbox();
+    };
+    document.addEventListener('keydown', onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [lightbox]);
+
   // Analytics
-  React.useEffect(() => {
+  useEffect(() => {
     if (typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('event', 'rug_viewed', {
         rug_slug: rug.slug,
@@ -57,331 +104,238 @@ export function RugDetailContent({
 
   return (
     <>
-      {/* ── Main two-column layout ─────────────────────────────────── */}
+      {/* ── Title + price header ───────────────────────────────────── */}
+      <header
+        className="rug-detail-head"
+        style={{ maxWidth: '1400px', margin: '0 auto', padding: '40px 24px 0' }}
+      >
+        <span
+          style={{
+            display: 'block',
+            fontSize: '11px',
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            color: 'var(--ink-soft)',
+            marginBottom: '14px',
+          }}
+        >
+          {collection.name}
+        </span>
+        <h1
+          style={{
+            fontFamily: 'var(--font-display)',
+            fontWeight: 300,
+            fontSize: 'clamp(42px, 5vw, 68px)',
+            lineHeight: 1,
+            letterSpacing: '-0.02em',
+            color: 'var(--ink)',
+          }}
+        >
+          {rug.name}
+        </h1>
+        {rug.price && (
+          <div style={{ marginTop: '16px' }}>
+            <span
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontWeight: 400,
+                fontSize: 'clamp(24px, 3vw, 30px)',
+                color: 'var(--ink)',
+              }}
+            >
+              {rug.price}
+            </span>
+            <span
+              style={{
+                fontSize: '12px',
+                letterSpacing: '0.06em',
+                color: 'var(--ink-soft)',
+                marginLeft: '12px',
+              }}
+            >
+              {t('priceNote')}
+            </span>
+          </div>
+        )}
+      </header>
+
+      {/* ── Image (left) + estimate configurator (right) ───────────── */}
       <div
         className="rug-detail-grid"
         style={{
           maxWidth: '1400px',
           margin: '0 auto',
-          padding: '48px 24px 80px',
+          padding: '20px 24px 24px',
           display: 'grid',
-          gridTemplateColumns: '60% 1fr',
-          gap: '56px',
+          gridTemplateColumns: '40% 1fr',
+          gap: '44px',
           alignItems: 'start',
         }}
       >
-        {/* Left: large rug image (4:5 aspect) */}
-        <motion.div
-          variants={slideUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          custom={0}
-        >
-          <div
-            style={{
-              position: 'relative',
-              aspectRatio: '4/5',
-              overflow: 'hidden',
-              background: 'var(--canvas-muted, #f0ece3)',
-            }}
+        {/* Left: large rug image — click to enlarge / zoom */}
+        <div className="rug-detail-media">
+          <motion.div
+            variants={slideUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            custom={0}
           >
-            <Image
-              src={rug.image}
-              alt={`${rug.name} — ${collection.name} collection`}
-              fill
-              priority
-              fetchPriority="high"
-              sizes="(max-width: 1024px) 100vw, 60vw"
-              placeholder="blur"
-              blurDataURL={blurDataURL()}
-              style={{ objectFit: 'cover' }}
-            />
-          </div>
-        </motion.div>
+            <button
+              type="button"
+              className="rug-zoom-trigger"
+              onClick={() => setLightbox(true)}
+              aria-label={`Enlarge ${rug.name}`}
+            >
+              <div
+                className="rug-detail-frame"
+                style={{
+                  position: 'relative',
+                  aspectRatio: '3 / 4',
+                  overflow: 'hidden',
+                  background: '#ffffff',
+                  boxShadow: '0 34px 70px -34px rgba(26, 24, 23, 0.32)',
+                }}
+              >
+                {rug.image ? (
+                  <Image
+                    src={rug.image}
+                    alt={`${rug.name} — ${collection.name} collection`}
+                    fill
+                    priority
+                    fetchPriority="high"
+                    sizes="(max-width: 1024px) 100vw, 58vw"
+                    placeholder="blur"
+                    blurDataURL={blurDataURL()}
+                    className="rug-detail-image"
+                  />
+                ) : null}
+              </div>
+              <span className="rug-zoom-hint" aria-hidden="true">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="11" cy="11" r="7" />
+                  <line x1="11" y1="8" x2="11" y2="14" />
+                  <line x1="8" y1="11" x2="14" y2="11" />
+                  <line x1="16.5" y1="16.5" x2="21" y2="21" />
+                </svg>
+                {t('zoomHint')}
+              </span>
+            </button>
+          </motion.div>
+        </div>
 
-        {/* Right: sticky details column */}
+        {/* Right: compact estimate configurator */}
         <motion.div
+          className="rug-detail-info"
           variants={slideUp}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           custom={0.15}
-          style={{ position: 'sticky', top: '120px' }}
-          className="rug-detail-sticky"
         >
-          {/* Rug name */}
-          <h1
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontWeight: 300,
-              fontSize: 'clamp(42px, 5vw, 68px)',
-              lineHeight: 1,
-              letterSpacing: '-0.02em',
-              color: 'var(--ink)',
-              marginBottom: '20px',
-            }}
-          >
-            {rug.name}
-          </h1>
-
-          {/* Description */}
-          {rug.description && (
-            <p
+          <div className="rug-est">
+            <span
               style={{
-                fontSize: '16px',
-                lineHeight: 1.7,
+                display: 'block',
+                fontSize: '11px',
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
                 color: 'var(--ink-soft)',
-                marginBottom: '24px',
-                maxWidth: '38ch',
+                marginBottom: '8px',
               }}
             >
-              {rug.description}
-            </p>
-          )}
-
-          {/* Price — prominent, product-level (Apple-style) */}
-          {rug.price && (
-            <div
+              {tRugs('calcEyebrow')}
+            </span>
+            <h2
               style={{
-                borderTop: '1px solid var(--ink-faint)',
-                paddingTop: '24px',
-                marginBottom: '28px',
+                fontFamily: 'var(--font-display)',
+                fontWeight: 300,
+                fontSize: 'clamp(22px, 2vw, 27px)',
+                lineHeight: 1.05,
+                letterSpacing: '-0.01em',
+                color: 'var(--ink)',
+                marginBottom: '14px',
               }}
             >
-              <div
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  fontWeight: 400,
-                  fontSize: 'clamp(28px, 3vw, 34px)',
-                  lineHeight: 1.1,
-                  letterSpacing: '-0.01em',
-                  color: 'var(--ink)',
-                }}
-              >
-                {rug.price}
-              </div>
-              <div
-                style={{
-                  fontSize: '12px',
-                  letterSpacing: '0.06em',
-                  color: 'var(--ink-soft)',
-                  marginTop: '8px',
-                }}
-              >
-                {t('priceNote')}
-              </div>
-            </div>
-          )}
+              {tRugs('calcTitle')}
+            </h2>
+            <EstimateTool source="piece" />
+          </div>
+        </motion.div>
+      </div>
 
-          {/* Spec strip */}
-          <dl
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: '20px',
-              borderTop: '1px solid var(--ink-faint)',
-              paddingTop: '28px',
-              marginBottom: '36px',
-            }}
-          >
-            {rug.materials && (
-              <div>
-                <dt
-                  style={{
-                    fontSize: '11px',
-                    letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
-                    color: 'var(--ink-soft)',
-                    marginBottom: '5px',
-                  }}
-                >
-                  {t('materials')}
-                </dt>
-                <dd
-                  style={{
-                    fontSize: '14px',
-                    color: 'var(--ink)',
-                    fontWeight: 500,
-                  }}
-                >
-                  {rug.materials}
-                </dd>
-              </div>
-            )}
-            {rug.dimensions && (
-              <div>
-                <dt
-                  style={{
-                    fontSize: '11px',
-                    letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
-                    color: 'var(--ink-soft)',
-                    marginBottom: '5px',
-                  }}
-                >
-                  {t('dimensions')}
-                </dt>
-                <dd
-                  style={{
-                    fontSize: '14px',
-                    color: 'var(--ink)',
-                    fontWeight: 500,
-                  }}
-                >
-                  {rug.dimensions}
-                </dd>
-              </div>
-            )}
-            {rug.knotDensity && (
-              <div>
-                <dt
-                  style={{
-                    fontSize: '11px',
-                    letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
-                    color: 'var(--ink-soft)',
-                    marginBottom: '5px',
-                  }}
-                >
-                  {t('density')}
-                </dt>
-                <dd
-                  style={{
-                    fontSize: '14px',
-                    color: 'var(--ink)',
-                    fontWeight: 500,
-                  }}
-                >
-                  {rug.knotDensity}
-                </dd>
-              </div>
-            )}
-            {rug.weaveTime && (
-              <div>
-                <dt
-                  style={{
-                    fontSize: '11px',
-                    letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
-                    color: 'var(--ink-soft)',
-                    marginBottom: '5px',
-                  }}
-                >
-                  {t('weaveTime')}
-                </dt>
-                <dd
-                  style={{
-                    fontSize: '14px',
-                    color: 'var(--ink)',
-                    fontWeight: 500,
-                  }}
-                >
-                  {rug.weaveTime}
-                </dd>
-              </div>
-            )}
-            {/* Fallback from collection meta */}
-            {!rug.materials && collection.meta?.materials && (
-              <div>
-                <dt
-                  style={{
-                    fontSize: '11px',
-                    letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
-                    color: 'var(--ink-soft)',
-                    marginBottom: '5px',
-                  }}
-                >
-                  {t('materials')}
-                </dt>
-                <dd
-                  style={{
-                    fontSize: '14px',
-                    color: 'var(--ink)',
-                    fontWeight: 500,
-                  }}
-                >
-                  {collection.meta.materials}
-                </dd>
-              </div>
-            )}
-            {!rug.knotDensity && collection.meta?.knotDensity && (
-              <div>
-                <dt
-                  style={{
-                    fontSize: '11px',
-                    letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
-                    color: 'var(--ink-soft)',
-                    marginBottom: '5px',
-                  }}
-                >
-                  {t('density')}
-                </dt>
-                <dd
-                  style={{
-                    fontSize: '14px',
-                    color: 'var(--ink)',
-                    fontWeight: 500,
-                  }}
-                >
-                  {collection.meta.knotDensity}
-                </dd>
-              </div>
-            )}
-            {!rug.weaveTime && collection.meta?.leadTime && (
-              <div>
-                <dt
-                  style={{
-                    fontSize: '11px',
-                    letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
-                    color: 'var(--ink-soft)',
-                    marginBottom: '5px',
-                  }}
-                >
-                  {t('leadTime')}
-                </dt>
-                <dd
-                  style={{
-                    fontSize: '14px',
-                    color: 'var(--ink)',
-                    fontWeight: 500,
-                  }}
-                >
-                  {collection.meta.leadTime}
-                </dd>
-              </div>
-            )}
-            <div>
-              <dt
+      {/* ── Description · specs · actions (below) ──────────────────── */}
+      <section
+        className="rug-detail-bottom"
+        style={{
+          maxWidth: '1400px',
+          margin: '48px auto 0',
+          padding: '52px 24px 72px',
+          borderTop: '1px solid var(--ink-faint)',
+        }}
+      >
+        <div className="rug-detail-bottom-grid">
+          {/* Description */}
+          <div>
+            <span
+              style={{
+                display: 'block',
+                fontSize: '11px',
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                color: 'var(--ink-soft)',
+                marginBottom: '16px',
+              }}
+            >
+              {t('aboutHeading')}
+            </span>
+            {rug.description && (
+              <p
                 style={{
-                  fontSize: '11px',
-                  letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
+                  fontSize: '16px',
+                  lineHeight: 1.7,
                   color: 'var(--ink-soft)',
-                  marginBottom: '5px',
+                  maxWidth: '52ch',
+                  marginBottom: '28px',
                 }}
               >
-                {t('origin')}
-              </dt>
-              <dd
-                style={{
-                  fontSize: '14px',
-                  color: 'var(--ink)',
-                  fontWeight: 500,
-                }}
-              >
-                {collection.meta?.origin || 'Jaipur, Rajasthan'}
-              </dd>
-            </div>
-          </dl>
+                {rug.description}
+              </p>
+            )}
 
-          {/* CTA buttons */}
-          <div
-            style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}
-          >
+            {/* Spec strip */}
+            <dl className="rug-spec-list">
+              <Spec
+                label={t('materials')}
+                value={rug.materials || collection.meta?.materials}
+              />
+              <Spec label={t('dimensions')} value={rug.dimensions} />
+              <Spec
+                label={t('density')}
+                value={rug.knotDensity || collection.meta?.knotDensity}
+              />
+              <Spec
+                label={rug.weaveTime ? t('weaveTime') : t('leadTime')}
+                value={rug.weaveTime || collection.meta?.leadTime}
+              />
+              <Spec
+                label={t('origin')}
+                value={collection.meta?.origin || 'Jaipur, Rajasthan'}
+              />
+            </dl>
+          </div>
+
+          {/* Actions */}
+          <div className="rug-detail-actions">
             <Link
               href={`/inquiry?message=${inquiryMessage}&collection=${encodeURIComponent(collection.name)}&rug=${encodeURIComponent(rug.name)}`}
               onClick={handleInquiryClick}
@@ -435,19 +389,7 @@ export function RugDetailContent({
               {t('whatsappCTA')}
             </a>
           </div>
-        </motion.div>
-      </div>
-
-      {/* ── Estimate this piece ───────────────────────────────────── */}
-      <section className="est-section" aria-labelledby="estimate-heading">
-        <div className="est-section-head">
-          <span className="est-section-eyebrow">{tRugs('calcEyebrow')}</span>
-          <h2 id="estimate-heading" className="est-section-title">
-            {tRugs('calcTitle')}
-          </h2>
-          <p className="est-section-sub">{tRugs('calcDesc')}</p>
         </div>
-        <EstimateTool source="piece" />
       </section>
 
       {/* ── More from this collection ──────────────────────────────── */}
@@ -495,25 +437,28 @@ export function RugDetailContent({
                     style={{ textDecoration: 'none', display: 'block' }}
                   >
                     <div
+                      className="rug-detail-frame"
                       style={{
                         width: '220px',
                         position: 'relative',
                         aspectRatio: '4/5',
                         overflow: 'hidden',
                         marginBottom: '14px',
-                        background: 'var(--canvas-muted, #f0ece3)',
+                        background: '#ffffff',
                       }}
                     >
-                      <Image
-                        src={sib.image}
-                        alt={sib.name}
-                        fill
-                        loading="lazy"
-                        sizes="220px"
-                        placeholder="blur"
-                        blurDataURL={blurDataURL()}
-                        style={{ objectFit: 'cover' }}
-                      />
+                      {sib.image ? (
+                        <Image
+                          src={sib.image}
+                          alt={sib.name}
+                          fill
+                          loading="lazy"
+                          sizes="220px"
+                          placeholder="blur"
+                          blurDataURL={blurDataURL()}
+                          className="rug-detail-image"
+                        />
+                      ) : null}
                     </div>
                     <span
                       style={{
@@ -541,11 +486,185 @@ export function RugDetailContent({
         </div>
       )}
 
-      {/* Responsive override */}
+      {/* ── Lightbox ───────────────────────────────────────────────── */}
+      {lightbox && rug.image && (
+        <div
+          className="rug-lightbox"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${rug.name} — enlarged view`}
+          onClick={closeLightbox}
+        >
+          <button
+            type="button"
+            className="rug-lightbox-close"
+            onClick={closeLightbox}
+            aria-label="Close"
+          >
+            ×
+          </button>
+          <div
+            className={`rug-lightbox-stage${zoomed ? ' is-zoomed' : ''}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              setZoomed((z) => !z);
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={rug.image}
+              alt={`${rug.name} — ${collection.name} collection`}
+              draggable={false}
+            />
+          </div>
+          <span className="rug-lightbox-hint" aria-hidden="true">
+            {zoomed ? t('zoomFit') : t('zoomIn')}
+          </span>
+        </div>
+      )}
+
+      {/* Image framing, compact calculator + responsive overrides */}
       <style>{`
+        .rug-zoom-trigger {
+          display: block;
+          width: 100%;
+          padding: 0;
+          border: none;
+          background: none;
+          cursor: zoom-in;
+          position: relative;
+        }
+        .rug-detail-image {
+          object-fit: contain;
+          padding: clamp(8px, 2.5%, 22px);
+        }
+        .rug-zoom-hint {
+          position: absolute;
+          bottom: 16px;
+          right: 16px;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 8px 12px;
+          font-size: 11px;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: var(--ink);
+          background: rgba(255, 255, 255, 0.92);
+          border: 1px solid var(--ink-faint);
+          opacity: 0;
+          transition: opacity 0.3s var(--ease-out);
+          pointer-events: none;
+        }
+        .rug-zoom-trigger:hover .rug-zoom-hint,
+        .rug-zoom-trigger:focus-visible .rug-zoom-hint {
+          opacity: 1;
+        }
+        @media (hover: none) {
+          .rug-zoom-hint { opacity: 1; }
+        }
+
+        /* Compact, wide estimate tool — output stays within the fold */
+        .rug-est .est-inputs { gap: 14px; }
+        .rug-est .est-group:not(:last-of-type) { padding-bottom: 12px; }
+        .rug-est .est-legend { margin-bottom: 7px; }
+        .rug-est .est-cards { gap: 8px; }
+        .rug-est .est-card { padding: 10px 12px; min-height: 0; }
+        .rug-est .est-chips { gap: 6px; }
+        .rug-est .est-sizes { grid-template-columns: repeat(5, 1fr); gap: 6px; }
+        .rug-est .est-size { padding: 9px 6px; min-height: 0; }
+        .rug-est .est-output { margin-top: 16px; padding-top: 16px; }
+        .rug-est .est-range { font-size: clamp(30px, 4vw, 42px); }
+
+        .rug-detail-bottom-grid {
+          display: grid;
+          grid-template-columns: 1.5fr 1fr;
+          gap: 56px;
+          align-items: start;
+        }
+        .rug-spec-list {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 20px 24px;
+          margin-top: 28px;
+        }
+        .rug-detail-actions {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        /* Lightbox */
+        .rug-lightbox {
+          position: fixed;
+          inset: 0;
+          z-index: 1000;
+          background: rgba(12, 10, 9, 0.93);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 24px;
+          animation: rugLbFade 0.25s ease;
+        }
+        @keyframes rugLbFade { from { opacity: 0; } to { opacity: 1; } }
+        .rug-lightbox-stage {
+          max-width: 94vw;
+          max-height: 92vh;
+          overflow: auto;
+          cursor: zoom-in;
+          -webkit-overflow-scrolling: touch;
+        }
+        .rug-lightbox-stage img {
+          display: block;
+          margin: 0 auto;
+          max-width: 94vw;
+          max-height: 92vh;
+          object-fit: contain;
+          user-select: none;
+        }
+        .rug-lightbox-stage.is-zoomed { cursor: zoom-out; }
+        .rug-lightbox-stage.is-zoomed img {
+          max-width: none;
+          max-height: none;
+          width: auto;
+          height: 165vh;
+        }
+        .rug-lightbox-close {
+          position: fixed;
+          top: 16px;
+          right: 22px;
+          z-index: 1001;
+          width: 44px;
+          height: 44px;
+          font-size: 32px;
+          line-height: 1;
+          color: #f4eedf;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+        }
+        .rug-lightbox-hint {
+          position: fixed;
+          bottom: 22px;
+          left: 50%;
+          transform: translateX(-50%);
+          font-size: 11px;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: rgba(244, 238, 223, 0.7);
+          pointer-events: none;
+        }
+
         @media (max-width: 900px) {
-          .rug-detail-grid { grid-template-columns: 1fr !important; }
-          .rug-detail-sticky { position: static !important; }
+          .rug-detail-grid {
+            grid-template-columns: 1fr !important;
+            gap: 32px !important;
+          }
+          .rug-detail-media { position: static !important; }
+          .rug-detail-bottom-grid { grid-template-columns: 1fr; gap: 36px; }
+        }
+        @media (max-width: 480px) {
+          .rug-spec-list { grid-template-columns: 1fr; }
         }
       `}</style>
     </>

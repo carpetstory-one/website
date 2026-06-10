@@ -1,33 +1,24 @@
 'use client';
 
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import { useTranslations } from 'next-intl';
-import { Link } from '@/i18n/routing';
+import { useSearchParams } from 'next/navigation';
+import { Link, useRouter, usePathname } from '@/i18n/routing';
 import { blurDataURL } from '@/lib/blur';
-import type { Collection, Rug } from '@/lib/collections';
+import type { Collection } from '@/lib/collections';
 import { ShortlistToggleButton } from '@/components/shortlist/ShortlistToggleButton';
-import { analytics } from '@/lib/analytics';
-import { debounce } from '@/lib/url';
 import { RugFilters } from '@/components/rugs/RugFilters';
+import { Pagination } from '@/components/rugs/Pagination';
+import { debounce } from '@/lib/url';
 import {
-  getAllRugs,
-  filterAndSort,
   emptyFilters,
-  hasActiveFilters,
-  parseFiltersFromParams,
   serializeFilters,
-  priceBounds,
-  availableMaterials,
-  availableMakes,
   type RugFilters as Filters,
+  type FlatRug,
+  type Material,
+  type Make,
 } from '@/lib/rugs';
 
 const slideUp = {
@@ -39,106 +30,132 @@ const slideUp = {
   }),
 };
 
-// Asymmetric rug grid — every 3rd card is larger
-const rugSizes = ['medium', 'small', 'large'] as const;
-type RugSize = (typeof rugSizes)[number];
+type Gtag = (
+  type: 'event',
+  event: string,
+  params: Record<string, string>
+) => void;
 
-const rugSizeStyle: Record<RugSize, React.CSSProperties> = {
-  large: { gridColumn: 'span 1', aspectRatio: '3/4' },
-  medium: { gridColumn: 'span 1', aspectRatio: '4/5' },
-  small: { gridColumn: 'span 1', aspectRatio: '1/1' },
+function track(event: string, params: Record<string, string>) {
+  if (typeof window === 'undefined') return;
+  const w = window as unknown as { gtag?: Gtag };
+  w.gtag?.('event', event, params);
+}
+
+type Facets = {
+  bounds: { min: number; max: number };
+  materials: Material[];
+  makes: Make[];
+  collectionOptions: Array<{ slug: string; name: string }>;
+};
+
+type Props = {
+  col: Collection;
+  locale: string;
+  others: Collection[];
+  /** The current page's rugs — filtered, sorted and sliced server-side. */
+  pageRugs: FlatRug[];
+  filters: Filters;
+  page: number;
+  totalPages: number;
+  matchingTotal: number;
+  facets: Facets;
 };
 
 export function CollectionDetailContent({
   col,
-  locale,
   others,
-}: {
-  col: Collection;
-  locale: string;
-  others: Collection[];
-}) {
+  pageRugs,
+  filters: serverFilters,
+  page,
+  totalPages,
+  matchingTotal,
+  facets,
+}: Props) {
   const tRugs = useTranslations('RugsPage');
   const tPiece = useTranslations('PiecePage');
 
-  const [filters, setFilters] = useState<Filters>(() => emptyFilters());
+  const router = useRouter();
+  const pathname = usePathname(); // locale-less, e.g. "/collection/persian"
+  const searchParams = useSearchParams();
 
-  // Hydrate from URL on mount + adopt back/forward popstate
-  useEffect(() => {
-    setFilters(
-      parseFiltersFromParams(new URLSearchParams(window.location.search))
-    );
-    const onPop = () =>
-      setFilters(
-        parseFiltersFromParams(new URLSearchParams(window.location.search))
-      );
-    window.addEventListener('popstate', onPop);
-    return () => window.removeEventListener('popstate', onPop);
-  }, []);
+  // Local mirror of the URL filters for instant sidebar feedback, re-synced
+  // from the server (render-phase reset pattern, not an effect).
+  const [filters, setFilters] = useState<Filters>(serverFilters);
+  const serverKey = serializeFilters(serverFilters);
+  const [syncedKey, setSyncedKey] = useState(serverKey);
+  if (serverKey !== syncedKey) {
+    setSyncedKey(serverKey);
+    setFilters(serverFilters);
+  }
 
-  const writeUrl = useRef(
-    debounce((f: Filters) => {
-      if (typeof window === 'undefined') return;
-      const url = new URL(window.location.href);
-      const ALL_FILTER_KEYS = [
-        'collection',
-        'material',
-        'make',
-        'size',
-        'color',
-        'price',
-        'sort',
-      ];
-      ALL_FILTER_KEYS.forEach((k) => url.searchParams.delete(k));
+  const buildHref = useCallback(
+    (f: Filters, targetPage: number) => {
       const qs = new URLSearchParams(serializeFilters(f));
-      qs.forEach((v, k) => url.searchParams.set(k, v));
-      window.history.replaceState(window.history.state, '', url);
-    }, 150)
-  ).current;
-  useEffect(() => () => writeUrl.cancel(), [writeUrl]);
+      const sl = searchParams.get('shortlist');
+      if (sl) qs.set('shortlist', sl);
+      if (targetPage > 1) qs.set('page', String(targetPage));
+      const q = qs.toString();
+      return q ? `${pathname}?${q}` : pathname;
+    },
+    [pathname, searchParams]
+  );
+
+  const hrefForPage = useCallback(
+    (targetPage: number) => buildHref(serverFilters, targetPage),
+    [buildHref, serverFilters]
+  );
+
+  // Filter changes reset to page 1; debounced replace() avoids history spam.
+  const navigate = useMemo(
+    () =>
+      debounce((href: string) => {
+        router.replace(href, { scroll: false });
+      }, 150),
+    [router]
+  );
+  useEffect(() => () => navigate.cancel(), [navigate]);
 
   const update = useCallback(
     (patch: Partial<Filters>) => {
       setFilters((prev) => {
         const next = { ...prev, ...patch };
-        writeUrl(next);
+        navigate(buildHref(next, 1));
         return next;
       });
     },
-    [writeUrl]
+    [navigate, buildHref]
   );
 
   const clearAll = useCallback(() => {
     const cleared = emptyFilters();
     setFilters(cleared);
-    writeUrl(cleared);
-  }, [writeUrl]);
+    navigate(buildHref(cleared, 1));
+  }, [navigate, buildHref]);
 
-  // Load synthesized flat rugs belonging to this specific collection
-  const collectionRugs = useMemo(() => {
-    return getAllRugs().filter((r) => r.collectionSlug === col.slug);
+  // Analytics: fire collection_viewed on mount.
+  useEffect(() => {
+    track('collection_viewed', { collection_slug: col.slug });
   }, [col.slug]);
 
-  const bounds = useMemo(() => priceBounds(), []);
-  const materials = useMemo(() => availableMaterials(), []);
-  const makes = useMemo(() => availableMakes(), []);
+  const trackInquiry = (rugSlug: string) =>
+    track('rug_inquiry_initiated', {
+      rug_slug: rugSlug,
+      collection_slug: col.slug,
+    });
 
-  // Run standard filtering and sorting
-  const visible = useMemo(() => {
-    return filterAndSort(collectionRugs, filters);
-  }, [collectionRugs, filters]);
+  const trackCollectionClick = (otherSlug: string) =>
+    track('collection_card_clicked', {
+      collection_slug: otherSlug,
+      source: 'index',
+    });
 
-  // Analytics event helper
-  function trackView(eventName: string, props: Record<string, string>) {
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', eventName, props);
-    }
-  }
-
-  // Fire collection_viewed on mount
-  React.useEffect(() => {
-    trackView('collection_viewed', { collection_slug: col.slug });
-  }, [col.slug]);
+  // Stable "piece number" = the rug's index in the full collection catalogue.
+  const indexInCollection = useMemo(() => {
+    const map = new Map<string, number>();
+    col.rugs.forEach((r, i) => map.set(r.slug, i));
+    return map;
+  }, [col.rugs]);
 
   return (
     <>
@@ -149,13 +166,13 @@ export function CollectionDetailContent({
           margin: '0 auto',
           padding: '72px 24px 64px',
           display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '48px',
+          gridTemplateColumns: '1fr 2.2fr',
+          gap: '64px',
           alignItems: 'start',
         }}
         className="coll-desc-grid"
       >
-        {/* Left: name + description */}
+        {/* Left Column: Collection Name + Metadata Sidebar */}
         <motion.div
           variants={slideUp}
           initial="hidden"
@@ -170,214 +187,197 @@ export function CollectionDetailContent({
               letterSpacing: '0.18em',
               textTransform: 'uppercase',
               color: 'var(--ink-soft)',
-              marginBottom: '18px',
+              marginBottom: '20px',
             }}
           >
             {col.name}
           </span>
-          <p
-            style={{
-              fontSize: '16px',
-              lineHeight: 1.7,
-              color: 'var(--ink-soft)',
-              maxWidth: '46ch',
-            }}
-          >
-            {col.description}
-          </p>
+
+          {col.meta && (col.meta.origin || col.meta.materials || col.meta.knotDensity || col.meta.leadTime) && (
+            <dl
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '20px',
+                borderTop: '1px solid var(--ink-faint)',
+                paddingTop: '20px',
+              }}
+            >
+              {col.meta.origin && (
+                <div>
+                  <dt
+                    style={{
+                      fontSize: '10px',
+                      letterSpacing: '0.14em',
+                      textTransform: 'uppercase',
+                      color: 'var(--ink-soft)',
+                      marginBottom: '4px',
+                    }}
+                  >
+                    {tPiece('origin')}
+                  </dt>
+                  <dd
+                    style={{
+                      fontSize: '15px',
+                      color: 'var(--ink)',
+                      fontWeight: 500,
+                    }}
+                  >
+                    {col.meta.origin}
+                  </dd>
+                </div>
+              )}
+              {col.meta.materials && (
+                <div>
+                  <dt
+                    style={{
+                      fontSize: '10px',
+                      letterSpacing: '0.14em',
+                      textTransform: 'uppercase',
+                      color: 'var(--ink-soft)',
+                      marginBottom: '4px',
+                    }}
+                  >
+                    {tPiece('materials')}
+                  </dt>
+                  <dd
+                    style={{
+                      fontSize: '15px',
+                      color: 'var(--ink)',
+                      fontWeight: 500,
+                    }}
+                  >
+                    {col.meta.materials}
+                  </dd>
+                </div>
+              )}
+              {col.meta.knotDensity && (
+                <div>
+                  <dt
+                    style={{
+                      fontSize: '10px',
+                      letterSpacing: '0.14em',
+                      textTransform: 'uppercase',
+                      color: 'var(--ink-soft)',
+                      marginBottom: '4px',
+                    }}
+                  >
+                    {tPiece('density')}
+                  </dt>
+                  <dd
+                    style={{
+                      fontSize: '15px',
+                      color: 'var(--ink)',
+                      fontWeight: 500,
+                    }}
+                  >
+                    {col.meta.knotDensity}
+                  </dd>
+                </div>
+              )}
+              {col.meta.leadTime && (
+                <div>
+                  <dt
+                    style={{
+                      fontSize: '10px',
+                      letterSpacing: '0.14em',
+                      textTransform: 'uppercase',
+                      color: 'var(--ink-soft)',
+                      marginBottom: '4px',
+                    }}
+                  >
+                    {tPiece('leadTime')}
+                  </dt>
+                  <dd
+                    style={{
+                      fontSize: '15px',
+                      color: 'var(--ink)',
+                      fontWeight: 500,
+                    }}
+                  >
+                    {col.meta.leadTime}
+                  </dd>
+                </div>
+              )}
+            </dl>
+          )}
         </motion.div>
 
-        {/* Right: meta strip */}
-        {col.meta && (
-          <motion.dl
-            variants={slideUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            custom={0.15}
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: '28px',
-              borderLeft: '1px solid var(--ink-faint)',
-              paddingLeft: '48px',
-            }}
-          >
-            {col.meta.origin && (
-              <div>
-                <dt
-                  style={{
-                    fontSize: '11px',
-                    letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
-                    color: 'var(--ink-soft)',
-                    marginBottom: '6px',
-                  }}
-                >
-                  {tPiece('origin')}
-                </dt>
-                <dd
-                  style={{
-                    fontSize: '15px',
-                    color: 'var(--ink)',
-                    fontWeight: 500,
-                  }}
-                >
-                  {col.meta.origin}
-                </dd>
-              </div>
-            )}
-            {col.meta.materials && (
-              <div>
-                <dt
-                  style={{
-                    fontSize: '11px',
-                    letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
-                    color: 'var(--ink-soft)',
-                    marginBottom: '6px',
-                  }}
-                >
-                  {tPiece('materials')}
-                </dt>
-                <dd
-                  style={{
-                    fontSize: '15px',
-                    color: 'var(--ink)',
-                    fontWeight: 500,
-                  }}
-                >
-                  {col.meta.materials}
-                </dd>
-              </div>
-            )}
-            {col.meta.knotDensity && (
-              <div>
-                <dt
-                  style={{
-                    fontSize: '11px',
-                    letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
-                    color: 'var(--ink-soft)',
-                    marginBottom: '6px',
-                  }}
-                >
-                  {tPiece('density')}
-                </dt>
-                <dd
-                  style={{
-                    fontSize: '15px',
-                    color: 'var(--ink)',
-                    fontWeight: 500,
-                  }}
-                >
-                  {col.meta.knotDensity}
-                </dd>
-              </div>
-            )}
-            {col.meta.leadTime && (
-              <div>
-                <dt
-                  style={{
-                    fontSize: '11px',
-                    letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
-                    color: 'var(--ink-soft)',
-                    marginBottom: '6px',
-                  }}
-                >
-                  {tPiece('leadTime')}
-                </dt>
-                <dd
-                  style={{
-                    fontSize: '15px',
-                    color: 'var(--ink)',
-                    fontWeight: 500,
-                  }}
-                >
-                  {col.meta.leadTime}
-                </dd>
-              </div>
-            )}
-          </motion.dl>
-        )}
-      </div>
-
-      {/* ── Rugs grid ─────────────────────────────────────────────────── */}
-      <div
-        style={{
-          maxWidth: '1400px',
-          margin: '0 auto',
-          padding: '0 24px 80px',
-        }}
-      >
+        {/* Right Column: Narrative Description */}
         <motion.div
           variants={slideUp}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          custom={0}
-          style={{ marginBottom: '24px' }}
+          custom={0.15}
         >
-          {/* Sticky filter bar */}
-          <div className="rugx-filterwrap mb-8">
-            <RugFilters
-              filters={filters}
-              update={update}
-              matchingCount={visible.length}
-              onClearAll={clearAll}
-              bounds={bounds}
-              materials={materials}
-              makes={makes}
-              hideFacets={['collection']}
-            />
-          </div>
+          <p
+            style={{
+              fontSize: '16px',
+              lineHeight: 1.8,
+              color: 'var(--ink-soft)',
+              maxWidth: '65ch',
+            }}
+          >
+            {col.description}
+          </p>
+        </motion.div>
+      </div>
 
-          {/* Grid / empty state */}
-          {visible.length === 0 ? (
-            <div className="py-20 text-center" role="status">
-              <p style={{ color: 'var(--ink-soft)', fontSize: '15px' }}>
-                {tRugs('noRugs')}
-              </p>
-              <button
-                onClick={clearAll}
-                className="text-accent mt-3 text-[12px] tracking-[0.16em] uppercase underline-offset-4 hover:underline"
-              >
-                {tRugs('clearFilters')}
-              </button>
+
+      {/* ── Rugs grid (server-paginated) ──────────────────────────────── */}
+      <div
+        style={{
+          maxWidth: '1400px',
+          margin: '0 auto',
+          padding: '0 24px 40px',
+        }}
+      >
+        <div className="rugx-layout">
+          {/* Left Sidebar */}
+          <aside className="rugx-sidebar">
+            <div className="rugx-filterwrap mb-8">
+              <RugFilters
+                filters={filters}
+                update={update}
+                matchingCount={matchingTotal}
+                onClearAll={clearAll}
+                bounds={facets.bounds}
+                materials={facets.materials}
+                makes={facets.makes}
+                hideFacets={['collection']}
+                collectionOptions={facets.collectionOptions}
+              />
             </div>
-          ) : (
-            <motion.div
-              layout="position"
-              className="rug-grid"
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(3, 1fr)',
-                gap: '32px',
-              }}
-            >
-              <AnimatePresence mode="popLayout">
-                {visible.map((rug, vi) => {
-                  const globalIdx = col.rugs.findIndex(
-                    (r) => r.slug === rug.rugSlug
-                  );
-                  const size = rugSizes[globalIdx % rugSizes.length] as RugSize;
-                  const sty = rugSizeStyle[size];
+          </aside>
 
+          {/* Main Content (Grid) */}
+          <main className="rugx-main">
+            {pageRugs.length === 0 ? (
+              <div className="py-20 text-center" role="status">
+                <p style={{ color: 'var(--ink-soft)', fontSize: '15px' }}>
+                  {tRugs('noRugs')}
+                </p>
+                <button
+                  onClick={clearAll}
+                  className="text-accent mt-3 text-[12px] tracking-[0.16em] uppercase underline-offset-4 hover:underline"
+                >
+                  {tRugs('clearFilters')}
+                </button>
+              </div>
+            ) : (
+              <div
+                className="rug-grid"
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(3, 1fr)',
+                  gap: '32px',
+                }}
+              >
+                {pageRugs.map((rug, vi) => {
+                  const globalIdx = indexInCollection.get(rug.rugSlug) ?? vi;
                   return (
-                    <motion.article
-                      key={rug.id}
-                      style={{ position: 'relative' }}
-                      layout="position"
-                      initial={{ opacity: 0, scale: 0.98 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.98 }}
-                      transition={{
-                        duration: 0.35,
-                        delay: (vi % 3) * 0.04,
-                        ease: [0.32, 0.72, 0, 1],
-                      }}
-                    >
+                    <article key={rug.id} style={{ position: 'relative' }}>
                       <ShortlistToggleButton
                         collectionSlug={col.slug}
                         rugSlug={rug.rugSlug}
@@ -386,37 +386,31 @@ export function CollectionDetailContent({
                       <Link
                         href={rug.href}
                         className="group block"
-                        onClick={() =>
-                          trackView('rug_inquiry_initiated', {
-                            rug_slug: rug.rugSlug,
-                            collection_slug: col.slug,
-                          })
-                        }
+                        onClick={() => trackInquiry(rug.rugSlug)}
                       >
                         <div
+                          className="coll-rug-frame"
                           style={{
                             position: 'relative',
                             overflow: 'hidden',
-                            background: 'var(--canvas-muted, #f0ece3)',
+                            background: '#ffffff',
                             marginBottom: '20px',
-                            ...sty,
+                            aspectRatio: '3 / 4',
                           }}
                         >
-                          <Image
-                            src={rug.image}
-                            alt={rug.name}
-                            fill
-                            loading={globalIdx < 3 ? 'eager' : 'lazy'}
-                            fetchPriority={globalIdx < 3 ? 'high' : undefined}
-                            sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 30vw"
-                            placeholder="blur"
-                            blurDataURL={blurDataURL()}
-                            style={{
-                              objectFit: 'cover',
-                              transition: 'transform 1.2s ease',
-                            }}
-                            className="group-hover:scale-[1.04]"
-                          />
+                          {rug.image ? (
+                            <Image
+                              src={rug.image}
+                              alt={rug.name}
+                              fill
+                              loading={vi < 3 ? 'eager' : 'lazy'}
+                              fetchPriority={vi < 3 ? 'high' : undefined}
+                              sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 30vw"
+                              placeholder="blur"
+                              blurDataURL={blurDataURL()}
+                              className="coll-rug-img"
+                            />
+                          ) : null}
                         </div>
 
                         <span
@@ -443,61 +437,22 @@ export function CollectionDetailContent({
                         >
                           {rug.name}
                         </h3>
-                        {rug.description && (
-                          <p
-                            style={{
-                              fontSize: '14px',
-                              color: 'var(--ink-soft)',
-                              lineHeight: 1.55,
-                              marginBottom: '10px',
-                              maxWidth: '34ch',
-                            }}
-                          >
-                            {rug.description}
-                          </p>
-                        )}
                       </Link>
-                    </motion.article>
+                    </article>
                   );
                 })}
-              </AnimatePresence>
-            </motion.div>
-          )}
-        </motion.div>
+              </div>
+            )}
+          </main>
+        </div>
       </div>
 
-      {/* ── Bottom CTA ────────────────────────────────────────────────── */}
-      <div
-        style={{
-          maxWidth: '1400px',
-          margin: '0 auto',
-          padding: '0 24px 64px',
-          borderTop: '1px solid var(--ink-faint)',
-          paddingTop: '48px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '24px',
-        }}
-      >
-        <Link
-          href="/inquiry"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '12px',
-            padding: '16px 32px',
-            background: 'var(--ink)',
-            color: 'var(--canvas)',
-            fontSize: '13px',
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
-            textDecoration: 'none',
-          }}
-        >
-          {tRugs('beginInquiry')}
-        </Link>
-      </div>
+      {/* Pagination sits full-width below the grid, where the products end. */}
+      {pageRugs.length > 0 && (
+        <Pagination page={page} totalPages={totalPages} hrefFor={hrefForPage} />
+      )}
+
+
 
       {/* ── Other collections horizontal strip ────────────────────────── */}
       <div
@@ -533,12 +488,7 @@ export function CollectionDetailContent({
                 key={other.slug}
                 href={`/collection/${other.slug}`}
                 style={{ textDecoration: 'none', flexShrink: 0 }}
-                onClick={() =>
-                  trackView('collection_card_clicked', {
-                    collection_slug: other.slug,
-                    source: 'index',
-                  })
-                }
+                onClick={() => trackCollectionClick(other.slug)}
               >
                 <div
                   style={{
@@ -549,16 +499,18 @@ export function CollectionDetailContent({
                     marginBottom: '12px',
                   }}
                 >
-                  <Image
-                    src={other.heroImage}
-                    alt={other.name}
-                    fill
-                    loading="lazy"
-                    sizes="200px"
-                    placeholder="blur"
-                    blurDataURL={blurDataURL()}
-                    style={{ objectFit: 'cover' }}
-                  />
+                  {other.heroImage ? (
+                    <Image
+                      src={other.heroImage}
+                      alt={other.name}
+                      fill
+                      loading="lazy"
+                      sizes="200px"
+                      placeholder="blur"
+                      blurDataURL={blurDataURL()}
+                      style={{ objectFit: 'cover' }}
+                    />
+                  ) : null}
                 </div>
                 <span
                   style={{
@@ -583,13 +535,29 @@ export function CollectionDetailContent({
       {/* Responsive style overrides */}
       <style>{`
         @media (max-width: 768px) {
-          .coll-desc-grid { grid-template-columns: 1fr !important; }
+          .coll-desc-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
           .rug-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 20px !important; }
         }
         @media (max-width: 480px) {
           .rug-grid { grid-template-columns: 1fr !important; }
         }
-        .group-hover\\:scale-\\[1\\.04\\]:hover { transform: scale(1.04); }
+        .coll-rug-img {
+          object-fit: contain;
+          padding: clamp(10px, 5%, 26px);
+          transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+          will-change: transform;
+          transform: translateZ(0);
+          backface-visibility: hidden;
+        }
+        .group:hover .coll-rug-img {
+          transform: scale(1.05) translateZ(0);
+        }
+        .coll-rug-frame {
+          transition: box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .group:hover .coll-rug-frame {
+          box-shadow: 0 18px 42px -18px rgba(26, 24, 23, 0.34);
+        }
       `}</style>
     </>
   );

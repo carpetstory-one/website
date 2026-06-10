@@ -1,11 +1,20 @@
 'use client';
 
+/**
+ * Collection — premium bento mosaic with a tall hero card.
+ *
+ * A compact 2-row mosaic: one tall card spans both rows on the left,
+ * two cards stack on the right, and two wider cards fill the bottom.
+ * Premium hover effects with image zoom, caption slide-up, and a
+ * subtle border-beam accent.
+ */
+
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'motion/react';
 import { Link } from '@/i18n/routing';
 import { blurDataURL } from '@/lib/blur';
-import { featuredCollections } from '@/lib/collections';
+import type { Collection as CollectionType } from '@/lib/collections';
 
 const slideUp = {
   hidden: { opacity: 0, y: 60 },
@@ -16,19 +25,21 @@ const slideUp = {
   }),
 };
 
-// Mosaic placement classes — one lead card, two stacked, two below.
-const place = [
-  'feat-lead',
-  'feat-side-1',
-  'feat-side-2',
-  'feat-bottom-1',
-  'feat-bottom-2',
+// Mosaic placement classes
+const PLACE = [
+  'bm-hero',     // tall, left, spans 2 rows
+  'bm-top-r1',   // top-right first
+  'bm-top-r2',   // top-right second
+  'bm-bot-1',    // bottom-left
+  'bm-bot-2',    // bottom-right
 ] as const;
-const roman = ['I', 'II', 'III', 'IV', 'V'] as const;
 
-export function Collection() {
-  // The home page shows the first five featured collections as a mosaic.
-  const featured = featuredCollections.slice(0, 5);
+const ROMAN = ['I', 'II', 'III', 'IV', 'V'] as const;
+
+export function Collection({ collections = [] }: { collections?: CollectionType[] }) {
+  const feats = collections.filter((c) => c.featured);
+  const others = collections.filter((c) => !c.featured);
+  const subset = [...feats, ...others].slice(0, 5);
 
   return (
     <section
@@ -56,7 +67,7 @@ export function Collection() {
             viewport={{ once: true, margin: '-80px' }}
             custom={0.15}
           >
-            Twelve houses. One workshop.
+            Many houses. One workshop.
           </motion.h2>
           <motion.div
             className="view-all"
@@ -68,32 +79,33 @@ export function Collection() {
             custom={0.3}
           >
             <Link href="/collection" className="link">
-              View all 12 collections →
+              View all collections →
             </Link>
           </motion.div>
         </div>
 
-        <div className="feat-mosaic">
-          {featured.map((col, i) => {
-            const eyebrow = `${roman[i]} — ${col.name.toUpperCase()}`;
+        <div className="bm-grid" data-count={subset.length}>
+          {subset.map((col, i) => {
+            const place = PLACE[i] || '';
+            const numeral = ROMAN[i] || `${i + 1}`;
 
             return (
               <motion.article
                 key={col.slug}
-                className={`feat-card ${place[i]}`}
-                initial={{ opacity: 0, y: 70 }}
+                className={`bm-card ${place}`}
+                initial={{ opacity: 0, y: 60 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{
                   duration: 1.1,
-                  delay: (i % 3) * 0.12,
+                  delay: (i % 3) * 0.1,
                   ease: [0.16, 1, 0.3, 1] as any,
                 }}
-                viewport={{ once: true, margin: '-100px' }}
+                viewport={{ once: true, margin: '-80px' }}
               >
                 <Link
                   href={`/collection/${col.slug}`}
                   aria-label={`${col.name} — ${col.tagline}`}
-                  className="feat-link"
+                  className="bm-link"
                   onClick={() => {
                     if (typeof window !== 'undefined' && (window as any).gtag) {
                       (window as any).gtag('event', 'collection_card_clicked', {
@@ -103,31 +115,41 @@ export function Collection() {
                     }
                   }}
                 >
-                  <div className="feat-img">
-                    <Image
-                      src={col.heroImage}
-                      alt={`${col.name} collection — ${col.tagline}`}
-                      fill
-                      loading="lazy"
-                      sizes={
-                        i === 0
-                          ? '(max-width: 640px) 90vw, (max-width: 1024px) 92vw, 58vw'
-                          : '(max-width: 640px) 90vw, (max-width: 1024px) 46vw, 40vw'
-                      }
-                      placeholder="blur"
-                      blurDataURL={blurDataURL()}
-                      style={{ objectFit: 'cover' }}
-                    />
+                  <div className="bm-img">
+                    {col.heroImage ? (
+                      <Image
+                        src={col.heroImage}
+                        alt={`${col.name} collection — ${col.tagline}`}
+                        fill
+                        loading="lazy"
+                        sizes={
+                          i === 0
+                            ? '(max-width: 640px) 90vw, (max-width: 1024px) 50vw, 42vw'
+                            : '(max-width: 640px) 90vw, (max-width: 1024px) 46vw, 30vw'
+                        }
+                        placeholder="blur"
+                        blurDataURL={blurDataURL()}
+                        style={{ objectFit: 'cover' }}
+                      />
+                    ) : null}
                   </div>
 
-                  <div className="feat-scrim" aria-hidden="true" />
+                  {/* Shimmer line on hover */}
+                  <div className="bm-shimmer" aria-hidden="true" />
 
-                  <div className="feat-caption">
-                    <span className="feat-eyebrow">{eyebrow}</span>
-                    <h3 className="feat-name">{col.name}</h3>
-                    <p className="feat-tag">{col.tagline}</p>
-                    <span className="feat-explore">
-                      Explore the collection →
+                  <div className="bm-scrim" aria-hidden="true" />
+
+                  <div className="bm-caption">
+                    <span className="bm-eyebrow">
+                      {numeral} — {col.name.toUpperCase()}
+                    </span>
+                    <h3 className="bm-name">{col.name}</h3>
+                    <p className="bm-tag">{col.tagline}</p>
+                    <span className="bm-explore">
+                      Explore
+                      <svg width="16" height="8" viewBox="0 0 16 8" fill="none" aria-hidden="true">
+                        <path d="M0 4h14M11 1l3 3-3 3" stroke="currentColor" strokeWidth="1" />
+                      </svg>
                     </span>
                   </div>
                 </Link>

@@ -5,7 +5,6 @@ import { createPortal } from 'react-dom';
 import { useTranslations } from 'next-intl';
 import { RangeSlider } from './RangeSlider';
 import {
-  COLLECTION_OPTIONS,
   COLOR_OPTIONS,
   SIZE_OPTIONS,
   SORT_OPTIONS,
@@ -35,6 +34,7 @@ type Props = {
   materials: Material[];
   makes: Make[];
   hideFacets?: string[];
+  collectionOptions?: Array<{ slug: string; name: string }>;
 };
 
 export function RugFilters(props: Props) {
@@ -49,8 +49,9 @@ export function RugFilters(props: Props) {
     materials,
     makes,
     hideFacets,
+    collectionOptions = [],
   } = props;
-  const [openFacet, setOpenFacet] = useState<string | null>(null);
+  const [openFacets, setOpenFacets] = useState<string[]>(['color']);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const barRef = useRef<HTMLDivElement>(null);
@@ -58,21 +59,11 @@ export function RugFilters(props: Props) {
   // Portal target is only available on the client.
   useEffect(() => setMounted(true), []);
 
-  // Desktop popover: close on outside click / ESC.
-  useEffect(() => {
-    if (!openFacet) return;
-    const onDown = (e: MouseEvent) => {
-      if (!barRef.current?.contains(e.target as Node)) setOpenFacet(null);
-    };
-    const onEsc = (e: KeyboardEvent) =>
-      e.key === 'Escape' && setOpenFacet(null);
-    document.addEventListener('mousedown', onDown);
-    document.addEventListener('keydown', onEsc);
-    return () => {
-      document.removeEventListener('mousedown', onDown);
-      document.removeEventListener('keydown', onEsc);
-    };
-  }, [openFacet]);
+  const toggleFacet = (id: string) => {
+    setOpenFacets((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  };
 
   // Mobile sheet: body scroll lock + ESC.
   useEffect(() => {
@@ -98,7 +89,7 @@ export function RugFilters(props: Props) {
   // ── Facet bodies (shared by desktop popovers + mobile sheet) ───────────────
   const Collections = (
     <div className="filx-chips">
-      {COLLECTION_OPTIONS.map((c) => (
+      {collectionOptions.map((c) => (
         <button
           key={c.slug}
           type="button"
@@ -222,32 +213,11 @@ export function RugFilters(props: Props) {
 
   return (
     <>
-      {/* ── Desktop filter bar ─────────────────────────────────────────── */}
-      <div className="filx-bar" ref={barRef}>
-        <div className="filx-facets">
-          {FACETS.map((f) => (
-            <div key={f.id} className="filx-facet">
-              <button
-                type="button"
-                className={`filx-facet-btn${openFacet === f.id ? ' is-open' : ''}`}
-                aria-expanded={openFacet === f.id}
-                onClick={() => setOpenFacet((o) => (o === f.id ? null : f.id))}
-              >
-                {f.label}
-                {f.count > 0 && <span className="filx-badge">{f.count}</span>}
-              </button>
-              {openFacet === f.id && (
-                <div className="filx-pop" role="group" aria-label={f.label}>
-                  {f.body}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-
+      {/* ── Desktop sidebar ────────────────────────────────────────────── */}
+      <div className="filx-sidebar" ref={barRef}>
         {!hideFacets?.includes('sort') && (
-          <label className="filx-sort">
-            <span className="filx-sort-label">{t('sort')}</span>
+          <label className="filx-sidebar-sort">
+            <span className="filx-sidebar-sort-label">{t('sort')}</span>
             <select
               value={filters.sort}
               onChange={(e) =>
@@ -262,6 +232,35 @@ export function RugFilters(props: Props) {
             </select>
           </label>
         )}
+
+        <div className="filx-sidebar-facets">
+          {FACETS.map((f) => {
+            const isOpen = openFacets.includes(f.id);
+            return (
+              <div key={f.id} className="filx-sidebar-facet">
+                <button
+                  type="button"
+                  className={`filx-sidebar-btn${isOpen ? ' is-open' : ''}`}
+                  aria-expanded={isOpen}
+                  onClick={() => toggleFacet(f.id)}
+                >
+                  <span className="filx-sidebar-btn-text">
+                    {f.label}
+                    {f.count > 0 && <span className="filx-badge">{f.count}</span>}
+                  </span>
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="filx-sidebar-icon">
+                    <path d={isOpen ? "M2 6h8" : "M6 2v8M2 6h8"} stroke="currentColor" strokeWidth="1.2" />
+                  </svg>
+                </button>
+                {isOpen && (
+                  <div className="filx-sidebar-body" role="group" aria-label={f.label}>
+                    {f.body}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {/* ── Mobile trigger ─────────────────────────────────────────────── */}

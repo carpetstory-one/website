@@ -12,6 +12,9 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
+    "@hubspot/api-client": "^13.5.0",
+    "@sanity/client": "^7.22.1",
+    "@sanity/image-url": "^2.1.1",
     "@studio-freight/react-lenis": "^0.0.47",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
