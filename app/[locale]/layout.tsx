@@ -125,6 +125,11 @@ export const metadata: Metadata = {
 
 import { setRequestLocale } from 'next-intl/server';
 
+// Site-wide ISR: every static route re-renders at most every 5 minutes,
+// matching the Sanity data-cache window in lib/sanity.ts. Without this the
+// pages would be frozen at build time until the next deploy.
+export const revalidate = 300;
+
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
@@ -153,7 +158,14 @@ export default async function RootLayout({
   // side is the easiest way to get started
   const messages = await getMessages();
 
+  // The shortlist drawer only needs slugs, names and thumbnails. Passing the
+  // full catalogue here would serialize it into the payload of every page.
   const collections = await getSanityCollections();
+  const shortlistCatalogue = collections.map((c) => ({
+    slug: c.slug,
+    name: c.name,
+    rugs: c.rugs.map((r) => ({ slug: r.slug, name: r.name, image: r.image })),
+  }));
 
   return (
     <html
@@ -161,6 +173,12 @@ export default async function RootLayout({
       className={`${cormorant.variable} ${poppins.variable} ${sacramento.variable} ${signature.variable}`}
     >
       <head>
+        <link
+          rel="preconnect"
+          href="https://cdn.sanity.io"
+          crossOrigin="anonymous"
+        />
+        <link rel="dns-prefetch" href="https://cdn.sanity.io" />
         <link
           rel="preconnect"
           href="https://images.unsplash.com"
@@ -226,7 +244,7 @@ export default async function RootLayout({
               >
                 {children}
               </main>
-              <ShortlistUI collections={collections} />
+              <ShortlistUI collections={shortlistCatalogue} />
               <div style={{ position: 'absolute', pointerEvents: 'none' }}>
                 <Toaster />
               </div>

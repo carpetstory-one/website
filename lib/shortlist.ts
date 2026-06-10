@@ -86,16 +86,29 @@ export function writeStoredShortlist(items: ShortlistItem[]): void {
 
 export type ResolvedShortlistItem = { collection: Collection; rug: Rug };
 
-/** Resolve slug pairs into full data for rendering. Order preserved. */
-export function resolveShortlist(
+/** Minimal catalogue shape the shortlist drawer needs. The root layout passes
+ *  this slim form so the full collection data isn't serialized into the
+ *  payload of every page. */
+export type ShortlistRugSummary = { slug: string; name: string; image: string };
+export type ShortlistCollectionSummary = {
+  slug: string;
+  name: string;
+  rugs: ShortlistRugSummary[];
+};
+
+/** Resolve slug pairs into data for rendering. Order preserved. Generic so it
+ *  works with both full `Collection[]` data and the slim drawer catalogue. */
+export function resolveShortlist<
+  C extends { slug: string; rugs: Array<{ slug: string }> },
+>(
   items: ShortlistItem[],
-  collectionsList: Collection[]
-): ResolvedShortlistItem[] {
-  const out: ResolvedShortlistItem[] = [];
+  collectionsList: C[]
+): Array<{ collection: C; rug: C['rugs'][number] }> {
+  const out: Array<{ collection: C; rug: C['rugs'][number] }> = [];
   for (const item of items) {
-    const col = collectionsList.find(c => c.slug === item.collectionSlug);
+    const col = collectionsList.find((c) => c.slug === item.collectionSlug);
     if (!col) continue;
-    const rug = col.rugs.find(r => r.slug === item.rugSlug);
+    const rug = col.rugs.find((r) => r.slug === item.rugSlug);
     if (rug) out.push({ collection: col, rug });
   }
   return out;

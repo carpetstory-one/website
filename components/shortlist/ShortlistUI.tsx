@@ -12,9 +12,13 @@ const ShortlistDrawer = dynamic(
   { ssr: false }
 );
 
-import type { Collection } from '@/lib/collections';
+import type { ShortlistCollectionSummary } from '@/lib/shortlist';
 
-export function ShortlistUI({ collections }: { collections: Collection[] }) {
+export function ShortlistUI({
+  collections,
+}: {
+  collections: ShortlistCollectionSummary[];
+}) {
   const { isDrawerOpen, notice } = useShortlist();
 
   return (
@@ -22,7 +26,9 @@ export function ShortlistUI({ collections }: { collections: Collection[] }) {
       <SharedShortlistBanner />
       <ShortlistIndicator />
 
-      <AnimatePresence>{isDrawerOpen && <ShortlistDrawer collections={collections} />}</AnimatePresence>
+      <AnimatePresence>
+        {isDrawerOpen && <ShortlistDrawer collections={collections} />}
+      </AnimatePresence>
 
       {/* Transient toast (limit reached, link copied, …) */}
       <AnimatePresence>

@@ -327,10 +327,10 @@
     "terms": "Conditions"
   },
   "GeoBanner": {
-    "message": "Nous avons remarqué que vous visitez depuis {country}. Voulez-vous passer à l'allemand ?",
+    "message": "Cette page est également disponible en {language}. Voulez-vous changer ?",
     "switch": "Passer à Deutsch",
     "dismiss": "Rester en français",
-    "ariaLabel": "Suggestion de langue basée sur votre emplacement"
+    "ariaLabel": "Suggestion de langue basée sur les paramètres de votre navigateur"
   },
   "Locale": {
     "en": "EN",

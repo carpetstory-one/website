@@ -327,10 +327,10 @@
     "terms": "AGB"
   },
   "GeoBanner": {
-    "message": "Wir haben bemerkt, dass Sie aus {country} besuchen. Möchten Sie auf Deutsch wechseln?",
+    "message": "Diese Seite ist auch auf {language} verfügbar. Möchten Sie wechseln?",
     "switch": "Auf Deutsch lesen",
     "dismiss": "Bei Englisch bleiben",
-    "ariaLabel": "Sprachvorschlag basierend auf Ihrem Standort"
+    "ariaLabel": "Sprachvorschlag basierend auf Ihren Browsereinstellungen"
   },
   "Locale": {
     "en": "EN",

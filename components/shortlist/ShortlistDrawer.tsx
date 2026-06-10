@@ -11,9 +11,13 @@ import { resolveShortlist, serializeShortlist } from '@/lib/shortlist';
 
 const EASE = [0.32, 0.72, 0, 1] as const;
 
-import type { Collection } from '@/lib/collections';
+import type { ShortlistCollectionSummary } from '@/lib/shortlist';
 
-export function ShortlistDrawer({ collections }: { collections: Collection[] }) {
+export function ShortlistDrawer({
+  collections,
+}: {
+  collections: ShortlistCollectionSummary[];
+}) {
   const router = useRouter();
   const { shortlist, count, remove, clear, closeDrawer, notify } =
     useShortlist();
@@ -23,7 +27,6 @@ export function ShortlistDrawer({ collections }: { collections: Collection[] }) 
   const previouslyFocused = useRef<HTMLElement | null>(null);
 
   const resolved = resolveShortlist(shortlist, collections);
-
 
   useEffect(() => {
     previouslyFocused.current = document.activeElement as HTMLElement | null;

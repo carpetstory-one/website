@@ -295,10 +295,10 @@
     "terms": "Terms"
   },
   "GeoBanner": {
-    "message": "We noticed you're visiting from {country}. Would you like to switch to German?",
+    "message": "This page is also available in {language}. Would you like to switch?",
     "switch": "Switch to Deutsch",
     "dismiss": "Stay in English",
-    "ariaLabel": "Language suggestion based on your location"
+    "ariaLabel": "Language suggestion based on your browser settings"
   },
   "Locale": {
     "en": "EN",

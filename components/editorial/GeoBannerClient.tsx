@@ -22,10 +22,8 @@ function setCookie(name: string, value: string) {
 
 export function GeoBannerClient({
   suggestedLocale,
-  countryName,
 }: {
   suggestedLocale: Locale;
-  countryName: string;
 }) {
   const t = useTranslations('GeoBanner');
   const tLocale = useTranslations('Locale');
@@ -79,7 +77,7 @@ export function GeoBannerClient({
           className="fixed right-3 bottom-3 left-3 z-[300] max-w-[420px] border border-[rgba(26,24,23,0.12)] bg-[var(--canvas)] p-5 shadow-[0_24px_48px_-16px_rgba(26,24,23,0.18)] sm:right-auto sm:bottom-6 sm:left-6 sm:p-6"
         >
           <p className="mb-4 text-[14px] leading-[1.5] text-[var(--ink)]">
-            {t('message', { country: countryName })}
+            {t('message', { language: langLabel })}
           </p>
           <div className="flex flex-col gap-2 sm:flex-row sm:gap-3">
             <button

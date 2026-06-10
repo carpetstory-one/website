@@ -15,8 +15,16 @@ import { Doors } from '@/components/editorial/Doors';
 import { Inquiry } from '@/components/editorial/Inquiry';
 import { Footer } from '@/components/editorial/Footer';
 import { getSanityCollections } from '@/lib/sanity';
+import { setRequestLocale } from 'next-intl/server';
 
-export default async function HomePage() {
+export default async function HomePage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const collections = await getSanityCollections();
 
   return (
@@ -25,7 +33,7 @@ export default async function HomePage() {
       <Hero />
       <Collection collections={collections} />
       <PromiseSection />
-      {/* <WorldStage /> */}
+      <WorldStage />
       {/* <MakingSection /> */}
       <KnotCount />
       <Materials />

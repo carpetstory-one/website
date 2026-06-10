@@ -1,5 +1,7 @@
 import { createClient } from '@sanity/client';
 import imageUrlBuilder from '@sanity/image-url';
+import { cache } from 'react';
+import { unstable_cache } from 'next/cache';
 import type { Collection } from './collections';
 
 export const sanityClient = createClient({
@@ -16,42 +18,49 @@ export function urlFor(source: any) {
   return builder.image(source);
 }
 
-export async function getSanityCollections(): Promise<Collection[]> {
-  const query = `*[_type == "collection"] {
-    "slug": slug.current,
-    "name": title,
-    tagline,
-    description,
-    heroImage,
-    featured,
-    meta {
-      origin,
-      materials,
-      knotDensity,
-      leadTime
-    },
-    "rugs": rugs[]-> {
-      "slug": slug.current,
-      "name": title,
-      description,
-      price,
-      priceUSD,
-      image,
-      materials,
-      dimensions,
-      knotDensity,
-      weaveTime,
-      colors
-    }
-  }`;
-  
-  const data = await sanityClient.fetch(
-    query,
-    {},
-    { next: { revalidate: 300 } } // Revalidate cache every 5 minutes (ISR)
-  );
-  return mapCollections(data);
+export function urlForOptimized(source: any, width: number = 1200) {
+  if (!source) return '';
+  return builder.image(source).width(width).auto('format').url();
 }
+
+export const getSanityCollections = cache(
+  unstable_cache(
+    async (): Promise<Collection[]> => {
+      const query = `*[_type == "collection"] {
+        "slug": slug.current,
+        "name": title,
+        tagline,
+        description,
+        heroImage,
+        featured,
+        meta {
+          origin,
+          materials,
+          knotDensity,
+          leadTime
+        },
+        "rugs": rugs[]-> {
+          "slug": slug.current,
+          "name": title,
+          description,
+          price,
+          priceUSD,
+          image,
+          materials,
+          dimensions,
+          knotDensity,
+          weaveTime,
+          colors
+        }
+      }`;
+      
+      const data = await sanityClient.fetch(query);
+      return mapCollections(data);
+    },
+    ['sanity-collections-all'],
+    { revalidate: 300, tags: ['collections'] }
+  )
+);
 
 /**
  * Lean projection for the /rugs listing. Returns only the fields the flat rug
@@ -61,30 +70,32 @@ export async function getSanityCollections(): Promise<Collection[]> {
  * small. Cached in Next's data cache (revalidated every 5 min) so paging and
  * filtering reuse one fetch instead of re-hitting Sanity on every navigation.
  */
-export async function getRugCatalogue(): Promise<Collection[]> {
-  const query = `*[_type == "collection"] {
-    "slug": slug.current,
-    "name": title,
-    meta { materials },
-    "rugs": rugs[]-> {
-      "slug": slug.current,
-      "name": title,
-      description,
-      price,
-      priceUSD,
-      image,
-      dimensions,
-      colors
-    }
-  }`;
+export const getRugCatalogue = cache(
+  unstable_cache(
+    async (): Promise<Collection[]> => {
+      const query = `*[_type == "collection"] {
+        "slug": slug.current,
+        "name": title,
+        meta { materials },
+        "rugs": rugs[]-> {
+          "slug": slug.current,
+          "name": title,
+          description,
+          price,
+          priceUSD,
+          image,
+          dimensions,
+          colors
+        }
+      }`;
 
-  const data = await sanityClient.fetch(
-    query,
-    {},
-    { next: { revalidate: 300 } }
-  );
-  return mapCollections(data);
-}
+      const data = await sanityClient.fetch(query);
+      return mapCollections(data);
+    },
+    ['sanity-collections-catalogue'],
+    { revalidate: 300, tags: ['collections'] }
+  )
+);
 
 function mapCollections(data: any): Collection[] {
   return (data || []).map((c: any) => ({
@@ -92,7 +103,7 @@ function mapCollections(data: any): Collection[] {
     name: c.name || '',
     tagline: c.tagline || '',
     description: c.description || '',
-    heroImage: c.heroImage ? urlFor(c.heroImage).url() : '',
+    heroImage: urlForOptimized(c.heroImage, 1200),
     featured: !!c.featured,
     meta: {
       origin: c.meta?.origin || '',
@@ -106,7 +117,7 @@ function mapCollections(data: any): Collection[] {
       description: r.description || '',
       price: r.price || '',
       priceUSD: r.priceUSD,
-      image: r.image ? urlFor(r.image).url() : '',
+      image: urlForOptimized(r.image, 1200),
       materials: r.materials || '',
       dimensions: r.dimensions || '',
       knotDensity: r.knotDensity || '',

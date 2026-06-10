@@ -9,6 +9,7 @@ import {
   SITE_URL,
 } from '@/lib/seo';
 import { getSanityCollections } from '@/lib/sanity';
+import { setRequestLocale } from 'next-intl/server';
 import { CollectionsGrid } from './CollectionsGrid';
 
 type Props = {
@@ -46,6 +47,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CollectionIndexPage({ params }: Props) {
   const { locale } = await params;
+  setRequestLocale(locale);
   const collections = await getSanityCollections();
 
   const breadcrumb = breadcrumbSchema([

@@ -1,43 +1,41 @@
-import { headers } from 'next/headers';
-import { routing, localeCountries } from '@/i18n/routing';
+'use client';
+
+/**
+ * GeoBanner — suggests switching locale based on the browser's preferred
+ * language. Runs entirely on the client: reading request headers here would
+ * opt the root layout (and therefore every page) into per-request dynamic
+ * rendering, which is what kept the whole site off the CDN edge cache.
+ */
+
+import { useSyncExternalStore } from 'react';
+import { routing } from '@/i18n/routing';
 import { GeoBannerClient } from './GeoBannerClient';
 
 type Locale = (typeof routing.locales)[number];
 
-const COUNTRY_NAMES: Record<string, Record<Locale, string>> = {
-  DE: { en: 'Germany', fr: 'Allemagne', de: 'Deutschland' },
-  AT: { en: 'Austria', fr: 'Autriche', de: 'Österreich' },
-  LI: { en: 'Liechtenstein', fr: 'Liechtenstein', de: 'Liechtenstein' },
-  FR: { en: 'France', fr: 'France', de: 'Frankreich' },
-  BE: { en: 'Belgium', fr: 'Belgique', de: 'Belgien' },
-  LU: { en: 'Luxembourg', fr: 'Luxembourg', de: 'Luxemburg' },
-  MC: { en: 'Monaco', fr: 'Monaco', de: 'Monaco' },
-};
+// Browser language never changes within a session, so a no-op subscription is
+// enough; the server snapshot is empty so prerendered HTML stays banner-free.
+const subscribe = () => () => {};
+const getBrowserLanguage = () =>
+  (navigator.languages?.[0] || navigator.language || '')
+    .toLowerCase()
+    .split('-')[0];
+const getServerSnapshot = () => '';
 
-export async function GeoBanner({ locale }: { locale: string }) {
-  const hdrs = await headers();
-  const country = (
-    hdrs.get('x-user-country') ||
-    hdrs.get('x-vercel-ip-country') ||
-    hdrs.get('cf-ipcountry') ||
-    ''
-  ).toUpperCase();
-
-  if (!country) return null;
-
-  // Find which locale this country prefers (if any), and skip if already on it.
-  const preferredLocale = (
-    Object.entries(localeCountries) as Array<[Locale, string[]]>
-  ).find(([, countries]) => countries.includes(country))?.[0];
-
-  if (!preferredLocale || preferredLocale === locale) return null;
-
-  const countryName = COUNTRY_NAMES[country]?.[locale as Locale] || country;
-
-  return (
-    <GeoBannerClient
-      suggestedLocale={preferredLocale}
-      countryName={countryName}
-    />
+export function GeoBanner({ locale }: { locale: string }) {
+  const preferred = useSyncExternalStore(
+    subscribe,
+    getBrowserLanguage,
+    getServerSnapshot
   );
+
+  const suggested =
+    preferred !== locale &&
+    (routing.locales as readonly string[]).includes(preferred)
+      ? (preferred as Locale)
+      : null;
+
+  if (!suggested) return null;
+
+  return <GeoBannerClient suggestedLocale={suggested} />;
 }
