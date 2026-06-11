@@ -111,8 +111,8 @@ export function CollectionsGrid({ collections = [] }: { collections?: Collection
   }, [filters, allRugs, collections]);
 
   return (
-    <main className="flex-1 px-5 pt-28 pb-16 sm:px-8 sm:pt-32 sm:pb-24 lg:px-12">
-      <div className="mx-auto max-w-[1400px]">
+    <main className="px-gutter pt-page-top pb-section flex-1">
+      <div className="max-w-site mx-auto">
         {/* Page header */}
         <motion.header
           className="mx-auto mb-10 max-w-2xl text-center sm:mb-12"
@@ -122,40 +122,13 @@ export function CollectionsGrid({ collections = [] }: { collections?: Collection
           viewport={{ once: true }}
           custom={0}
         >
-          <span
-            style={{
-              display: 'block',
-              fontSize: '11px',
-              letterSpacing: '0.18em',
-              textTransform: 'uppercase',
-              color: 'var(--ink-soft)',
-              marginBottom: '20px',
-            }}
-          >
+          <span className="text-ink-soft mb-5 block text-[11px] tracking-[0.18em] uppercase">
             {t('eyebrow')}
           </span>
-          <h1
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontWeight: 300,
-              fontSize: 'clamp(40px, 6vw, 76px)',
-              lineHeight: 1,
-              letterSpacing: '-0.02em',
-              color: 'var(--ink)',
-              marginBottom: '22px',
-            }}
-          >
+          <h1 className="font-display text-ink mb-5 text-[40px] leading-[1] font-light tracking-[-0.02em] sm:text-[56px] md:text-[80px]">
             {t('headline')}
           </h1>
-          <p
-            style={{
-              fontSize: '16px',
-              lineHeight: 1.65,
-              color: 'var(--ink-soft)',
-              maxWidth: '38ch',
-              margin: '0 auto',
-            }}
-          >
+          <p className="text-ink-soft mx-auto max-w-[38ch] text-[16px] leading-[1.65]">
             {t('description')}
           </p>
         </motion.header>

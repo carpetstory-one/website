@@ -81,7 +81,7 @@ export default async function PostPage({ params }: Props) {
 
       <Nav />
 
-      <article className="flex-1 px-5 pt-28 pb-16 sm:px-7 sm:pt-32 sm:pb-24 lg:px-12">
+      <article className="px-gutter pt-page-top pb-section flex-1">
         <header className="mx-auto mb-12 max-w-4xl text-center sm:mb-16">
           <div className="text-ink-soft mb-6 flex flex-wrap items-center justify-center gap-3 text-[11px] tracking-[0.16em] uppercase sm:mb-8 sm:gap-4">
             <time dateTime={post.meta.date}>

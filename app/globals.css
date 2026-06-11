@@ -17,4 +17,13 @@
   --color-ink-soft: var(--ink-soft);
 
   --font-display: var(--font-cormorant), 'Cormorant Garamond', serif;
+
+  /* Spacing tokens — bridge the editorial.css fluid spacing scale into
+     Tailwind so page wrappers share one rhythm with the CSS sections:
+     px-gutter, py-section, pt-page-top, pt-page-flush, max-w-site. */
+  --spacing-gutter: var(--gutter);
+  --spacing-section: var(--section-y);
+  --spacing-page-top: var(--page-top);
+  --spacing-page-flush: var(--page-top-flush);
+  --container-site: var(--container-max);
 }

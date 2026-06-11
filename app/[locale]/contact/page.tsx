@@ -44,7 +44,7 @@ export default async function ContactPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumb) }}
       />
       <Nav />
-      <main className="flex-1 pt-28 sm:pt-32">
+      <main className="pt-page-flush flex-1">
         <Suspense fallback={<div className="py-24" />}>
           <Inquiry collections={collections} />
         </Suspense>

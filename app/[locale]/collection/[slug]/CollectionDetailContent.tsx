@@ -162,9 +162,9 @@ export function CollectionDetailContent({
       {/* ── Description block ─────────────────────────────────────────── */}
       <div
         style={{
-          maxWidth: '1400px',
+          maxWidth: 'var(--container-max)',
           margin: '0 auto',
-          padding: '72px 24px 64px',
+          padding: 'var(--stack-xl) var(--gutter)',
           display: 'grid',
           gridTemplateColumns: '1fr 2.2fr',
           gap: '64px',
@@ -358,9 +358,9 @@ export function CollectionDetailContent({
       {/* ── Rugs grid (server-paginated) ──────────────────────────────── */}
       <div
         style={{
-          maxWidth: '1400px',
+          maxWidth: 'var(--container-max)',
           margin: '0 auto',
-          padding: '0 24px 40px',
+          padding: '0 var(--gutter) 40px',
         }}
       >
         <div className="rugx-layout">

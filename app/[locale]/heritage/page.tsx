@@ -47,7 +47,7 @@ export default async function HeritagePage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumb) }}
       />
       <Nav />
-      <main className="flex-1 pt-28 sm:pt-32">
+      <main className="pt-page-flush flex-1">
         <Heritage />
         <Letter />
       </main>
