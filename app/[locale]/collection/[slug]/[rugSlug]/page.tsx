@@ -110,7 +110,7 @@ export default async function RugDetailPage({ params }: Props) {
       <Nav />
 
       {/* Breadcrumb */}
-      <div
+      {/* <div
         style={{
           padding: '112px 24px 0',
           display: 'flex',
@@ -144,9 +144,9 @@ export default async function RugDetailPage({ params }: Props) {
         </Link>
         <span>/</span>
         <span style={{ color: 'var(--ink)' }}>{rug.name}</span>
-      </div>
+      </div> */}
 
-      <main className="flex-1" style={{ backgroundColor: '#ffffff' }}>
+      <main className="flex-1" style={{ backgroundColor: '#ffffff', paddingTop: '80px' }}>
         <RugDetailContent
           rug={rug}
           collection={collection}

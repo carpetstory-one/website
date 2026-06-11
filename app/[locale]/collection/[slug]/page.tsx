@@ -151,7 +151,7 @@ export default async function CollectionDetailPage({
       <Nav />
 
       {/* Breadcrumb — visible at top */}
-      <div
+      {/* <div
         style={{
           position: 'absolute',
           top: '90px',
@@ -180,7 +180,7 @@ export default async function CollectionDetailPage({
         </Link>
         <span>/</span>
         <span style={{ color: '#fff' }}>{col.name}</span>
-      </div>
+      </div> */}
 
       {/* Hero — 65vh full-bleed with Ken Burns */}
       <div

@@ -27,7 +27,7 @@ const WHATSAPP_HREF = 'https://wa.me/919602492022';
 const NAV_LINKS = [
   { href: '/collection', key: 'collection' },
   { href: '/rugs', key: 'rugs' },
-  { href: '/journal', key: 'journal' },
+// { href: '/journal', key: 'journal' },
   { href: '/trade', key: 'trade' },
 ] as const;
 

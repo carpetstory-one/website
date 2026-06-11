@@ -3,7 +3,7 @@ import { routing } from '@/i18n/routing';
 import { collections } from '@/lib/collections';
 import { getAllPosts } from '@/lib/mdx';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://carpetstory.com';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://carpetstory.one';
 
 type RouteSpec = {
   path: string;
@@ -20,7 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/collection', changeFrequency: 'weekly', priority: 0.9 },
     { path: '/craft', changeFrequency: 'monthly', priority: 0.8 },
     { path: '/heritage', changeFrequency: 'monthly', priority: 0.7 },
-    { path: '/journal', changeFrequency: 'weekly', priority: 0.7 },
+    // { path: '/journal', changeFrequency: 'weekly', priority: 0.7 },
     { path: '/trade', changeFrequency: 'monthly', priority: 0.6 },
     { path: '/inquiry', changeFrequency: 'monthly', priority: 0.6 },
     { path: '/about', changeFrequency: 'monthly', priority: 0.6 },
@@ -59,7 +59,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...staticRoutes,
     ...collectionRoutes,
     ...rugRoutes,
-    ...journalRoutes,
+    // ...journalRoutes,
   ];
 
   return all.map((route) => {

@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     letterSpacing: 4,
   },
-  
+
   // --- Page 2: Handcrafted / Heritage / Heirloom ---
   splitPageLeft: {
     flex: 1,
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     color: '#A09D9C',
     lineHeight: 1.6,
   },
-  
+
   // --- Page 3 & Post-Product: Dark Quote Pages ---
   darkQuotePage: {
     backgroundColor: '#1A1110',
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     marginBottom: 40,
   },
-  
+
   // --- Collection Intro Page ---
   collectionPageContainer: {
     padding: 60,
@@ -110,10 +110,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     maxWidth: '70%',
   },
-  
+
   // --- Product Pages ---
   rugsPageContainer: {
-    padding: 40,
+    paddingTop: 10,
+    paddingBottom: 25,
+    paddingLeft: 40,
+    paddingRight: 40,
     flex: 1,
     justifyContent: 'center',
   },
@@ -124,15 +127,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   rugCard: {
-    width: '46%',
-    marginBottom: 40,
+    width: '48%',
+    marginBottom: 8,
     alignItems: 'center',
   },
   rugImageContainer: {
     width: '100%',
-    height: 400,
-    backgroundColor: '#FFFFFF',
-    marginBottom: 15,
+    height: 240,
+    backgroundColor: 'transparent',
+    marginBottom: 4,
   },
   rugImage: {
     width: '100%',
@@ -141,9 +144,9 @@ const styles = StyleSheet.create({
   },
   rugTitle: {
     fontFamily: 'Times-Roman',
-    fontSize: 20,
+    fontSize: 18,
     color: '#1a1817',
-    marginBottom: 8,
+    marginBottom: 2,
     textAlign: 'center',
   },
   rugMeta: {
@@ -154,7 +157,7 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
     textAlign: 'center',
   },
-  
+
   // --- Contact Page ---
   contactPage: {
     flex: 1,
@@ -197,6 +200,21 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
     textTransform: 'uppercase',
   },
+  // --- Watermark ---
+  watermarkContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: -1,
+    opacity: 0.12,
+  },
+  watermarkLogo: {
+    width: 300,
+  },
 });
 
 type Rug = {
@@ -219,16 +237,22 @@ export function CollectionPDF({
   rugs,
   logoBuffer,
 }: Props) {
-  // Chunk rugs into arrays of 2 for each page
+  // Chunk rugs into arrays of 4 for each page (landscape)
   const chunkedRugs = [];
-  for (let i = 0; i < rugs.length; i += 2) {
-    chunkedRugs.push(rugs.slice(i, i + 2));
+  for (let i = 0; i < rugs.length; i += 4) {
+    chunkedRugs.push(rugs.slice(i, i + 4));
   }
+
+  const Watermark = () => logoBuffer ? (
+    <View style={styles.watermarkContainer}>
+      <Image src={logoBuffer} style={styles.watermarkLogo} />
+    </View>
+  ) : null;
 
   return (
     <Document>
       {/* Page 1: Brand / Logo */}
-      <Page size="A4" style={styles.page}>
+      <Page size="A4" orientation="landscape" style={styles.page}>
         <View style={styles.brandPageContainer}>
           {logoBuffer ? (
             <Image src={logoBuffer} style={styles.brandLogo} />
@@ -238,7 +262,8 @@ export function CollectionPDF({
       </Page>
 
       {/* Page 2: Handcrafted. Heritage. Heirloom. */}
-      <Page size="A4" style={[styles.page, { flexDirection: 'row' }]}>
+      <Page size="A4" orientation="landscape" style={[styles.page, { flexDirection: 'row' }]}>
+        <Watermark />
         <View style={styles.splitPageLeft}>
           <Text style={styles.splitTitle}>Handcrafted.</Text>
           <Text style={styles.splitTitle}>Heritage.</Text>
@@ -267,13 +292,15 @@ export function CollectionPDF({
       </Page>
 
       {/* Page 3: Walk the path of richness */}
-      <Page size="A4" style={styles.darkQuotePage}>
+      <Page size="A4" orientation="landscape" style={styles.darkQuotePage}>
+        <Watermark />
         <Text style={styles.quoteSymbol}>§</Text>
         <Text style={styles.quoteText}>walk the path of richness</Text>
       </Page>
 
       {/* Page 4: Collection Name & Description */}
-      <Page size="A4" style={styles.page}>
+      <Page size="A4" orientation="landscape" style={styles.page}>
+        <Watermark />
         <View style={styles.collectionPageContainer}>
           <Text style={styles.collectionTitle}>{collectionName}</Text>
           <Text style={styles.bodyText}>{collectionDescription}</Text>
@@ -281,9 +308,10 @@ export function CollectionPDF({
         </View>
       </Page>
 
-      {/* Collection Photos (2 per page, larger size, no origin, no collection name) */}
+      {/* Collection Photos (4 per page, landscape, no origin, no collection name) */}
       {chunkedRugs.map((chunk, index) => (
-        <Page key={`rug-page-${index}`} size="A4" style={styles.page}>
+        <Page key={`rug-page-${index}`} size="A4" orientation="landscape" style={styles.page}>
+          <Watermark />
           <View style={styles.rugsPageContainer}>
             <View style={styles.rugsGrid}>
               {chunk.map((rug, idx) => (
@@ -308,25 +336,27 @@ export function CollectionPDF({
       ))}
 
       {/* Post-Product Image: Timeless Elegance */}
-      <Page size="A4" style={styles.darkQuotePage}>
+      <Page size="A4" orientation="landscape" style={styles.darkQuotePage}>
+        <Watermark />
         <Text style={styles.quoteSymbol}>§</Text>
         <Text style={styles.quoteText}>Timeless Elegance</Text>
       </Page>
 
       {/* Contact Details */}
-      <Page size="A4" style={styles.contactPage}>
+      <Page size="A4" orientation="landscape" style={styles.contactPage}>
+        <Watermark />
         <View style={styles.contactPage}>
           <Text style={styles.contactTitle}>Get in Touch</Text>
           <Text style={styles.contactHighlight}>Aashrit Garg</Text>
           <Text style={styles.contactText}>Founder, Carpetstory</Text>
           <Text style={styles.contactText}>+91 96024 92022</Text>
-          <Text style={styles.contactText}>contact@carpetstory.com</Text>
+          <Text style={styles.contactText}>contact@carpetstory.one</Text>
           <Text style={styles.contactText}>Jaipur, Rajasthan, India</Text>
         </View>
       </Page>
 
       {/* Final Page: Brand/Logo name again */}
-      <Page size="A4" style={styles.page}>
+      <Page size="A4" orientation="landscape" style={styles.page}>
         <View style={styles.brandPageContainer}>
           {logoBuffer ? (
             <Image src={logoBuffer} style={styles.brandLogo} />

@@ -45,8 +45,8 @@ export async function submitInquiry(formData: FormData) {
   // 4. Send actual email
   try {
     await resend.emails.send({
-      from: 'Carpetstory <hello@carpetstory.com>', // Replace with verified domain
-      to: ['hello@carpetstory.com'],
+      from: 'Carpetstory <hello@carpetstory.one>', // Replace with verified domain
+      to: ['hello@carpetstory.one'],
       replyTo: email,
       subject: `New Inquiry from ${name} - ${space}`,
       text: `

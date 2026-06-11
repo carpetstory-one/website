@@ -31,7 +31,7 @@ import {
   websiteSchema,
 } from '@/lib/seo';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://carpetstory.com';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://carpetstory.one';
 
 export const viewport: Viewport = {
   width: 'device-width',

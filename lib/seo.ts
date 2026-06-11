@@ -6,7 +6,7 @@
 import type { Metadata } from 'next';
 import { routing } from '@/i18n/routing';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://carpetstory.com';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://carpetstory.one';
 const SITE_NAME = 'Carpetstory';
 
 const OG_LOCALE: Record<string, string> = {
@@ -143,7 +143,7 @@ export const websiteSchema = {
   name: SITE_NAME,
   url: SITE_URL,
   publisher: { '@id': `${SITE_URL}/#organization` },
-  inLanguage: routing.locales.map((l:any) => OG_LOCALE[l] || l),
+  inLanguage: routing.locales.map((l: any) => OG_LOCALE[l] || l),
   potentialAction: {
     '@type': 'SearchAction',
     target: {
