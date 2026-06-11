@@ -12,6 +12,7 @@
  */
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { analytics } from '@/lib/analytics';
 import {
@@ -21,8 +22,6 @@ import {
   COMPLEXITY_OPTIONS,
   SIZE_PRESETS,
   computeEstimate,
-  constructionLabel,
-  materialLabel,
   type Construction,
   type EstMaterial,
   type KnotDensity,
@@ -76,6 +75,7 @@ export function EstimateTool({
 }: {
   source: 'rugs' | 'collection' | 'piece';
 }) {
+  const t = useTranslations('Estimate');
   const [construction, setConstruction] = useState<Construction | null>(null);
   const [material, setMaterial] = useState<EstMaterial | null>(null);
   const [preset, setPreset] = useState<string | null>(null);
@@ -136,11 +136,17 @@ export function EstimateTool({
   const animHigh = useAnimatedNumber(result?.high ?? 0);
 
   const sqftLive =
-    widthFt && lengthFt ? `${Math.round(widthFt * lengthFt)} sq ft` : null;
+    widthFt && lengthFt ? t('sqft', { n: Math.round(widthFt * lengthFt) }) : null;
 
   const inquiryMessage =
     result && construction && material
-      ? `I'm exploring a ${result.sqft} sq ft ${constructionLabel(construction)} piece in ${materialLabel(material)}. Estimated range from your calculator: ${usd(result.low)}–${usd(result.high)}. Looking for an exact quote.`
+      ? t('inquiryMessage', {
+          sqft: result.sqft,
+          construction: t(`constructionOptions.${construction}.label`),
+          material: t(`materialOptions.${material}`),
+          low: usd(result.low),
+          high: usd(result.high),
+        })
       : '';
 
   return (
@@ -148,7 +154,7 @@ export function EstimateTool({
       <div className="est-inputs">
         {/* 1. Construction */}
         <fieldset className="est-group">
-          <legend className="est-legend">Construction</legend>
+          <legend className="est-legend">{t('construction')}</legend>
           <div className="est-cards">
             {CONSTRUCTION_OPTIONS.map((o) => (
               <button
@@ -158,8 +164,12 @@ export function EstimateTool({
                 className={`est-card${construction === o.id ? ' is-on' : ''}`}
                 onClick={() => setConstruction(o.id)}
               >
-                <span className="est-card-title">{o.label}</span>
-                <span className="est-card-desc">{o.descriptor}</span>
+                <span className="est-card-title">
+                  {t(`constructionOptions.${o.id}.label`)}
+                </span>
+                <span className="est-card-desc">
+                  {t(`constructionOptions.${o.id}.desc`)}
+                </span>
               </button>
             ))}
           </div>
@@ -167,7 +177,7 @@ export function EstimateTool({
 
         {/* 2. Material */}
         <fieldset className="est-group">
-          <legend className="est-legend">Material</legend>
+          <legend className="est-legend">{t('material')}</legend>
           <div className="est-chips">
             {MATERIAL_OPTIONS.map((o) => (
               <button
@@ -177,7 +187,7 @@ export function EstimateTool({
                 className={`est-chip${material === o.id ? ' is-on' : ''}`}
                 onClick={() => setMaterial(o.id)}
               >
-                {o.label}
+                {t(`materialOptions.${o.id}`)}
               </button>
             ))}
           </div>
@@ -186,7 +196,8 @@ export function EstimateTool({
         {/* 3. Size */}
         <fieldset className="est-group">
           <legend className="est-legend">
-            Size {sqftLive && <span className="est-sqft">· {sqftLive}</span>}
+            {t('size')}{' '}
+            {sqftLive && <span className="est-sqft">· {sqftLive}</span>}
           </legend>
           <div className="est-sizes">
             {SIZE_PRESETS.map((p) => (
@@ -209,13 +220,13 @@ export function EstimateTool({
               className={`est-size${custom ? ' is-on' : ''}`}
               onClick={() => setCustom(true)}
             >
-              Custom
+              {t('custom')}
             </button>
           </div>
           {custom && (
             <div className="est-custom">
               <label className="est-num">
-                <span>Width (ft)</span>
+                <span>{t('widthFt')}</span>
                 <input
                   type="number"
                   inputMode="numeric"
@@ -229,7 +240,7 @@ export function EstimateTool({
                 ×
               </span>
               <label className="est-num">
-                <span>Length (ft)</span>
+                <span>{t('lengthFt')}</span>
                 <input
                   type="number"
                   inputMode="numeric"
@@ -246,7 +257,7 @@ export function EstimateTool({
         {/* 4. Knot density — hand-knotted only */}
         {construction === 'hand-knotted' && (
           <fieldset className="est-group">
-            <legend className="est-legend">Knot density</legend>
+            <legend className="est-legend">{t('knotDensity')}</legend>
             <div className="est-chips">
               {KNOT_OPTIONS.map((o: any) => (
                 <button
@@ -256,10 +267,11 @@ export function EstimateTool({
                   className={`est-chip${knot === o.id ? ' is-on' : ''}`}
                   onClick={() => setKnot(o.id)}
                 >
-                  {o.label}
-                  {o.descriptor && (
-                    <span className="est-chip-sub"> {o.descriptor}</span>
-                  )}
+                  {t(`knotOptions.${o.id}.label`)}
+                  <span className="est-chip-sub">
+                    {' '}
+                    {t(`knotOptions.${o.id}.desc`)}
+                  </span>
                 </button>
               ))}
             </div>
@@ -268,7 +280,7 @@ export function EstimateTool({
 
         {/* 5. Complexity */}
         <fieldset className="est-group">
-          <legend className="est-legend">Design complexity</legend>
+          <legend className="est-legend">{t('complexity')}</legend>
           <div className="est-chips">
             {COMPLEXITY_OPTIONS.map((o) => (
               <button
@@ -278,7 +290,7 @@ export function EstimateTool({
                 className={`est-chip${complexity === o.id ? ' is-on' : ''}`}
                 onClick={() => setComplexity(o.id)}
               >
-                {o.label}
+                {t(`complexityOptions.${o.id}`)}
               </button>
             ))}
           </div>
@@ -288,26 +300,23 @@ export function EstimateTool({
       {/* Output — sticky at the bottom of the viewport on mobile */}
       <div className="est-output" aria-live="polite">
         {!result ? (
-          <p className="est-placeholder">
-            Set construction, material, and size to see an estimate.
-          </p>
+          <p className="est-placeholder">{t('placeholder')}</p>
         ) : (
           <>
-            <span className="est-out-label">Estimated range</span>
+            <span className="est-out-label">{t('rangeLabel')}</span>
             <p className="est-range">
               {usd(animLow)} <span className="est-dash">—</span> {usd(animHigh)}
             </p>
             <p className="est-out-line">
-              For a {result.sqft} sq ft piece in{' '}
-              {material && materialLabel(material)},{' '}
-              {construction && constructionLabel(construction).toLowerCase()}.
+              {t('outLine', {
+                sqft: result.sqft,
+                material: material ? t(`materialOptions.${material}`) : '',
+                construction: construction
+                  ? t(`constructionOptions.${construction}.label`)
+                  : '',
+              })}
             </p>
-            <p className="est-disclaimer">
-              This estimate reflects typical production at Carpetstory. Final
-              pricing varies based on dye complexity, finish, custom design
-              fees, and current materials sourcing. For an exact quote on your
-              specification, begin an inquiry.
-            </p>
+            <p className="est-disclaimer">{t('disclaimer')}</p>
             <Link
               href={{
                 pathname: '/contact',
@@ -318,7 +327,7 @@ export function EstimateTool({
                 analytics.estimateInquiryInitiated(result.low, result.high)
               }
             >
-              Begin an inquiry →
+              {t('cta')}
             </Link>
           </>
         )}

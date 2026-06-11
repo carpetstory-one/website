@@ -25,7 +25,8 @@
      105 cookie / geo consent banner (above nav, below open menu)
      110 mobile-menu backdrop
      120 mobile-menu panel + slide-out drawers
-     130 toasts / transient notices  */
+     130 toasts / transient notices
+     200 lead-capture popup (above everything)  */
   --z-content: 0;
   --z-sticky: 50;
   --z-float: 40;
@@ -34,6 +35,7 @@
   --z-menu-backdrop: 110;
   --z-menu: 120;
   --z-toast: 130;
+  --z-popup: 200;
 
   /* Fixed header height (kept small on mobile per editorial spec). */
   --nav-h: 60px;
@@ -4134,7 +4136,7 @@ section {
 .lead-popup-overlay {
   position: fixed;
   inset: 0;
-  z-index: 200; /* above everything */
+  z-index: var(--z-popup);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -6401,10 +6403,10 @@ nav.nav--home:not(.scrolled):not(.is-open) .nav-burger {
 }
 
 .rugx-pagination {
-  max-width: 1400px;
+  max-width: var(--container-max);
   margin: 16px auto 0;
   width: 100%;
-  padding: 32px 20px 72px;
+  padding: 32px var(--gutter) 72px;
   border-top: 1px solid var(--ink-faint);
   display: flex;
   align-items: center;
@@ -6415,7 +6417,7 @@ nav.nav--home:not(.scrolled):not(.is-open) .nav-burger {
 
 @media (min-width: 640px) {
   .rugx-pagination {
-    padding: 40px 32px 80px;
+    padding: 40px var(--gutter) 80px;
   }
 }
 
@@ -6576,7 +6578,7 @@ nav.nav--home:not(.scrolled):not(.is-open) .nav-burger {
   justify-content: center;
   text-align: center;
   gap: 16px;
-  padding: 80px 20px;
+  padding: var(--section-y) var(--gutter);
 }
 .rugx-error-title {
   font-family: var(--font-cormorant), 'Cormorant Garamond', serif;

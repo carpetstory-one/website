@@ -116,7 +116,7 @@ export function Nav() {
     <>
       <nav
         id="nav"
-        aria-label="Primary"
+        aria-label={label('primaryNav', 'Primary')}
         className={`${isHome ? 'nav--home' : ''} ${scrolled ? 'scrolled' : ''} ${menuOpen ? 'is-open' : ''}`}
       >
         {/* Left — primary links (desktop) + burger (mobile) */}
@@ -126,7 +126,11 @@ export function Nav() {
             ref={burgerRef}
             type="button"
             className={`nav-burger lg:hidden ${menuOpen ? 'is-open' : ''}`}
-            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-label={
+              menuOpen
+                ? label('closeMenu', 'Close menu')
+                : label('openMenu', 'Open menu')
+            }
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
             onClick={() => setMenuOpen((v) => !v)}
@@ -182,10 +186,13 @@ export function Nav() {
         className={`mobile-menu ${menuOpen ? 'is-open' : ''}`}
         role="dialog"
         aria-modal="true"
-        aria-label="Site menu"
+        aria-label={label('siteMenu', 'Site menu')}
         data-lenis-prevent
       >
-        <nav className="mobile-menu-links" aria-label="Mobile">
+        <nav
+          className="mobile-menu-links"
+          aria-label={label('mobileNav', 'Mobile')}
+        >
           {NAV_LINKS.map((l, i) => (
             <Link
               key={l.href}

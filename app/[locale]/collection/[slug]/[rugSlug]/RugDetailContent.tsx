@@ -60,6 +60,7 @@ export function RugDetailContent({
 }) {
   const t = useTranslations('PiecePage');
   const tRugs = useTranslations('RugsPage');
+  const tCommon = useTranslations('Common');
 
   // Lightbox (enlarge / zoom the carpet)
   const [lightbox, setLightbox] = useState(false);
@@ -607,7 +608,7 @@ export function RugDetailContent({
             type="button"
             className="rug-lightbox-close"
             onClick={closeLightbox}
-            aria-label="Close"
+            aria-label={tCommon('close')}
           >
             ×
           </button>

@@ -1,12 +1,14 @@
 import { Nav } from '@/components/editorial/Nav';
 import { Footer } from '@/components/editorial/Footer';
 import { PER_PAGE } from '@/lib/rugs';
+import { useTranslations } from 'next-intl';
 
 /**
  * Instant loading skeleton shown while the server renders the collection
  * (this route is dynamic because filters/pagination live in the URL).
  */
 export default function CollectionDetailLoading() {
+  const t = useTranslations('RugsPage');
   return (
     <div className="bg-canvas relative flex min-h-screen flex-col">
       <Nav />
@@ -35,7 +37,7 @@ export default function CollectionDetailLoading() {
 
           <main className="rugx-main">
             <div className="rugx-grid" aria-busy="true" role="status">
-              <span className="sr-only">Loading pieces…</span>
+              <span className="sr-only">{t('loading')}</span>
               {Array.from({ length: PER_PAGE }).map((_, i) => (
                 <div key={i} className="rugx-card" aria-hidden="true">
                   <span

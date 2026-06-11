@@ -20,7 +20,10 @@
     "openMenu": "Ouvrir le menu",
     "closeMenu": "Fermer le menu",
     "rugs": "Toutes les pièces",
-    "search": "Rechercher"
+    "search": "Rechercher",
+    "primaryNav": "Navigation principale",
+    "siteMenu": "Menu du site",
+    "mobileNav": "Mobile"
   },
   "Hero": {
     "consultation": "Consultation Gratuite",
@@ -55,7 +58,6 @@
     "frame2Tag": "02 — La teinture",
     "frame2Alt": "Écheveaux de fil teint dans un rayon de lumière",
     "frame2Caption": "La garance pour le rouge. L'indigo pour le bleu. Les coques de noix pour le brun.",
-    "frame2Meta": "Tout est naturel. Tout provient d'un rayon de 300 km autour de l'atelier.",
     "frame3Tag": "03 — Le métier",
     "frame3Alt": "Plan large d'un métier horizontal avec des fils de chaîne tendus",
     "frame3Caption": "Un métier. Un tisserand. Huit mois. Pas de chaîne de montage.",
@@ -85,10 +87,10 @@
     "hundred": "Cent.",
     "hundredSub": "Un pouce carré. Le tisserand travaille à cette densité, nœud par nœud, pendant huit mois.",
     "squareFootSub": "Dans un seul pied carré.",
-    "rugSub": "dans une pièce de 8 × 10.",
+    "rugSub": "nœuds noués à la main dans une pièce de 8 × 10 pieds.",
     "finalLabel": "Le chiffre final",
     "finalUpTo": "Jusqu'à",
-    "finalSuffix": "dans nos tissages les plus fins.",
+    "finalSuffix": "nœuds dans nos tissages les plus fins.",
     "tagline": "Un chiffre qui commence à expliquer le prix. Et l'attente.",
     "density": "Densité de nœuds",
     "densityValue": "10 à 14 / pouce²",
@@ -131,8 +133,8 @@
   },
   "Collection": {
     "label": "I — La collection",
-    "headline": "Six pièces. Choisies, non cataloguées.",
-    "viewAll": "Voir les 24 pièces →",
+    "headline": "Plusieurs maisons. Un seul atelier.",
+    "viewAll": "Voir toutes les collections →",
     "viewPiece": "Voir la pièce →",
     "from": "À partir de",
     "khwabName": "Khwab",
@@ -152,7 +154,8 @@
     "naqshPrice": "À partir de 12 400 $",
     "aaraamName": "Aaraam",
     "aaraamDesc": "La pièce silencieuse. Crème, ivoire, le plus léger des roses. Pour les pièces qui demandent le calme.",
-    "aaraamPrice": "À partir de 11 200 $"
+    "aaraamPrice": "À partir de 11 200 $",
+    "explore": "Découvrir"
   },
   "Heritage": {
     "label": "V — Héritage",
@@ -194,25 +197,7 @@
     "r2": "Londres, Royaume-Uni",
     "q3": "On n'achète pas une pièce comme celle-ci. On la transmet.",
     "n3": "Marcou & Vasilakis",
-    "r3": "Athènes, Grèce",
-    "q4": "J'ai demandé à Aashrit quelque chose de la couleur de la fin d'après-midi. Ce qui est arrivé était exactement cela.",
-    "n4": "Lila Hartwell",
-    "r4": "Brooklyn, NY",
-    "q5": "Le poil est si dense que votre pied s'enfonce d'un quart de pouce. Je le remarque chaque matin.",
-    "n5": "Quincy Architects",
-    "r5": "Cabinet, NYC",
-    "q6": "Spécifié pour un client à Genève. Ils ont écrit un an plus tard juste pour dire que le tapis avait mieux vieilli que la pièce autour de lui.",
-    "n6": "Henrik Vogel",
-    "r6": "Architecte, Zurich",
-    "q7": "On dirait quelque chose qu'on trouverait dans un musée et qu'on voudrait ramener à la maison. Nous l'avons ramené à la maison.",
-    "n7": "Anya Kapoor",
-    "r7": "Mumbai, Inde",
-    "q8": "Le coin se courbe légèrement là où le métier s'est terminé. J'adore ça. Une machine n'aurait pas laissé cela.",
-    "n8": "Tom Halloran",
-    "r8": "Client privé, Dublin",
-    "q9": "Huit mois, c'est long pour attendre un sol. Quarante ans, c'est long pour en garder un. Nous parions sur le deuxième chiffre.",
-    "n9": "Studio Marais",
-    "r9": "Paris, France"
+    "r3": "Athènes, Grèce"
   },
   "Doors": {
     "leftLabel": "Pour les maisons privées",
@@ -292,7 +277,9 @@
     "notSure": "Pas encore sûr",
     "errorName": "Veuillez entrer votre nom.",
     "errorEmail": "Veuillez entrer une adresse e-mail valide.",
-    "errorMessage": "Veuillez nous parler de votre espace."
+    "errorMessage": "Veuillez nous parler de votre espace.",
+    "errorGeneric": "Une erreur est survenue. Veuillez réessayer ou nous écrire sur WhatsApp.",
+    "shortlistCount": "Demande concernant {count, plural, one {# pièce} other {# pièces}}"
   },
   "InquiryForm": {
     "label": "Contact",
@@ -357,7 +344,8 @@
     "aboutHeading": "La pièce",
     "zoomHint": "Agrandir",
     "zoomIn": "Cliquez pour agrandir",
-    "zoomFit": "Cliquez pour ajuster"
+    "zoomFit": "Cliquez pour ajuster",
+    "downloadPdf": "Télécharger la collection (PDF)"
   },
   "TradePage": {
     "metaTitle": "Devenez notre partenaire — Négoce & Manufacture",
@@ -372,7 +360,7 @@
     "stat1Label": "Pays fournis",
     "stat2Value": "1 jour",
     "stat2Label": "Du brief au devis",
-    "stat3Value": "2016",
+    "stat3Value": "2012",
     "stat3Label": "Présenté au Domotex de Hanovre",
     "stat4Value": "4",
     "stat4Label": "Générations de tisserands",
@@ -508,7 +496,11 @@
     "calcDesc": "Une estimation approximative pour commencer la conversation — pas un devis. Donnez-nous la construction, nous estimerons le coût.",
     "otherCollections": "Autres collections",
     "explore": "Explorer →",
-    "beginInquiry": "Commencer une demande →"
+    "beginInquiry": "Commencer une demande →",
+    "errorTitle": "Impossible de charger la collection.",
+    "errorText": "Une erreur est survenue lors du chargement des pièces. Veuillez réessayer.",
+    "errorRetry": "Réessayer",
+    "loading": "Chargement des pièces…"
   },
   "Pagination": {
     "label": "Pagination",
@@ -612,5 +604,75 @@
     "dontShowAgain": "Ne plus afficher",
     "successTitle": "Merci.",
     "successBody": "Votre réduction de 10 % sera appliquée à votre première commande. Nous vous contacterons sous peu."
+  },
+  "Immersive": {
+    "word1": "Huit mois.",
+    "word2": "Une seule paire de mains.",
+    "meta": "La fabrication, en mouvement",
+    "cue": "Faites défiler pour plonger"
+  },
+  "Estimate": {
+    "construction": "Construction",
+    "material": "Matière",
+    "size": "Dimensions",
+    "knotDensity": "Densité de nœuds",
+    "complexity": "Complexité du dessin",
+    "custom": "Sur mesure",
+    "widthFt": "Largeur (ft)",
+    "lengthFt": "Longueur (ft)",
+    "sqft": "{n} sq ft",
+    "placeholder": "Choisissez la construction, la matière et les dimensions pour voir une estimation.",
+    "rangeLabel": "Fourchette estimée",
+    "outLine": "Pour une pièce de {sqft} sq ft en {material}, {construction}.",
+    "disclaimer": "Cette estimation reflète la production habituelle de Carpetstory. Le prix final varie selon la complexité des teintures, la finition, les frais de dessin sur mesure et l’approvisionnement en matières. Pour un devis exact sur votre spécification, commencez une demande.",
+    "cta": "Commencer une demande →",
+    "inquiryMessage": "J’étudie une pièce de {sqft} sq ft, {construction}, en {material}. Fourchette estimée par votre calculateur : {low}–{high}. Je souhaite un devis exact.",
+    "drawerEyebrow": "Un calculateur discret",
+    "drawerTitle": "Estimez votre pièce",
+    "drawerClose": "Fermer le calculateur",
+    "constructionOptions": {
+      "hand-knotted": {
+        "label": "Noué main",
+        "desc": "Nœud persan, 6–10 mois sur le métier"
+      },
+      "hand-tufted": {
+        "label": "Tufté main",
+        "desc": "Velours piqué main, quelques mois de fabrication"
+      },
+      "flatweave": {
+        "label": "Tissage plat / Dhurrie",
+        "desc": "Sans velours, réversible, la forme la plus ancienne"
+      },
+      "machine-made": {
+        "label": "Mécanique",
+        "desc": "Qualité de production, délais rapides"
+      }
+    },
+    "materialOptions": {
+      "pure-silk": "Pure soie",
+      "wool-silk": "Mélange laine et soie",
+      "pure-wool": "Pure laine",
+      "wool-cotton": "Laine et coton",
+      "pure-cotton": "Pur coton"
+    },
+    "knotOptions": {
+      "standard": {
+        "label": "Standard",
+        "desc": "10×10 nœuds/in²"
+      },
+      "fine": {
+        "label": "Fin",
+        "desc": "12×12 nœuds/in²"
+      },
+      "very-fine": {
+        "label": "Très fin",
+        "desc": "14×14 nœuds/in²"
+      }
+    },
+    "complexityOptions": {
+      "simple": "Simple / minimal",
+      "traditional": "Traditionnel / à motifs",
+      "intricate": "Très complexe / sur mesure"
+    }
   }
 }

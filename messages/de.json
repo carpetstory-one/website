@@ -20,7 +20,10 @@
     "openMenu": "Menü öffnen",
     "closeMenu": "Menü schließen",
     "rugs": "Alle Stücke",
-    "search": "Suche"
+    "search": "Suche",
+    "primaryNav": "Hauptnavigation",
+    "siteMenu": "Seitenmenü",
+    "mobileNav": "Mobil"
   },
   "Hero": {
     "consultation": "Kostenlose Beratung",
@@ -55,7 +58,6 @@
     "frame2Tag": "02 — Das Färben",
     "frame2Alt": "Stränge gefärbten Garns in einem Lichtstrahl",
     "frame2Caption": "Krapp für das Rot. Indigo für das Blau. Walnussschalen für das Braun.",
-    "frame2Meta": "Alles natürlich. Alles aus einem Umkreis von 300 km um die Werkstatt.",
     "frame3Tag": "03 — Der Webstuhl",
     "frame3Alt": "Weite Aufnahme eines horizontalen Webstuhls mit straff gespannten Kettfäden",
     "frame3Caption": "Ein Webstuhl. Ein Weber. Acht Monate. Kein Fließband.",
@@ -85,10 +87,10 @@
     "hundred": "Einhundert.",
     "hundredSub": "Ein Quadratzoll. Der Weber arbeitet acht Monate lang in dieser Dichte, Knoten für Knoten.",
     "squareFootSub": "In einem einzigen Quadratfuß.",
-    "rugSub": "in einem 8 × 10 Stück.",
+    "rugSub": "handgeknüpfte Knoten in einem Stück von 8 × 10 Fuß.",
     "finalLabel": "Die endgültige Zahl",
     "finalUpTo": "Bis zu",
-    "finalSuffix": "in unseren feinsten Geweben.",
+    "finalSuffix": "Knoten in unseren feinsten Geweben.",
     "tagline": "Eine Zahl, die anfängt, den Preis zu erklären. Und die Wartezeit.",
     "density": "Knotendichte",
     "densityValue": "10 bis 14 / Zoll²",
@@ -131,8 +133,8 @@
   },
   "Collection": {
     "label": "I — Die Kollektion",
-    "headline": "Sechs Stücke. Ausgewählt, nicht katalogisiert.",
-    "viewAll": "Alle 24 Stücke ansehen →",
+    "headline": "Viele Häuser. Eine Werkstatt.",
+    "viewAll": "Alle Kollektionen ansehen →",
     "viewPiece": "Stück ansehen →",
     "from": "Ab",
     "khwabName": "Khwab",
@@ -152,7 +154,8 @@
     "naqshPrice": "Ab 12.400 $",
     "aaraamName": "Aaraam",
     "aaraamDesc": "Das stille Stück. Creme, Elfenbein, die feinste Andeutung von Rosa. Für Räume, die nach Stille verlangen.",
-    "aaraamPrice": "Ab 11.200 $"
+    "aaraamPrice": "Ab 11.200 $",
+    "explore": "Entdecken"
   },
   "Heritage": {
     "label": "V — Geschichte",
@@ -194,25 +197,7 @@
     "r2": "London, Großbritannien",
     "q3": "Man kauft kein Stück wie dieses. Man vererbt es weiter.",
     "n3": "Marcou & Vasilakis",
-    "r3": "Athen, Griechenland",
-    "q4": "Ich bat Aashrit um etwas in der Farbe des späten Nachmittags. Was ankam, war genau das.",
-    "n4": "Lila Hartwell",
-    "r4": "Brooklyn, NY",
-    "q5": "Der Flor ist so dicht, dass der Fuß einen Viertelzoll einsinkt. Ich bemerke es jeden Morgen.",
-    "n5": "Quincy Architects",
-    "r5": "Büro, NYC",
-    "q6": "Für einen Kunden in Genf spezifiziert. Sie schrieben ein Jahr später, nur um zu sagen, dass der Teppich besser gealtert war als der Raum drumherum.",
-    "n6": "Henrik Vogel",
-    "r6": "Architekt, Zürich",
-    "q7": "Er sieht aus wie etwas, das man in einem Museum findet und mit nach Hause nehmen möchte. Wir haben ihn mit nach Hause genommen.",
-    "n7": "Anya Kapoor",
-    "r7": "Mumbai, Indien",
-    "q8": "Die Ecke wölbt sich leicht, wo der Webstuhl endete. Das liebe ich. Eine Maschine hätte das nicht hinterlassen.",
-    "n8": "Tom Halloran",
-    "r8": "Privatkunde, Dublin",
-    "q9": "Acht Monate sind eine lange Zeit, um auf einen Bodenbelag zu warten. Vierzig Jahre sind eine lange Zeit, um einen zu behalten. Wir setzen auf die zweite Zahl.",
-    "n9": "Studio Marais",
-    "r9": "Paris, Frankreich"
+    "r3": "Athen, Griechenland"
   },
   "Doors": {
     "leftLabel": "Für Privathaushalte",
@@ -292,7 +277,9 @@
     "notSure": "Noch nicht sicher",
     "errorName": "Bitte geben Sie Ihren Namen ein.",
     "errorEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
-    "errorMessage": "Bitte erzählen Sie uns von Ihrem Raum."
+    "errorMessage": "Bitte erzählen Sie uns von Ihrem Raum.",
+    "errorGeneric": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut oder schreiben Sie uns per WhatsApp.",
+    "shortlistCount": "Anfrage zu {count, plural, one {# Stück} other {# Stücken}}"
   },
   "InquiryForm": {
     "label": "Anfrage",
@@ -357,7 +344,8 @@
     "aboutHeading": "Das Stück",
     "zoomHint": "Vergrößern",
     "zoomIn": "Zum Vergrößern klicken",
-    "zoomFit": "Klicken zum Anpassen"
+    "zoomFit": "Klicken zum Anpassen",
+    "downloadPdf": "Kollektion als PDF herunterladen"
   },
   "TradePage": {
     "metaTitle": "Werden Sie unser Partner — Handel & Manufaktur",
@@ -372,7 +360,7 @@
     "stat1Label": "Belieferte Länder",
     "stat2Value": "1 Tag",
     "stat2Label": "Vom Briefing zum Angebot",
-    "stat3Value": "2016",
+    "stat3Value": "2012",
     "stat3Label": "Auf der Domotex Hannover gezeigt",
     "stat4Value": "4",
     "stat4Label": "Generationen von Knüpfern",
@@ -508,7 +496,11 @@
     "calcDesc": "Ein grober Richtwert, um das Gespräch zu beginnen — kein Angebot. Nennen Sie uns die Ausführung, und wir schätzen die Kosten.",
     "otherCollections": "Andere Kollektionen",
     "explore": "Entdecken →",
-    "beginInquiry": "Anfrage beginnen →"
+    "beginInquiry": "Anfrage beginnen →",
+    "errorTitle": "Die Kollektion konnte nicht geladen werden.",
+    "errorText": "Beim Laden der Stücke ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+    "errorRetry": "Erneut versuchen",
+    "loading": "Stücke werden geladen…"
   },
   "Pagination": {
     "label": "Seitennummerierung",
@@ -612,5 +604,75 @@
     "dontShowAgain": "Nicht mehr anzeigen",
     "successTitle": "Vielen Dank.",
     "successBody": "Ihr 10 %-Rabatt wird auf Ihre erste Bestellung angewendet. Wir melden uns in Kürze."
+  },
+  "Immersive": {
+    "word1": "Acht Monate.",
+    "word2": "Ein Paar Hände.",
+    "meta": "Die Entstehung, in Bewegung",
+    "cue": "Scrollen Sie, um einzutauchen"
+  },
+  "Estimate": {
+    "construction": "Konstruktion",
+    "material": "Material",
+    "size": "Größe",
+    "knotDensity": "Knotendichte",
+    "complexity": "Designkomplexität",
+    "custom": "Individuell",
+    "widthFt": "Breite (ft)",
+    "lengthFt": "Länge (ft)",
+    "sqft": "{n} sq ft",
+    "placeholder": "Wählen Sie Konstruktion, Material und Größe, um eine Schätzung zu sehen.",
+    "rangeLabel": "Geschätzte Preisspanne",
+    "outLine": "Für ein Stück von {sqft} sq ft in {material}, {construction}.",
+    "disclaimer": "Diese Schätzung entspricht der typischen Fertigung bei Carpetstory. Der endgültige Preis hängt von Farbkomplexität, Veredelung, individuellen Designkosten und aktueller Materialbeschaffung ab. Für ein verbindliches Angebot zu Ihrer Spezifikation starten Sie eine Anfrage.",
+    "cta": "Anfrage beginnen →",
+    "inquiryMessage": "Ich interessiere mich für ein Stück mit {sqft} sq ft, {construction}, in {material}. Geschätzte Spanne laut Ihrem Rechner: {low}–{high}. Ich bitte um ein verbindliches Angebot.",
+    "drawerEyebrow": "Ein stiller Rechner",
+    "drawerTitle": "Ihr Stück kalkulieren",
+    "drawerClose": "Rechner schließen",
+    "constructionOptions": {
+      "hand-knotted": {
+        "label": "Handgeknüpft",
+        "desc": "Persischer Knoten, 6–10 Monate am Knüpfstuhl"
+      },
+      "hand-tufted": {
+        "label": "Handgetuftet",
+        "desc": "Handgestanzter Flor, in wenigen Monaten gefertigt"
+      },
+      "flatweave": {
+        "label": "Flachgewebe / Dhurrie",
+        "desc": "Ohne Flor, beidseitig nutzbar, die älteste Form"
+      },
+      "machine-made": {
+        "label": "Maschinell gefertigt",
+        "desc": "Produktionsqualität, schnelle Lieferung"
+      }
+    },
+    "materialOptions": {
+      "pure-silk": "Reine Seide",
+      "wool-silk": "Woll-Seiden-Mischung",
+      "pure-wool": "Reine Wolle",
+      "wool-cotton": "Wolle & Baumwolle",
+      "pure-cotton": "Reine Baumwolle"
+    },
+    "knotOptions": {
+      "standard": {
+        "label": "Standard",
+        "desc": "10×10 Knoten/in²"
+      },
+      "fine": {
+        "label": "Fein",
+        "desc": "12×12 Knoten/in²"
+      },
+      "very-fine": {
+        "label": "Sehr fein",
+        "desc": "14×14 Knoten/in²"
+      }
+    },
+    "complexityOptions": {
+      "simple": "Schlicht / minimalistisch",
+      "traditional": "Traditionell / gemustert",
+      "intricate": "Hochkomplex / individuell"
+    }
   }
 }

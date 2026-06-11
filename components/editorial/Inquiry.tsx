@@ -135,8 +135,8 @@ export function Inquiry({
 
               setSubmitted(true);
               onSuccess?.();
-            } catch (err: any) {
-              setSubmitError(err.message || 'An error occurred. Please try again or use WhatsApp.');
+            } catch {
+              setSubmitError(t('errorGeneric'));
             } finally {
               setIsSubmitting(false);
             }
@@ -159,8 +159,7 @@ export function Inquiry({
                   marginBottom: '12px',
                 }}
               >
-                Inquiring about {shortlistResolved.length}{' '}
-                {shortlistResolved.length === 1 ? 'piece' : 'pieces'}
+                {t('shortlistCount', { count: shortlistResolved.length })}
               </span>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
                 {shortlistResolved.map(({ collection, rug }) => (

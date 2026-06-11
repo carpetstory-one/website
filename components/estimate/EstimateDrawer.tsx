@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useTranslations } from 'next-intl';
 import { EstimateTool } from './EstimateTool';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
@@ -14,6 +15,7 @@ export function EstimateDrawer({
   open: boolean;
   onClose: () => void;
 }) {
+  const t = useTranslations('Estimate');
   const panelRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
 
@@ -56,7 +58,7 @@ export function EstimateDrawer({
             ref={panelRef}
             role="dialog"
             aria-modal="true"
-            aria-label="Estimate your piece"
+            aria-label={t('drawerTitle')}
             initial={slide.initial}
             animate={slide.animate}
             exit={slide.exit}
@@ -66,13 +68,13 @@ export function EstimateDrawer({
           >
             <div className="est-drawer-head">
               <div>
-                <span className="est-drawer-eyebrow">A quiet calculator</span>
-                <h2 className="est-drawer-title">Estimate your piece</h2>
+                <span className="est-drawer-eyebrow">{t('drawerEyebrow')}</span>
+                <h2 className="est-drawer-title">{t('drawerTitle')}</h2>
               </div>
               <button
                 type="button"
                 onClick={onClose}
-                aria-label="Close estimate"
+                aria-label={t('drawerClose')}
                 className="est-drawer-close"
               >
                 ✕

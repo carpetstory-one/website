@@ -20,7 +20,10 @@
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
     "rugs": "All Pieces",
-    "search": "Search"
+    "search": "Search",
+    "primaryNav": "Primary",
+    "siteMenu": "Site menu",
+    "mobileNav": "Mobile"
   },
   "Hero": {
     "consultation": "Free Consultation",
@@ -84,10 +87,10 @@
     "hundred": "One hundred.",
     "hundredSub": "One square inch. The weaver works at this density, knot by knot, for eight months.",
     "squareFootSub": "In a single square foot.",
-    "rugSub": "in an 8 × 10 piece.",
+    "rugSub": "hand-tied knots in an 8 × 10 ft piece.",
     "finalLabel": "The final figure",
     "finalUpTo": "Up to",
-    "finalSuffix": "in our finest weaves.",
+    "finalSuffix": "knots in our finest weaves.",
     "tagline": "A number that begins to explain the price. And the wait.",
     "density": "Knot density",
     "densityValue": "10 to 14 / inch²",
@@ -117,8 +120,8 @@
   },
   "Collection": {
     "label": "I — The collection",
-    "headline": "Six pieces. Chosen, not catalogued.",
-    "viewAll": "View all 24 pieces →",
+    "headline": "Many houses. One workshop.",
+    "viewAll": "View all collections →",
     "viewPiece": "View piece →",
     "from": "From",
     "khwabName": "Khwab",
@@ -138,7 +141,8 @@
     "naqshPrice": "From $12,400",
     "aaraamName": "Aaraam",
     "aaraamDesc": "The quiet one. Cream, ivory, the faintest blush. For rooms that ask for stillness.",
-    "aaraamPrice": "From $11,200"
+    "aaraamPrice": "From $11,200",
+    "explore": "Explore"
   },
   "Heritage": {
     "label": "V — Heritage",
@@ -260,7 +264,9 @@
     "notSure": "Not sure yet",
     "errorName": "Please enter your name.",
     "errorEmail": "Please enter a valid email address.",
-    "errorMessage": "Please tell us about your space."
+    "errorMessage": "Please tell us about your space.",
+    "errorGeneric": "An error occurred. Please try again or use WhatsApp.",
+    "shortlistCount": "Inquiring about {count, plural, one {# piece} other {# pieces}}"
   },
   "InquiryForm": {
     "label": "Inquire",
@@ -325,7 +331,8 @@
     "aboutHeading": "The piece",
     "zoomHint": "Zoom",
     "zoomIn": "Click image to zoom",
-    "zoomFit": "Click to fit screen"
+    "zoomFit": "Click to fit screen",
+    "downloadPdf": "Download Collection (PDF)"
   },
   "TradePage": {
     "metaTitle": "Partner With Us — Trade & Manufacturing",
@@ -340,7 +347,7 @@
     "stat1Label": "Countries supplied",
     "stat2Value": "1 day",
     "stat2Label": "From brief to quotation",
-    "stat3Value": "2016",
+    "stat3Value": "2012",
     "stat3Label": "Shown at Domotex Hannover",
     "stat4Value": "4",
     "stat4Label": "Generations of weavers",
@@ -476,7 +483,11 @@
     "calcDesc": "A rough range to begin the conversation — not a quote. Tell us the construction, and we'll sketch the cost.",
     "otherCollections": "Other collections",
     "explore": "Explore →",
-    "beginInquiry": "Begin an inquiry →"
+    "beginInquiry": "Begin an inquiry →",
+    "errorTitle": "We couldn’t load the collection.",
+    "errorText": "Something went wrong while fetching the pieces. Please try again.",
+    "errorRetry": "Try again",
+    "loading": "Loading pieces…"
   },
   "Pagination": {
     "label": "Pagination",
@@ -580,5 +591,88 @@
     "dontShowAgain": "Don't show again",
     "successTitle": "Thank you.",
     "successBody": "Your 10% discount will be applied to your first order. We'll be in touch shortly."
+  },
+  "Immersive": {
+    "word1": "Eight months.",
+    "word2": "One pair of hands.",
+    "meta": "The Making, In Motion",
+    "cue": "Scroll to immerse"
+  },
+  "Estimate": {
+    "construction": "Construction",
+    "material": "Material",
+    "size": "Size",
+    "knotDensity": "Knot density",
+    "complexity": "Design complexity",
+    "custom": "Custom",
+    "widthFt": "Width (ft)",
+    "lengthFt": "Length (ft)",
+    "sqft": "{n} sq ft",
+    "placeholder": "Set construction, material, and size to see an estimate.",
+    "rangeLabel": "Estimated range",
+    "outLine": "For a {sqft} sq ft piece in {material}, {construction}.",
+    "disclaimer": "This estimate reflects typical production at Carpetstory. Final pricing varies based on dye complexity, finish, custom design fees, and current materials sourcing. For an exact quote on your specification, begin an inquiry.",
+    "cta": "Begin an inquiry →",
+    "inquiryMessage": "I’m exploring a {sqft} sq ft {construction} piece in {material}. Estimated range from your calculator: {low}–{high}. Looking for an exact quote.",
+    "drawerEyebrow": "A quiet calculator",
+    "drawerTitle": "Estimate your piece",
+    "drawerClose": "Close estimate",
+    "constructionOptions": {
+      "hand-knotted": {
+        "label": "Hand-knotted",
+        "desc": "Persian knot, 6–10 months on the loom"
+      },
+      "hand-tufted": {
+        "label": "Hand-tufted",
+        "desc": "Hand-punched pile, a few months to make"
+      },
+      "flatweave": {
+        "label": "Flatweave / Dhurrie",
+        "desc": "No pile, reversible, the oldest form"
+      },
+      "machine-made": {
+        "label": "Machine-made",
+        "desc": "Production-quality, fast turnaround"
+      }
+    },
+    "materialOptions": {
+      "pure-silk": "Pure silk",
+      "wool-silk": "Wool + silk blend",
+      "pure-wool": "Pure wool",
+      "wool-cotton": "Wool + cotton",
+      "pure-cotton": "Pure cotton"
+    },
+    "knotOptions": {
+      "standard": {
+        "label": "Standard",
+        "desc": "10×10 knots/in²"
+      },
+      "fine": {
+        "label": "Fine",
+        "desc": "12×12 knots/in²"
+      },
+      "very-fine": {
+        "label": "Very fine",
+        "desc": "14×14 knots/in²"
+      }
+    },
+    "complexityOptions": {
+      "simple": "Simple / minimal",
+      "traditional": "Traditional / patterned",
+      "intricate": "Highly intricate / custom"
+    }
+  },
+  "ColorStory": {
+    "label": "A note",
+    "headlineStart": "A piece begins as",
+    "headlineItalic": "colour.",
+    "headlineEnd": "Long before the loom, long before the knot.",
+    "skein1": "Madder — for the red",
+    "skein2": "Indigo — for the blue",
+    "skein3": "Walnut — for the brown",
+    "skein4": "Pomegranate — for the gold",
+    "skein5": "Henna — for the rust",
+    "skein6": "Cochineal — for the pink",
+    "footer": "Six plants. One river. One rooftop under the Rajasthan sun. Every colour in a Carpetstory piece begins somewhere you could walk to."
   }
 }
