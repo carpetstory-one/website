@@ -56,6 +56,11 @@ const nextConfig = {
         destination: '/:locale/collection',
         permanent: true,
       },
+      {
+        source: `/:locale/wissen/:slug`,
+        destination: '/:locale/journal/:slug',
+        permanent: true,
+      },
     ]);
   },
 

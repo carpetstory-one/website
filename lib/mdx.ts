@@ -7,13 +7,21 @@ const postsDirectory = path.join(process.cwd(), 'content/journal');
 
 export interface PostMeta {
   title: string;
-  excerpt: string;
-  date: string;
-  author: string;
-  coverImage: string;
-  tags: string[];
-  readingTime: string;
   slug: string;
+  lang: string;
+  translationKey: string;
+  description: string;
+  targetKeyword?: string;
+  cluster?: string;
+  track?: string;
+  author: string;
+  publishDate: string;
+  updatedDate?: string;
+  heroImage: string;
+  heroAlt: string;
+  ogImage?: string;
+  draft: boolean;
+  readingTime: string;
 }
 
 export function getPostSlugs() {
@@ -46,7 +54,34 @@ export function getAllPosts(): PostMeta[] {
   const slugs = getPostSlugs();
   const posts = slugs
     .map((slug) => getPostBySlug(slug).meta)
-    .sort((post1, post2) => (post1.date > post2.date ? -1 : 1));
+    .sort((post1, post2) => (post1.publishDate > post2.publishDate ? -1 : 1));
 
   return posts;
 }
+
+let crossRefCache: Record<string, Record<string, string>> | null = null;
+let slugToKeyCache: Record<string, string> | null = null;
+
+export function buildJournalIndex() {
+  if (crossRefCache && slugToKeyCache) {
+    return { crossRef: crossRefCache, slugToKey: slugToKeyCache };
+  }
+
+  const posts = getAllPosts();
+  const crossRef: Record<string, Record<string, string>> = {};
+  const slugToKey: Record<string, string> = {};
+
+  for (const post of posts) {
+    if (!crossRef[post.translationKey]) {
+      crossRef[post.translationKey] = {};
+    }
+    crossRef[post.translationKey][post.lang] = post.slug;
+    slugToKey[post.slug] = post.translationKey;
+  }
+
+  crossRefCache = crossRef;
+  slugToKeyCache = slugToKey;
+
+  return { crossRef, slugToKey };
+}
+

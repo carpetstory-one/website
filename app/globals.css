@@ -15,6 +15,10 @@
   --color-accent: var(--accent);
   --color-ink: var(--ink);
   --color-ink-soft: var(--ink-soft);
+  --color-canvas: var(--canvas);
+  --color-canvas-warm: var(--canvas-warm);
+  --color-canvas-warmer: var(--canvas-warmer);
+  --color-canvas-muted: var(--canvas-muted);
 
   --font-display: var(--font-cormorant), 'Cormorant Garamond', serif;
 

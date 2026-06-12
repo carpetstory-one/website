@@ -27,8 +27,8 @@ export const revealVariants: Variants = {
     clipPath: 'inset(0 0% 0 0)',
     opacity: 1,
     transition: {
-      clipPath: { duration: 1.4, ease: EASE_WEAVE },
-      opacity: { duration: 0.5, ease: EASE_OUT },
+      clipPath: { duration: 0.7, ease: EASE_WEAVE },
+      opacity: { duration: 0.35, ease: EASE_OUT },
     },
   },
 };
@@ -40,7 +40,7 @@ export const slideLeftVariants: Variants = {
   visible: {
     opacity: 1,
     x: 0,
-    transition: { duration: 1.1, ease: EASE_OUT },
+    transition: { duration: 0.55, ease: EASE_OUT },
   },
 };
 
@@ -49,7 +49,7 @@ export const slideRightVariants: Variants = {
   visible: {
     opacity: 1,
     x: 0,
-    transition: { duration: 1.1, ease: EASE_OUT },
+    transition: { duration: 0.55, ease: EASE_OUT },
   },
 };
 
@@ -58,7 +58,7 @@ export const slideUpVariants: Variants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 1.1, ease: EASE_OUT },
+    transition: { duration: 0.55, ease: EASE_OUT },
   },
 };
 
@@ -67,7 +67,7 @@ export const slideDownVariants: Variants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 1.1, ease: EASE_OUT },
+    transition: { duration: 0.55, ease: EASE_OUT },
   },
 };
 
@@ -77,7 +77,7 @@ export const weaveImageVariants: Variants = {
   hidden: { clipPath: 'inset(0 100% 0 0)' },
   visible: {
     clipPath: 'inset(0 0% 0 0)',
-    transition: { duration: 1.4, ease: EASE_WEAVE },
+    transition: { duration: 0.7, ease: EASE_WEAVE },
   },
 };
 
@@ -87,7 +87,7 @@ export const fadeInVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { duration: 0.8, ease: EASE_OUT },
+    transition: { duration: 0.4, ease: EASE_OUT },
   },
 };
 
@@ -107,7 +107,7 @@ export const staggerContainerVariants: Variants = {
 
 export const viewportOnce = {
   once: true,
-  margin: '-40px' as const,
+  margin: '120px 0px 0px 0px' as const,
 };
 
 // ── Shared transitions ──

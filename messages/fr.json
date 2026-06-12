@@ -584,6 +584,7 @@
   },
   "JournalPage": {
     "title": "Journal",
+    "eyebrow": "Notes de l'Atelier",
     "readArticle": "Lire l'article",
     "description": "Notes de l'atelier. Écrits sur l'artisanat, la couleur, les matériaux et les personnes qui tissent les tapis Carpetstory."
   },

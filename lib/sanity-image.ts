@@ -36,7 +36,12 @@ export function isSanityImageUrl(src: string): boolean {
  */
 export function urlForImageSrc(source: unknown): string {
   if (!source) return '';
-  return builder.image(source as Parameters<typeof builder.image>[0]).url();
+  if (typeof source === 'string') return source;
+  try {
+    return builder.image(source as Parameters<typeof builder.image>[0]).url();
+  } catch (e) {
+    return '';
+  }
 }
 
 /**
@@ -49,13 +54,18 @@ export function sanityImageUrl(
   quality = 75
 ): string {
   if (!source) return '';
-  return builder
-    .image(source as Parameters<typeof builder.image>[0])
-    .width(width)
-    .quality(quality)
-    .auto('format')
-    .fit('max')
-    .url();
+  if (typeof source === 'string' && !isSanityImageUrl(source)) return source;
+  try {
+    return builder
+      .image(source as Parameters<typeof builder.image>[0])
+      .width(width)
+      .quality(quality)
+      .auto('format')
+      .fit('max')
+      .url();
+  } catch (e) {
+    return typeof source === 'string' ? source : '';
+  }
 }
 
 /**

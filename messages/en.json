@@ -571,6 +571,7 @@
   },
   "JournalPage": {
     "title": "Journal",
+    "eyebrow": "Notes from the Atelier",
     "readArticle": "Read article",
     "description": "Notes from the atelier. Writing on craft, colour, materials, and the people who weave Carpetstory rugs."
   },

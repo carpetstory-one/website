@@ -584,6 +584,7 @@
   },
   "JournalPage": {
     "title": "Journal",
+    "eyebrow": "Notizen aus dem Atelier",
     "readArticle": "Artikel lesen",
     "description": "Notizen aus dem Atelier. Beiträge über Handwerk, Farbe, Materialien und die Menschen, die Carpetstory-Teppiche weben."
   },

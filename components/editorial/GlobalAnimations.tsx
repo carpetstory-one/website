@@ -47,11 +47,11 @@ export function GlobalAnimations() {
           // remaining distance toward the target. This reacts to wheel input
           // immediately and settles quickly — smooth but fast/snappy — instead
           // of gliding to a stop over a fixed duration (the old "slow" feel).
-          lerp: 0.10,
+          lerp: 0.18,
           smoothWheel: true,
           // Each wheel notch travels a touch further so the page covers ground
           // faster without losing smoothness.
-          wheelMultiplier: 1.15,
+          wheelMultiplier: 1.35,
           // syncTouch:false === smoothTouch:false — keep native momentum on
           // mobile, where smoothed touch scrolling feels worse than the OS.
           syncTouch: false,

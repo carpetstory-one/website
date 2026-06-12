@@ -87,17 +87,7 @@ export function CookieConsent() {
           }}
         >
           <p style={{ margin: 0, flex: '1 1 200px', opacity: 0.8 }}>
-            We use analytics to understand how visitors experience the site.{' '}
-            <a
-              href="/privacy"
-              style={{
-                color: 'var(--canvas)',
-                textDecoration: 'underline',
-                textUnderlineOffset: '2px',
-              }}
-            >
-              Privacy
-            </a>
+            We use analytics to understand how visitors experience the site.
           </p>
           <div style={{ display: 'flex', gap: '12px', flexShrink: 0 }}>
             <button
