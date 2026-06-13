@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 
 /**
  * Route-level error boundary for the /rugs listing. Catches failures from the
@@ -13,6 +14,8 @@ export default function RugsError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const t = useTranslations('RugsPage');
+
   useEffect(() => {
     // Surface for monitoring; the digest links to the server-side log entry.
     console.error('[rugs] failed to load catalogue:', error);
@@ -24,12 +27,10 @@ export default function RugsError({
       role="alert"
       style={{ backgroundColor: '#ffffff' }}
     >
-      <h1 className="rugx-error-title">We couldn’t load the collection.</h1>
-      <p className="rugx-error-text">
-        Something went wrong while fetching the pieces. Please try again.
-      </p>
+      <h1 className="rugx-error-title">{t('errorTitle')}</h1>
+      <p className="rugx-error-text">{t('errorText')}</p>
       <button type="button" className="rugx-empty-btn" onClick={() => reset()}>
-        Try again
+        {t('errorRetry')}
       </button>
     </div>
   );

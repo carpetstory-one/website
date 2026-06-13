@@ -5,10 +5,15 @@ import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { SlideIn } from '@/components/editorial/SlideIn';
 import { Reveal } from '@/components/editorial/Reveal';
+import { PARTNER_TYPES, INTERESTS } from '@/lib/schemas/trade';
+import { submitTradeInquiry } from '@/app/actions/trade';
 
-const PARTNER_TYPES = ['designer', 'importer', 'retailer', 'brand', 'other'] as const;
+const WHATSAPP_NUMBER = '919602492022';
 
-const INTERESTS = ['ready', 'custom', 'whiteLabel', 'account', 'kit', 'general'] as const;
+/* Section heading sizes follow the editorial.css header scale
+   (clamp(40px, 4.5vw, 64px) for section h2s, one step down here). */
+const H2_CLASS =
+  'font-display text-ink text-[length:clamp(34px,4.5vw,56px)] leading-[1.05] font-light tracking-[-0.02em]';
 
 export function TradeContent() {
   const t = useTranslations('TradePage');
@@ -27,6 +32,7 @@ export function TradeContent() {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const set = (field: string, value: string) =>
@@ -40,6 +46,13 @@ export function TradeContent() {
       return { ...prev, interests };
     });
   };
+
+  const stats = [
+    { value: t('stat1Value'), label: t('stat1Label') },
+    { value: t('stat2Value'), label: t('stat2Label') },
+    { value: t('stat3Value'), label: t('stat3Label') },
+    { value: t('stat4Value'), label: t('stat4Label') },
+  ];
 
   const partners = [
     {
@@ -89,31 +102,28 @@ export function TradeContent() {
   ];
 
   const processSteps = [
-    {
-      step: '01',
-      title: t('step1Title'),
-      desc: t('step1Desc'),
-    },
-    {
-      step: '02',
-      title: t('step2Title'),
-      desc: t('step2Desc'),
-    },
-    {
-      step: '03',
-      title: t('step3Title'),
-      desc: t('step3Desc'),
-    },
-    {
-      step: '04',
-      title: t('step4Title'),
-      desc: t('step4Desc'),
-    },
-    {
-      step: '05',
-      title: t('step5Title'),
-      desc: t('step5Desc'),
-    },
+    { step: '01', title: t('step1Title'), desc: t('step1Desc') },
+    { step: '02', title: t('step2Title'), desc: t('step2Desc') },
+    { step: '03', title: t('step3Title'), desc: t('step3Desc') },
+    { step: '04', title: t('step4Title'), desc: t('step4Desc') },
+    { step: '05', title: t('step5Title'), desc: t('step5Desc') },
+  ];
+
+  const faqs = [1, 2, 3, 4, 5, 6].map((i) => ({
+    q: t(`faq${i}q`),
+    a: t(`faq${i}a`),
+  }));
+
+  /* Skyline + flag pairs for the markets marquee. Paths must match the
+     on-disk filename case exactly — the production host is case-sensitive. */
+  const markets = [
+    { skyline: '/Markets We Supply/Group-1.svg', flag: '/Markets We Supply/SINGAPORE.svg', name: 'Singapore' },
+    { skyline: '/Markets We Supply/Group-2.svg', flag: '/Markets We Supply/GERMANY.svg', name: 'Germany' },
+    { skyline: '/Markets We Supply/Group-3.svg', flag: '/Markets We Supply/DUBAI.svg', name: 'Dubai' },
+    { skyline: '/Markets We Supply/Group-4.svg', flag: '/Markets We Supply/TURKEY.svg', name: 'Turkey' },
+    { skyline: '/Markets We Supply/Group.svg', flag: '/Markets We Supply/USA.svg', name: 'USA' },
+    { skyline: '/Markets We Supply/Vector.svg', flag: '/Markets We Supply/CANADA.svg', name: 'Canada' },
+    { skyline: '/Markets We Supply/moscow.svg', flag: '/Markets We Supply/RUSSIA.svg', name: 'Russia' },
   ];
 
   function validate() {
@@ -132,10 +142,11 @@ export function TradeContent() {
     return e;
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const errs = validate();
     setErrors(errs);
+    setSubmitError(false);
     if (Object.keys(errs).length > 0) {
       document
         .getElementById('query-form')
@@ -143,10 +154,29 @@ export function TradeContent() {
       return;
     }
     setIsSubmitting(true);
-    setTimeout(() => {
+    try {
+      const fd = new FormData();
+      fd.set('name', formData.name);
+      fd.set('company', formData.company);
+      fd.set('designation', formData.designation);
+      fd.set('country', formData.country);
+      fd.set('email', formData.email);
+      fd.set('phone', formData.phone);
+      fd.set('partnerType', formData.partnerType);
+      formData.interests.forEach((i) => fd.append('interests', i));
+      fd.set('requirement', formData.requirement);
+
+      const result = await submitTradeInquiry(fd);
+      if (result.success) {
+        setSubmitted(true);
+      } else {
+        setSubmitError(true);
+      }
+    } catch {
+      setSubmitError(true);
+    } finally {
       setIsSubmitting(false);
-      setSubmitted(true);
-    }, 1000);
+    }
   };
 
   const scrollToForm = (preselectSampleKit = false) => {
@@ -172,41 +202,62 @@ export function TradeContent() {
     errors[field] ? { borderBottomColor: 'var(--accent)' } : {};
 
   return (
-    <div className="flex flex-col gap-6 md:gap-8 pt-8">
+    <div className="space-y-section">
       {/* 1. Header ───────────────────────────────────────────── */}
       <Reveal>
         <header className="text-center">
-          <span className="text-accent mb-6 block text-[11px] tracking-[0.22em] uppercase">
-            {t('eyebrow')}
-          </span>
-          <h1 className="font-display text-ink mx-auto max-w-[14ch] text-[38px] leading-[1.04] font-light tracking-[-0.03em] sm:text-[56px] lg:text-[76px]">
+          <span className="label text-accent mb-6 block">{t('eyebrow')}</span>
+          <h1 className="font-display text-ink mx-auto max-w-[14ch] text-[40px] leading-[1.04] font-light tracking-[-0.03em] sm:text-[56px] md:text-[80px]">
             {t('title')}
           </h1>
-          <p className="body-md text-ink-soft mx-auto mt-4 max-w-[58ch] leading-relaxed font-light">
+          <p className="body-md text-ink-soft mx-auto mt-8 max-w-[58ch] leading-relaxed font-light">
             {t('intro')}
           </p>
-          <div className="bg-accent mx-auto mt-6 h-px w-12" />
+
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+            <button
+              type="button"
+              onClick={() => scrollToForm()}
+              className="bg-accent inline-flex min-h-[48px] items-center px-9 py-4 text-[11px] font-medium tracking-[0.18em] text-white uppercase transition-colors duration-300 hover:bg-[var(--accent-soft)]"
+            >
+              {t('ctaStart')}
+            </button>
+            <a
+              href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(t('whatsappPrefill'))}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border-ink text-ink hover:bg-ink inline-flex min-h-[48px] items-center gap-2 border px-9 py-4 text-[11px] tracking-[0.18em] uppercase transition-colors duration-300 hover:text-white"
+            >
+              {t('ctaWhatsApp')}
+            </a>
+          </div>
         </header>
       </Reveal>
 
-      {/* 2. Philosophy pillars ───────────────────────────────── */}
-      <div className="grid grid-cols-1 gap-x-10 gap-y-6 md:grid-cols-3 lg:gap-x-14">
+      {/* 2. Credibility strip ────────────────────────────────── */}
+      <Reveal>
+        <div className="border-y border-[rgba(26,24,23,0.1)] py-10 md:py-14">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-10 text-center md:grid-cols-4">
+            {stats.map((s) => (
+              <div key={s.label}>
+                <div className="font-display text-accent text-[38px] leading-none font-light italic md:text-[48px]">
+                  {s.value}
+                </div>
+                <div className="text-ink-soft mx-auto mt-3 max-w-[20ch] text-[11px] tracking-[0.16em] uppercase">
+                  {s.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Reveal>
+
+      {/* 3. Philosophy pillars ───────────────────────────────── */}
+      <div className="grid grid-cols-1 gap-x-10 gap-y-12 md:grid-cols-3 lg:gap-x-14">
         {[
-          {
-            num: 'I',
-            title: t('pillar1Title'),
-            body: t('pillar1Body'),
-          },
-          {
-            num: 'II',
-            title: t('pillar2Title'),
-            body: t('pillar2Body'),
-          },
-          {
-            num: 'III',
-            title: t('pillar3Title'),
-            body: t('pillar3Body'),
-          },
+          { num: 'I', title: t('pillar1Title'), body: t('pillar1Body') },
+          { num: 'II', title: t('pillar2Title'), body: t('pillar2Body') },
+          { num: 'III', title: t('pillar3Title'), body: t('pillar3Body') },
         ].map((p, i) => (
           <SlideIn key={p.num} direction="u" delay={i * 100}>
             <div>
@@ -221,16 +272,14 @@ export function TradeContent() {
         ))}
       </div>
 
-      {/* 3. Who we partner with ──────────────────────────────── */}
-      <div className="flex flex-col gap-4 md:gap-6">
+      {/* 4. Who we partner with ──────────────────────────────── */}
+      <section className="space-y-12 md:space-y-16">
         <Reveal>
           <div className="text-center">
-            <span className="text-ink-soft mb-2 block text-[11px] tracking-[0.22em] uppercase">
+            <span className="label text-ink-soft mb-4 block">
               {t('collaborators')}
             </span>
-            <h2 className="font-display text-ink text-[32px] leading-[1.05] font-light tracking-[-0.02em] md:text-[46px]">
-              {t('whoWePartnerWith')}
-            </h2>
+            <h2 className={H2_CLASS}>{t('whoWePartnerWith')}</h2>
           </div>
         </Reveal>
 
@@ -242,17 +291,17 @@ export function TradeContent() {
               delay={i % 2 === 0 ? 0 : 100}
               className="h-full"
             >
-              <div className="hover:border-accent flex h-full flex-col border border-[rgba(26,24,23,0.1)] p-6 transition-colors duration-500 md:p-8">
-                <span className="font-display text-accent mb-3 text-[26px] leading-none font-light">
+              <div className="hover:border-accent flex h-full flex-col border border-[rgba(26,24,23,0.1)] p-8 transition-colors duration-500 md:p-10">
+                <span className="font-display text-accent mb-5 text-[26px] leading-none font-light">
                   {card.num}
                 </span>
-                <h3 className="text-ink mb-2 text-[17px] font-medium tracking-[0.01em]">
+                <h3 className="text-ink mb-3 text-[17px] font-medium tracking-[0.01em]">
                   {card.title}
                 </h3>
-                <p className="text-ink-soft mb-4 flex-1 text-[14px] leading-relaxed font-light">
+                <p className="text-ink-soft mb-8 flex-1 text-[14px] leading-relaxed font-light">
                   {card.body}
                 </p>
-                <ul className="flex flex-col gap-2.5 border-t border-[rgba(26,24,23,0.08)] pt-4">
+                <ul className="space-y-2.5 border-t border-[rgba(26,24,23,0.08)] pt-6">
                   {card.bullets.map((b) => (
                     <li
                       key={b}
@@ -267,22 +316,20 @@ export function TradeContent() {
             </SlideIn>
           ))}
         </div>
-      </div>
+      </section>
 
-      {/* 4. Our process ──────────────────────────────────────── */}
-      <div className="flex flex-col gap-4 md:gap-6">
+      {/* 5. Our process ──────────────────────────────────────── */}
+      <section className="space-y-12 md:space-y-16">
         <Reveal>
           <div className="text-center">
-            <span className="text-accent mb-2 block text-[11px] tracking-[0.22em] uppercase">
+            <span className="label text-accent mb-4 block">
               {t('howWeWork')}
             </span>
-            <h2 className="font-display text-ink text-[32px] leading-[1.05] font-light tracking-[-0.02em] md:text-[46px]">
-              {t('ourProcess')}
-            </h2>
+            <h2 className={H2_CLASS}>{t('ourProcess')}</h2>
           </div>
         </Reveal>
 
-        <div className="process-container border-t border-[rgba(26,24,23,0.12)] pt-4 md:pt-6">
+        <div className="process-container border-t border-[rgba(26,24,23,0.12)] pt-10 md:pt-12">
           {processSteps.map((item) => (
             <div key={item.step} className="process-item">
               <span className="font-display text-accent mb-4 block text-[34px] leading-none font-light">
@@ -297,17 +344,20 @@ export function TradeContent() {
             </div>
           ))}
         </div>
-      </div>
+      </section>
 
-      {/* 5. Markets we supply ────────────────────────────────── */}
+      {/* 6. Markets we supply ────────────────────────────────── */}
       <SlideIn direction="u">
-        <div className="overflow-hidden border-y border-[rgba(26,24,23,0.1)] py-6 text-center md:py-8">
-          <span className="text-ink-soft mb-2 block text-[10px] tracking-[0.26em] uppercase">
+        <div className="overflow-hidden border-y border-[rgba(26,24,23,0.1)] py-14 text-center md:py-16">
+          <span className="label text-ink-soft mb-5 block">
             {t('globalLogistics')}
           </span>
-          <h3 className="font-display text-ink mb-6 text-[26px] font-light tracking-[-0.02em] md:text-[34px]">
+          <h3 className="font-display text-ink mb-5 text-[length:clamp(26px,3vw,36px)] font-light tracking-[-0.02em]">
             {t('marketsWeSupply')}
           </h3>
+          <p className="text-ink-soft mx-auto mb-12 max-w-[62ch] px-4 text-[14px] leading-relaxed font-light">
+            {t('marketsNote')}
+          </p>
 
           <style>{`
             @keyframes marquee-markets {
@@ -333,104 +383,24 @@ export function TradeContent() {
             <div className="marquee-markets-container flex items-center gap-12 px-6 md:gap-24">
               {[...Array(2)].map((_, i) => (
                 <React.Fragment key={i}>
-                  <Image
-                    src="/Markets We Supply/Group-1.svg"
-                    alt="Market"
-                    width={100}
-                    height={40}
-                    className="h-8 w-auto object-contain opacity-80 md:h-12"
-                  />
-                  <Image
-                    src="/Markets We Supply/singapore.svg"
-                    alt="Singapore"
-                    width={60}
-                    height={60}
-                    className="h-4 w-auto object-contain opacity-80 md:h-6"
-                  />
-                  <Image
-                    src="/Markets We Supply/Group-2.svg"
-                    alt="Market"
-                    width={100}
-                    height={40}
-                    className="h-8 w-auto object-contain opacity-80 md:h-12"
-                  />
-                  <Image
-                    src="/Markets We Supply/germany.svg"
-                    alt="Germany"
-                    width={60}
-                    height={60}
-                    className="h-4 w-auto object-contain opacity-80 md:h-6"
-                  />
-                  <Image
-                    src="/Markets We Supply/Group-3.svg"
-                    alt="Market"
-                    width={100}
-                    height={40}
-                    className="h-8 w-auto object-contain opacity-80 md:h-12"
-                  />
-                  <Image
-                    src="/Markets We Supply/dubai.svg"
-                    alt="Dubai"
-                    width={100}
-                    height={40}
-                    className="h-4 w-auto object-contain opacity-80 md:h-6"
-                  />
-                  <Image
-                    src="/Markets We Supply/Group-4.svg"
-                    alt="Market"
-                    width={100}
-                    height={40}
-                    className="h-8 w-auto object-contain opacity-80 md:h-12"
-                  />
-                  <Image
-                    src="/Markets We Supply/turkey.svg"
-                    alt="Turkey"
-                    width={100}
-                    height={40}
-                    className="h-4 w-auto object-contain opacity-80 md:h-6"
-                  />
-                  <Image
-                    src="/Markets We Supply/Group.svg"
-                    alt="Market"
-                    width={100}
-                    height={40}
-                    className="h-8 w-auto object-contain opacity-80 md:h-12"
-                  />
-                  <Image
-                    src="/Markets We Supply/USA.svg"
-                    alt="USA"
-                    width={100}
-                    height={40}
-                    className="h-4 w-auto object-contain opacity-80 md:h-6"
-                  />
-                  <Image
-                    src="/Markets We Supply/Vector.svg"
-                    alt="Market"
-                    width={100}
-                    height={40}
-                    className="h-8 w-auto object-contain opacity-80 md:h-12"
-                  />
-                  <Image
-                    src="/Markets We Supply/canada.svg"
-                    alt="Canada"
-                    width={100}
-                    height={40}
-                    className="h-4 w-auto object-contain opacity-80 md:h-6"
-                  />
-                  <Image
-                    src="/Markets We Supply/moscow.svg"
-                    alt="Moscow"
-                    width={100}
-                    height={40}
-                    className="h-8 w-auto object-contain opacity-80 md:h-12"
-                  />
-                  <Image
-                    src="/Markets We Supply/russia.svg"
-                    alt="Russia"
-                    width={100}
-                    height={40}
-                    className="h-4 w-auto object-contain opacity-80 md:h-6"
-                  />
+                  {markets.map((m) => (
+                    <React.Fragment key={`${i}-${m.name}`}>
+                      <Image
+                        src={m.skyline}
+                        alt=""
+                        width={100}
+                        height={40}
+                        className="h-8 w-auto object-contain opacity-80 md:h-12"
+                      />
+                      <Image
+                        src={m.flag}
+                        alt={m.name}
+                        width={60}
+                        height={60}
+                        className="h-4 w-auto object-contain opacity-80 md:h-6"
+                      />
+                    </React.Fragment>
+                  ))}
                 </React.Fragment>
               ))}
             </div>
@@ -438,27 +408,57 @@ export function TradeContent() {
         </div>
       </SlideIn>
 
-      {/* 6. Submit query form ────────────────────────────────── */}
-      <div id="query-form" className="flex justify-center">
+      {/* 7. FAQ ──────────────────────────────────────────────── */}
+      <section className="mx-auto w-full max-w-[820px]">
+        <Reveal>
+          <div className="mb-12 text-center md:mb-14">
+            <span className="label text-ink-soft mb-4 block">
+              {t('faqEyebrow')}
+            </span>
+            <h2 className={H2_CLASS}>{t('faqTitle')}</h2>
+          </div>
+        </Reveal>
+
+        <div className="border-t border-[rgba(26,24,23,0.1)]">
+          {faqs.map((f, i) => (
+            <SlideIn key={f.q} direction="u" delay={Math.min(i * 60, 240)}>
+              <div className="grid grid-cols-1 gap-3 border-b border-[rgba(26,24,23,0.1)] py-7 md:grid-cols-[1fr_1.6fr] md:gap-10 md:py-8">
+                <h3 className="text-ink text-[15px] leading-snug font-medium tracking-[0.01em]">
+                  {f.q}
+                </h3>
+                <p className="text-ink-soft text-[14px] leading-relaxed font-light">
+                  {f.a}
+                </p>
+              </div>
+            </SlideIn>
+          ))}
+        </div>
+      </section>
+
+      {/* 8. Submit query form ────────────────────────────────── */}
+      <div
+        id="query-form"
+        className="inquiry mb-10 md:mb-10"
+        style={{ padding: 0 }}
+      >
         {submitted ? (
           <div
-            className="inquiry-form text-center"
+            className="inquiry-form"
             role="status"
             aria-live="polite"
+            style={{ textAlign: 'center' }}
           >
-            <h2 className="font-display text-ink text-[32px] leading-[1.05] font-light tracking-[-0.02em] md:text-[46px]">
-              {t('received')}
-            </h2>
-            <p className="body-md text-ink-soft mx-auto mt-4 max-w-[48ch] leading-relaxed font-light">
+            <h2>{t('received')}</h2>
+            <p style={{ marginTop: '24px', color: 'var(--ink-soft)' }}>
               {t('successMessage')}
             </p>
           </div>
         ) : (
           <form className="inquiry-form" onSubmit={handleSubmit} noValidate>
-            <h2 className="font-display text-ink mb-6 text-center text-[32px] leading-[1.05] font-light tracking-[-0.02em] md:text-[46px]">
+            <h2>
               {t('submitQuery').split(' ')[0]}{' '}
-              <span className="text-accent italic">
-                {t('submitQuery').split(' ')[1]}
+              <span className="it">
+                {t('submitQuery').split(' ').slice(1).join(' ')}
               </span>
             </h2>
 
@@ -613,9 +613,7 @@ export function TradeContent() {
             </div>
 
             <div className="field" style={{ marginBottom: 0 }}>
-              <label htmlFor="requirement">
-                {t('requirement')}
-              </label>
+              <label htmlFor="requirement">{t('requirement')}</label>
               <textarea
                 id="requirement"
                 placeholder={t('requirementPlaceholder')}
@@ -624,7 +622,16 @@ export function TradeContent() {
               />
             </div>
 
-            <div className="mt-10 flex justify-center">
+            {submitError && (
+              <p
+                role="alert"
+                className="text-accent mt-8 text-center text-[13px] leading-relaxed"
+              >
+                {t('errorSubmit')}
+              </p>
+            )}
+
+            <div className="mt-14 flex justify-center">
               <button
                 className="btn-send magnetic"
                 type="submit"
@@ -651,22 +658,22 @@ export function TradeContent() {
         )}
       </div>
 
-      {/* 7. Sample kit ───────────────────────────────────────── */}
+      {/* 9. Sample kit ───────────────────────────────────────── */}
       <SlideIn direction="u">
         <div className="bg-accent flex flex-col text-white lg:flex-row lg:items-stretch">
-          <div className="flex-1 p-8 md:p-10 lg:p-12">
-            <span className="mb-3 block text-[11px] tracking-[0.22em] text-white/55 uppercase">
-              {t('sampleKitDesc').split(' — ')[0] || t('eyebrow')}
+          <div className="flex-1 p-10 md:p-14 lg:p-16">
+            <span className="label mb-6 block text-white/55">
+              {t('sampleKitEyebrow')}
             </span>
-            <h2 className="font-display mb-2 text-[30px] leading-[1.08] font-light md:text-[42px]">
+            <h2 className="font-display mb-6 text-[30px] leading-[1.08] font-light md:text-[42px]">
               {t('notReady')}
               <br />
               <span className="italic">{t('startWithSample')}</span>
             </h2>
-            <p className="mb-4 max-w-[52ch] text-[14.5px] leading-relaxed font-light text-white/80">
+            <p className="mb-8 max-w-[52ch] text-[14.5px] leading-relaxed font-light text-white/80">
               {t('sampleKitDesc')}
             </p>
-            <ul className="flex flex-col gap-3">
+            <ul className="space-y-3">
               {[
                 t('sampleKitBullet1'),
                 t('sampleKitBullet2'),

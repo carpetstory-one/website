@@ -67,8 +67,8 @@ export function LeadCapturePopup() {
       return; // storage blocked (e.g. Safari incognito)
     }
 
-    // Random delay between 8 000 ms and 10 000 ms
-    const delay = 8000 + Math.random() * 2000;
+    // Random delay between 15 000 ms and 18 000 ms
+    const delay = 15000 + Math.random() * 3000;
     const timer = setTimeout(() => {
       setIsOpen(true);
       try {

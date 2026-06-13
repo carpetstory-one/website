@@ -21,18 +21,27 @@ const WhatsAppIcon = ({ className = '' }: { className?: string }) => (
 
 
 const WHATSAPP_HREF = 'https://wa.me/919602492022';
+const INSTAGRAM_HREF = 'https://www.instagram.com/carpetstory';
+
+// Overlay entrance choreography: links rise in one after another, then the
+// foot row follows once the list has settled.
+const MENU_STAGGER_BASE = 0.15;
+const MENU_STAGGER_STEP = 0.055;
 
 // Primary nav destinations — single source of truth for desktop links + the
 // mobile overlay menu so the two can never drift apart.
 const NAV_LINKS = [
   { href: '/collection', key: 'collection' },
   { href: '/rugs', key: 'rugs' },
-// { href: '/journal', key: 'journal' },
+  { href: '/journal', key: 'journal' },
   { href: '/trade', key: 'trade' },
 ] as const;
 
 export function Nav() {
   const t = useTranslations('Nav');
+  // The overlay foot reuses Footer strings (Contact / Instagram / tagline) so
+  // the menu needs no new message keys.
+  const tFooter = useTranslations('Footer');
   const pathname = usePathname();
   const isHome = pathname === '/';
   const [scrolled, setScrolled] = useState(false);
@@ -116,7 +125,7 @@ export function Nav() {
     <>
       <nav
         id="nav"
-        aria-label="Primary"
+        aria-label={label('primaryNav', 'Primary')}
         className={`${isHome ? 'nav--home' : ''} ${scrolled ? 'scrolled' : ''} ${menuOpen ? 'is-open' : ''}`}
       >
         {/* Left — primary links (desktop) + burger (mobile) */}
@@ -126,7 +135,11 @@ export function Nav() {
             ref={burgerRef}
             type="button"
             className={`nav-burger lg:hidden ${menuOpen ? 'is-open' : ''}`}
-            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-label={
+              menuOpen
+                ? label('closeMenu', 'Close menu')
+                : label('openMenu', 'Open menu')
+            }
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
             onClick={() => setMenuOpen((v) => !v)}
@@ -156,8 +169,10 @@ export function Nav() {
           <BrandLogo size="sm" />
         </a>
 
-        {/* Right — WhatsApp, language */}
-        <div className="nav-right flex items-center gap-3 sm:gap-5 lg:gap-6">
+        {/* Right — WhatsApp + language, kept as one tight group so the bar
+            reads close-left / logo-center / utilities-right. The locale
+            button carries 8px inner padding, so gap-2 reads as ~16px. */}
+        <div className="nav-right flex items-center gap-2 sm:gap-5 lg:gap-6">
           <a
             href={WHATSAPP_HREF}
             target="_blank"
@@ -182,22 +197,68 @@ export function Nav() {
         className={`mobile-menu ${menuOpen ? 'is-open' : ''}`}
         role="dialog"
         aria-modal="true"
-        aria-label="Site menu"
+        aria-label={label('siteMenu', 'Site menu')}
         data-lenis-prevent
       >
-        <nav className="mobile-menu-links" aria-label="Mobile">
-          {NAV_LINKS.map((l, i) => (
+        <nav
+          className="mobile-menu-links"
+          aria-label={label('mobileNav', 'Mobile')}
+        >
+          {NAV_LINKS.map((l, i) => {
+            const active =
+              pathname === l.href || pathname.startsWith(`${l.href}/`);
+            return (
+              <Link
+                key={l.href}
+                href={l.href}
+                className={`mobile-menu-link ${active ? 'is-active' : ''}`}
+                aria-current={active ? 'page' : undefined}
+                style={{
+                  transitionDelay: menuOpen
+                    ? `${MENU_STAGGER_BASE + i * MENU_STAGGER_STEP}s`
+                    : '0s',
+                }}
+                onClick={() => setMenuOpen(false)}
+              >
+                <span className="mobile-menu-index" aria-hidden="true">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span className="mobile-menu-label">
+                  {label(l.key, l.key[0].toUpperCase() + l.key.slice(1))}
+                </span>
+              </Link>
+            );
+          })}
+        </nav>
+
+        {/* Hairline + quiet secondary row so the lower half reads intentional. */}
+        <div
+          className="mobile-menu-foot"
+          style={{
+            transitionDelay: menuOpen
+              ? `${MENU_STAGGER_BASE + NAV_LINKS.length * MENU_STAGGER_STEP + 0.1}s`
+              : '0s',
+          }}
+        >
+          <div className="mobile-menu-foot-links">
             <Link
-              key={l.href}
-              href={l.href}
-              className="mobile-menu-link"
-              style={{ transitionDelay: menuOpen ? `${0.22 + i * 0.06}s` : '0s' }}
+              href="/contact"
+              className="mobile-menu-foot-link"
               onClick={() => setMenuOpen(false)}
             >
-              {label(l.key, l.key[0].toUpperCase() + l.key.slice(1))}
+              {tFooter('exploreContact')}
             </Link>
-          ))}
-        </nav>
+            <a
+              href={INSTAGRAM_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mobile-menu-foot-link"
+            >
+              {tFooter('followInstagram')}
+            </a>
+          </div>
+          <p className="mobile-menu-tagline">{tFooter('tagline')}</p>
+        </div>
       </div>
     </>
   );

@@ -20,7 +20,10 @@
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
     "rugs": "All Pieces",
-    "search": "Search"
+    "search": "Search",
+    "primaryNav": "Primary",
+    "siteMenu": "Site menu",
+    "mobileNav": "Mobile"
   },
   "Hero": {
     "consultation": "Free Consultation",
@@ -84,10 +87,10 @@
     "hundred": "One hundred.",
     "hundredSub": "One square inch. The weaver works at this density, knot by knot, for eight months.",
     "squareFootSub": "In a single square foot.",
-    "rugSub": "in an 8 × 10 piece.",
+    "rugSub": "hand-tied knots in an 8 × 10 ft piece.",
     "finalLabel": "The final figure",
     "finalUpTo": "Up to",
-    "finalSuffix": "in our finest weaves.",
+    "finalSuffix": "knots in our finest weaves.",
     "tagline": "A number that begins to explain the price. And the wait.",
     "density": "Knot density",
     "densityValue": "10 to 14 / inch²",
@@ -117,8 +120,8 @@
   },
   "Collection": {
     "label": "I — The collection",
-    "headline": "Six pieces. Chosen, not catalogued.",
-    "viewAll": "View all 24 pieces →",
+    "headline": "Many houses. One workshop.",
+    "viewAll": "View all collections →",
     "viewPiece": "View piece →",
     "from": "From",
     "khwabName": "Khwab",
@@ -138,7 +141,8 @@
     "naqshPrice": "From $12,400",
     "aaraamName": "Aaraam",
     "aaraamDesc": "The quiet one. Cream, ivory, the faintest blush. For rooms that ask for stillness.",
-    "aaraamPrice": "From $11,200"
+    "aaraamPrice": "From $11,200",
+    "explore": "Explore"
   },
   "Heritage": {
     "label": "V — Heritage",
@@ -260,7 +264,9 @@
     "notSure": "Not sure yet",
     "errorName": "Please enter your name.",
     "errorEmail": "Please enter a valid email address.",
-    "errorMessage": "Please tell us about your space."
+    "errorMessage": "Please tell us about your space.",
+    "errorGeneric": "An error occurred. Please try again or use WhatsApp.",
+    "shortlistCount": "Inquiring about {count, plural, one {# piece} other {# pieces}}"
   },
   "InquiryForm": {
     "label": "Inquire",
@@ -325,12 +331,26 @@
     "aboutHeading": "The piece",
     "zoomHint": "Zoom",
     "zoomIn": "Click image to zoom",
-    "zoomFit": "Click to fit screen"
+    "zoomFit": "Click to fit screen",
+    "downloadPdf": "Download Collection (PDF)"
   },
   "TradePage": {
+    "metaTitle": "Partner With Us — Trade & Manufacturing",
+    "metaDescription": "Carpetstory is a full-spectrum carpet manufacturing and export house in Jaipur, partnering with interior designers, importers, retailers, and luxury brands in more than thirty countries.",
     "eyebrow": "Manufacturing & Trade Partnerships",
     "title": "Partner With Us",
-    "intro": "A great carpet is not made quickly. Neither is a great manufacturing house. Carpetstory produces the full spectrum of carpets and rugs from Jaipur — supplying trade professionals and luxury brands across more than thirty countries with rigour and discretion. We manufacture everything. We compromise on nothing.",
+    "intro": "A great carpet is not made quickly. Neither is a great manufacturing house. From our ateliers in Jaipur we produce the full spectrum of handmade and machine-made carpets, supplying trade professionals and luxury brands in more than thirty countries. We manufacture everything. We compromise on nothing.",
+    "ctaStart": "Start a partnership",
+    "ctaWhatsApp": "WhatsApp the trade desk",
+    "whatsappPrefill": "Hello — I would like to discuss a trade partnership with Carpetstory.",
+    "stat1Value": "30+",
+    "stat1Label": "Countries supplied",
+    "stat2Value": "1 day",
+    "stat2Label": "From brief to quotation",
+    "stat3Value": "2012",
+    "stat3Label": "Shown at Domotex Hannover",
+    "stat4Value": "4",
+    "stat4Label": "Generations of weavers",
     "pillar1Title": "Versatility",
     "pillar1Body": "From hand-knotted artisan rugs to precision machine-made carpets, we produce every construction and every specification — for designers, importers, luxury brands, and retailers. Whatever your floor demands, we make it.",
     "pillar2Title": "Rigour & Discretion",
@@ -340,9 +360,9 @@
     "collaborators": "Collaborators",
     "whoWePartnerWith": "Who We Partner With",
     "partner1Title": "Interior Designers & Architects",
-    "partner1Body": "We manufacture to your exact project specification, size, construction, material, and palette, with the precision and lead-time discipline that professional projects demand.",
+    "partner1Body": "We manufacture to your exact project specification — size, construction, material, and palette — with the precision and lead-time discipline that professional projects demand.",
     "partner1Bullet1": "Preferential trade pricing",
-    "partner1Bullet2": "Sample dispatch worldwide",
+    "partner1Bullet2": "Single bespoke pieces or full projects",
     "partner1Bullet3": "CAD-ready technical spec sheets",
     "partner1Bullet4": "Dedicated account management",
     "partner2Title": "Importers & Distributors",
@@ -377,6 +397,21 @@
     "step5Desc": "Door-to-door shipping with complete documentation and compliance.",
     "globalLogistics": "Global Logistics",
     "marketsWeSupply": "Markets We Supply",
+    "marketsNote": "First shown at Domotex in Hannover — the world’s leading trade fair for carpets — our pieces now reach studios and showrooms from Berlin to Singapore.",
+    "faqEyebrow": "Before You Write",
+    "faqTitle": "Questions, answered",
+    "faq1q": "What is the minimum order?",
+    "faq1a": "Programme and wholesale orders start at five pieces per design. For interior designers and architects we also weave single bespoke pieces to project specification.",
+    "faq2q": "Can you produce our own designs?",
+    "faq2a": "Yes. Size, construction, material, and palette are made to your specification. You approve CAD-ready technical sheets and a physical sample before production begins.",
+    "faq3q": "How long does production take?",
+    "faq3a": "It depends on the construction — a hand-knotted piece spends months on the loom, while machine-made programmes move considerably faster. You receive exact lead times with your quotation, within one business day of your brief.",
+    "faq4q": "Do you handle export and shipping?",
+    "faq4a": "Fully. Sea and air freight ex Delhi, complete export documentation, and door-to-door delivery — to Germany and the EU, the Gulf, North America, and beyond.",
+    "faq5q": "Can we judge the quality before committing?",
+    "faq5a": "Start with the sample kit: swatches curated to your brief by a consultant, shipped worldwide, with half the kit value redeemable against your first order.",
+    "faq6q": "Can we visit the atelier?",
+    "faq6a": "Gladly. The atelier in Jaipur receives partners by appointment — write to us and we will arrange it.",
     "submitQuery": "Submit Query",
     "fullName": "Full Name *",
     "fullNamePlaceholder": "e.g. Salim Khan",
@@ -385,24 +420,29 @@
     "designation": "Designation *",
     "designationPlaceholder": "e.g. Lead Designer",
     "country": "Country *",
-    "countryPlaceholder": "e.g. United Kingdom",
+    "countryPlaceholder": "e.g. Germany",
     "email": "Email *",
     "emailPlaceholder": "e.g. design@studio.com",
     "phone": "Phone *",
-    "phonePlaceholder": "e.g. +44 20 7946 0000",
+    "phonePlaceholder": "e.g. +49 30 123456",
     "iAmA": "I am a… *",
     "iAmInterestedIn": "I am interested in…",
     "requirement": "Tell us about your requirement",
     "requirementPlaceholder": "Estimated quantities, timelines, sizing, construction…",
     "sending": "Sending…",
     "received": "Received.",
-    "successMessage": "Thank you for starting a B2B inquiry. Our trade team in Jaipur will review your specifications and contact you within one business day.",
+    "successMessage": "Thank you for starting a trade inquiry. Our team in Jaipur will review your specifications and contact you within one business day.",
+    "errorSubmit": "Your inquiry could not be sent. Please try again — or write to us directly on WhatsApp.",
+    "errorRequired": "Required",
+    "errorEmail": "Enter a valid email",
+    "errorSelectOne": "Select one",
     "notReady": "Not ready to order yet?",
     "startWithSample": "Start with a sample.",
+    "sampleKitEyebrow": "The Sample Kit",
     "sampleKitDesc": "Before you specify, before you order, before you commit — hold the material, feel the construction, understand the difference. Our consultant curates the right swatches personally, based on your requirement. No image does it justice.",
     "sampleKitBullet1": "Curated to your brief by a Carpetstory consultant",
     "sampleKitBullet2": "Shipped to your door worldwide",
-    "sampleKitBullet3": "50% of the kit value redeemable on your first B2B order",
+    "sampleKitBullet3": "50% of the kit value redeemable on your first order",
     "startingFrom": "Starting from",
     "requestSampleKit": "Request Your Sample Kit",
     "partnerTypes": {
@@ -443,7 +483,11 @@
     "calcDesc": "A rough range to begin the conversation — not a quote. Tell us the construction, and we'll sketch the cost.",
     "otherCollections": "Other collections",
     "explore": "Explore →",
-    "beginInquiry": "Begin an inquiry →"
+    "beginInquiry": "Begin an inquiry →",
+    "errorTitle": "We couldn’t load the collection.",
+    "errorText": "Something went wrong while fetching the pieces. Please try again.",
+    "errorRetry": "Try again",
+    "loading": "Loading pieces…"
   },
   "Pagination": {
     "label": "Pagination",
@@ -527,6 +571,7 @@
   },
   "JournalPage": {
     "title": "Journal",
+    "eyebrow": "Notes from the Atelier",
     "readArticle": "Read article",
     "description": "Notes from the atelier. Writing on craft, colour, materials, and the people who weave Carpetstory rugs."
   },
@@ -547,5 +592,88 @@
     "dontShowAgain": "Don't show again",
     "successTitle": "Thank you.",
     "successBody": "Your 10% discount will be applied to your first order. We'll be in touch shortly."
+  },
+  "Immersive": {
+    "word1": "Eight months.",
+    "word2": "One pair of hands.",
+    "meta": "The Making, In Motion",
+    "cue": "Scroll to immerse"
+  },
+  "Estimate": {
+    "construction": "Construction",
+    "material": "Material",
+    "size": "Size",
+    "knotDensity": "Knot density",
+    "complexity": "Design complexity",
+    "custom": "Custom",
+    "widthFt": "Width (ft)",
+    "lengthFt": "Length (ft)",
+    "sqft": "{n} sq ft",
+    "placeholder": "Set construction, material, and size to see an estimate.",
+    "rangeLabel": "Estimated range",
+    "outLine": "For a {sqft} sq ft piece in {material}, {construction}.",
+    "disclaimer": "This estimate reflects typical production at Carpetstory. Final pricing varies based on dye complexity, finish, custom design fees, and current materials sourcing. For an exact quote on your specification, begin an inquiry.",
+    "cta": "Begin an inquiry →",
+    "inquiryMessage": "I’m exploring a {sqft} sq ft {construction} piece in {material}. Estimated range from your calculator: {low}–{high}. Looking for an exact quote.",
+    "drawerEyebrow": "A quiet calculator",
+    "drawerTitle": "Estimate your piece",
+    "drawerClose": "Close estimate",
+    "constructionOptions": {
+      "hand-knotted": {
+        "label": "Hand-knotted",
+        "desc": "Persian knot, 6–10 months on the loom"
+      },
+      "hand-tufted": {
+        "label": "Hand-tufted",
+        "desc": "Hand-punched pile, a few months to make"
+      },
+      "flatweave": {
+        "label": "Flatweave / Dhurrie",
+        "desc": "No pile, reversible, the oldest form"
+      },
+      "machine-made": {
+        "label": "Machine-made",
+        "desc": "Production-quality, fast turnaround"
+      }
+    },
+    "materialOptions": {
+      "pure-silk": "Pure silk",
+      "wool-silk": "Wool + silk blend",
+      "pure-wool": "Pure wool",
+      "wool-cotton": "Wool + cotton",
+      "pure-cotton": "Pure cotton"
+    },
+    "knotOptions": {
+      "standard": {
+        "label": "Standard",
+        "desc": "10×10 knots/in²"
+      },
+      "fine": {
+        "label": "Fine",
+        "desc": "12×12 knots/in²"
+      },
+      "very-fine": {
+        "label": "Very fine",
+        "desc": "14×14 knots/in²"
+      }
+    },
+    "complexityOptions": {
+      "simple": "Simple / minimal",
+      "traditional": "Traditional / patterned",
+      "intricate": "Highly intricate / custom"
+    }
+  },
+  "ColorStory": {
+    "label": "A note",
+    "headlineStart": "A piece begins as",
+    "headlineItalic": "colour.",
+    "headlineEnd": "Long before the loom, long before the knot.",
+    "skein1": "Madder — for the red",
+    "skein2": "Indigo — for the blue",
+    "skein3": "Walnut — for the brown",
+    "skein4": "Pomegranate — for the gold",
+    "skein5": "Henna — for the rust",
+    "skein6": "Cochineal — for the pink",
+    "footer": "Six plants. One river. One rooftop under the Rajasthan sun. Every colour in a Carpetstory piece begins somewhere you could walk to."
   }
 }

@@ -112,7 +112,7 @@ export default async function RugDetailPage({ params }: Props) {
       {/* Breadcrumb */}
       {/* <div
         style={{
-          padding: '112px 24px 0',
+          padding: 'var(--page-top) var(--gutter) 0',
           display: 'flex',
           gap: '8px',
           alignItems: 'center',
@@ -120,7 +120,7 @@ export default async function RugDetailPage({ params }: Props) {
           letterSpacing: '0.1em',
           textTransform: 'uppercase',
           color: 'var(--ink-soft)',
-          maxWidth: '1400px',
+          maxWidth: 'var(--container-max)',
           margin: '0 auto',
           width: '100%',
         }}

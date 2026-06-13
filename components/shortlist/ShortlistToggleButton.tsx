@@ -72,7 +72,7 @@ export function ShortlistToggleButton({
       whileHover={{ scale: 1.1 }}
       style={{ backgroundColor: 'rgba(237,229,212,0.85)' }}
       className={
-        'text-ink hover:text-accent absolute top-3 right-3 z-10 flex h-9 w-9 items-center justify-center rounded-full backdrop-blur-sm transition-colors' +
+        'shortlist-toggle text-ink hover:text-accent absolute top-3 right-3 z-10 flex h-9 w-9 items-center justify-center rounded-full backdrop-blur-sm transition-colors' +
         (className ? ' ' + className : '')
       }
     >

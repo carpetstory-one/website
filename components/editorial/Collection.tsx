@@ -12,6 +12,7 @@
 import React from 'react';
 import { SanityImage } from '@/components/SanityImage';
 import { motion } from 'motion/react';
+import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { blurDataURL } from '@/lib/blur';
 import type { Collection as CollectionType } from '@/lib/collections';
@@ -37,6 +38,7 @@ const PLACE = [
 const ROMAN = ['I', 'II', 'III', 'IV', 'V'] as const;
 
 export function Collection({ collections = [] }: { collections?: CollectionType[] }) {
+  const t = useTranslations('Collection');
   const feats = collections.filter((c) => c.featured);
   const others = collections.filter((c) => !c.featured);
   const subset = [...feats, ...others].slice(0, 5);
@@ -57,7 +59,7 @@ export function Collection({ collections = [] }: { collections?: CollectionType[
             viewport={{ once: true, margin: '-80px' }}
             custom={0}
           >
-            I — The collection
+            {t('label')}
           </motion.span>
           <motion.h2
             id="collection-heading"
@@ -67,7 +69,7 @@ export function Collection({ collections = [] }: { collections?: CollectionType[
             viewport={{ once: true, margin: '-80px' }}
             custom={0.15}
           >
-            Many houses. One workshop.
+            {t('headline')}
           </motion.h2>
           <motion.div
             className="view-all"
@@ -79,7 +81,7 @@ export function Collection({ collections = [] }: { collections?: CollectionType[
             custom={0.3}
           >
             <Link href="/collection" className="link">
-              View all collections →
+              {t('viewAll')}
             </Link>
           </motion.div>
         </div>
@@ -146,7 +148,7 @@ export function Collection({ collections = [] }: { collections?: CollectionType[
                     <h3 className="bm-name">{col.name}</h3>
                     <p className="bm-tag">{col.tagline}</p>
                     <span className="bm-explore">
-                      Explore
+                      {t('explore')}
                       <svg width="16" height="8" viewBox="0 0 16 8" fill="none" aria-hidden="true">
                         <path d="M0 4h14M11 1l3 3-3 3" stroke="currentColor" strokeWidth="1" />
                       </svg>

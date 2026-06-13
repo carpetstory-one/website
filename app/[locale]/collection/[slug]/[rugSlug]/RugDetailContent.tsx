@@ -60,6 +60,7 @@ export function RugDetailContent({
 }) {
   const t = useTranslations('PiecePage');
   const tRugs = useTranslations('RugsPage');
+  const tCommon = useTranslations('Common');
 
   // Lightbox (enlarge / zoom the carpet)
   const [lightbox, setLightbox] = useState(false);
@@ -164,9 +165,9 @@ export function RugDetailContent({
       <div
         className="rug-detail-grid"
         style={{
-          maxWidth: '1400px',
+          maxWidth: 'var(--container-max)',
           margin: '0 auto',
-          padding: '20px 24px 24px',
+          padding: '20px var(--gutter) 24px',
           display: 'grid',
           gridTemplateColumns: '60% 1fr',
           gap: '44px',
@@ -505,10 +506,10 @@ export function RugDetailContent({
         <div
           style={{
             borderTop: '1px solid var(--ink-faint)',
-            padding: '48px 24px 72px',
+            padding: 'var(--pad-frame) var(--gutter) var(--section-y)',
           }}
         >
-          <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+          <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto' }}>
             <span
               style={{
                 display: 'block',
@@ -607,7 +608,7 @@ export function RugDetailContent({
             type="button"
             className="rug-lightbox-close"
             onClick={closeLightbox}
-            aria-label="Close"
+            aria-label={tCommon('close')}
           >
             ×
           </button>

@@ -165,6 +165,51 @@ export const getShortlistCatalogue = cache(
   )
 );
 
+export type ArticleImagePair = {
+  heroImage: string;
+  ogImage: string;
+};
+
+export const getArticleImages = cache(
+  unstable_cache(
+    async (translationKey: string): Promise<ArticleImagePair | null> => {
+      logSanityFetch(`sanity-articleImages-${translationKey}`);
+      const query = `*[_type == "articleImages" && translationKey == $key][0]{ heroImage, ogImage }`;
+      const data = await sanityClient.fetch(query, { key: translationKey });
+      if (!data) return null;
+      return {
+        heroImage: urlForImageSrc(data.heroImage),
+        ogImage: urlForImageSrc(data.ogImage),
+      };
+    },
+    ['sanity-articleImages'],
+    { revalidate: 300, tags: ['articleImages'] }
+  )
+);
+
+export const getAllArticleImages = cache(
+  unstable_cache(
+    async (translationKeys: string[]): Promise<Record<string, ArticleImagePair>> => {
+      logSanityFetch(`sanity-articleImages-batch`);
+      const query = `*[_type == "articleImages" && translationKey in $keys]{ translationKey, heroImage, ogImage }`;
+      const data = await sanityClient.fetch(query, { keys: translationKeys });
+      
+      const result: Record<string, ArticleImagePair> = {};
+      for (const doc of data || []) {
+        if (doc.translationKey) {
+          result[doc.translationKey] = {
+            heroImage: urlForImageSrc(doc.heroImage),
+            ogImage: urlForImageSrc(doc.ogImage),
+          };
+        }
+      }
+      return result;
+    },
+    ['sanity-articleImages-batch-v3'],
+    { revalidate: 300, tags: ['articleImages'] }
+  )
+);
+
 function mapCollections(data: any): Collection[] {
   return (data || []).map((c: any) => ({
     slug: c.slug || '',

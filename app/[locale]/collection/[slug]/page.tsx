@@ -158,7 +158,7 @@ export default async function CollectionDetailPage({
           left: 0,
           right: 0,
           zIndex: 20,
-          padding: '0 24px',
+          padding: '0 var(--gutter)',
           display: 'flex',
           gap: '8px',
           alignItems: 'center',
@@ -232,7 +232,7 @@ export default async function CollectionDetailPage({
             position: 'relative',
             zIndex: 10,
             textAlign: 'center',
-            padding: '0 24px',
+            padding: '0 var(--gutter)',
           }}
         >
           <span

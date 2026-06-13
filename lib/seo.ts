@@ -27,6 +27,7 @@ interface PageMetadataOptions {
   author?: string;
   keywords?: string[];
   noIndex?: boolean;
+  customLanguages?: Record<string, string>;
 }
 
 export function generatePageMetadata({
@@ -41,6 +42,7 @@ export function generatePageMetadata({
   author,
   keywords,
   noIndex,
+  customLanguages,
 }: PageMetadataOptions): Metadata {
   const cleanPath = path.startsWith('/') ? path : `/${path}`;
   const canonicalLocale = locale || routing.defaultLocale;
@@ -49,14 +51,16 @@ export function generatePageMetadata({
   const truncatedDescription =
     description.length > 155 ? description.slice(0, 152) + '…' : description;
 
-  const languages = Object.fromEntries(
+  const languages = customLanguages || Object.fromEntries(
     routing.locales.map((l: any) => [
       l,
       `${SITE_URL}/${l}${cleanPath === '/' ? '' : cleanPath}`,
     ])
   );
-  languages['x-default'] =
-    `${SITE_URL}/${routing.defaultLocale}${cleanPath === '/' ? '' : cleanPath}`;
+  if (!customLanguages) {
+    languages['x-default'] =
+      `${SITE_URL}/${routing.defaultLocale}${cleanPath === '/' ? '' : cleanPath}`;
+  }
 
   return {
     title: truncatedTitle,
@@ -264,7 +268,7 @@ export function articleSchema(a: {
     '@type': 'Article',
     headline: a.headline,
     description: a.description,
-    image: a.image.startsWith('http') ? a.image : `${SITE_URL}${a.image}`,
+    image: a.image ? (a.image.startsWith('http') ? a.image : `${SITE_URL}${a.image}`) : undefined,
     datePublished: a.datePublished,
     dateModified: a.dateModified || a.datePublished,
     author: {
