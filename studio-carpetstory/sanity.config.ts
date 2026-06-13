@@ -7,8 +7,8 @@ export default defineConfig({
   name: 'default',
   title: 'carpetstory',
 
-  projectId: 'f9neojf8',
-  dataset: 'production',
+  projectId: process.env.SANITY_STUDIO_PROJECT_ID || '',
+  dataset: process.env.SANITY_STUDIO_DATASET || 'production',
 
   plugins: [structureTool(), visionTool()],
 
