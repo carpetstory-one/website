@@ -16,8 +16,8 @@
 import { createImageUrlBuilder } from '@sanity/image-url';
 import type { ImageLoaderProps } from 'next/image';
 
-export const SANITY_PROJECT_ID = 'f9neojf8';
-export const SANITY_DATASET = 'production';
+export const SANITY_PROJECT_ID = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '';
+export const SANITY_DATASET = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production';
 
 const builder = createImageUrlBuilder({
   projectId: SANITY_PROJECT_ID,
