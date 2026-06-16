@@ -51,7 +51,7 @@ export const getSanityCollections = cache(
   unstable_cache(
     async (): Promise<Collection[]> => {
       logSanityFetch('sanity-collections-all');
-      const query = `*[_type == "collection"] {
+      const query = `*[_type in ["collection", "bulkCollection"]] {
         "slug": slug.current,
         "name": title,
         tagline,
@@ -64,19 +64,32 @@ export const getSanityCollections = cache(
           knotDensity,
           leadTime
         },
-        "rugs": rugs[]-> {
-          "slug": slug.current,
-          "name": title,
-          description,
-          price,
-          priceUSD,
-          image,
-          materials,
-          dimensions,
-          knotDensity,
-          weaveTime,
-          colors
-        }
+        "rugs": select(
+          _type == "collection" => rugs[]-> {
+            "slug": slug.current,
+            "name": title,
+            description,
+            price,
+            priceUSD,
+            image,
+            materials,
+            dimensions,
+            knotDensity,
+            weaveTime,
+            colors
+          },
+          _type == "bulkCollection" => rugImages[] {
+            "slug": coalesce(sku, _key),
+            "name": coalesce(sku, ^.title + " " + _key),
+            price,
+            priceUSD,
+            "image": {
+              "asset": asset,
+              "hotspot": hotspot,
+              "crop": crop
+            }
+          }
+        )
       }`;
       
       const data = await sanityClient.fetch(query);
@@ -100,19 +113,31 @@ export const getRugCatalogue = cache(
   unstable_cache(
     async (): Promise<Collection[]> => {
       logSanityFetch('sanity-collections-catalogue');
-      const query = `*[_type == "collection"] {
+      const query = `*[_type in ["collection", "bulkCollection"]] {
         "slug": slug.current,
         "name": title,
         meta { materials },
-        "rugs": rugs[]-> {
-          "slug": slug.current,
-          "name": title,
-          description,
-          priceUSD,
-          image,
-          dimensions,
-          colors
-        }
+        "rugs": select(
+          _type == "collection" => rugs[]-> {
+            "slug": slug.current,
+            "name": title,
+            description,
+            priceUSD,
+            image,
+            dimensions,
+            colors
+          },
+          _type == "bulkCollection" => rugImages[] {
+            "slug": coalesce(sku, _key),
+            "name": coalesce(sku, ^.title + " " + _key),
+            priceUSD,
+            "image": {
+              "asset": asset,
+              "hotspot": hotspot,
+              "crop": crop
+            }
+          }
+        )
       }`;
 
       const data = await sanityClient.fetch(query);
@@ -134,14 +159,25 @@ export const getShortlistCatalogue = cache(
   unstable_cache(
     async (): Promise<ShortlistCollectionSummary[]> => {
       logSanityFetch('sanity-shortlist-catalogue');
-      const query = `*[_type == "collection"] {
+      const query = `*[_type in ["collection", "bulkCollection"]] {
         "slug": slug.current,
         "name": title,
-        "rugs": rugs[]-> {
-          "slug": slug.current,
-          "name": title,
-          image
-        }
+        "rugs": select(
+          _type == "collection" => rugs[]-> {
+            "slug": slug.current,
+            "name": title,
+            image
+          },
+          _type == "bulkCollection" => rugImages[] {
+            "slug": coalesce(sku, _key),
+            "name": coalesce(sku, ^.title + " " + _key),
+            "image": {
+              "asset": asset,
+              "hotspot": hotspot,
+              "crop": crop
+            }
+          }
+        )
       }`;
 
       type Row = {
