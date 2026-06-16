@@ -51,7 +51,7 @@ export const getSanityCollections = cache(
   unstable_cache(
     async (): Promise<Collection[]> => {
       logSanityFetch('sanity-collections-all');
-      const query = `*[_type in ["collection", "bulkCollection"]] {
+      const query = `*[_type in ["collection", "bulkCollection"]]{
         "slug": slug.current,
         "name": title,
         tagline,
