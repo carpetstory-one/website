@@ -6,9 +6,7 @@ export const inquirySchema = z.object({
   location: z.string().optional(),
   space: z.string().optional(),
   collection: z.string().optional(),
-  message: z
-    .string()
-    .min(10, 'Please tell us a bit more about what you are imagining'),
+  message: z.string().optional(),
   productName: z.string().optional(),
   productSlug: z.string().optional(),
   pageUrl: z.string().optional(),

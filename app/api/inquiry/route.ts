@@ -30,11 +30,7 @@ export async function POST(request: Request) {
       firstname: name.split(' ')[0],
       lastname: name.split(' ').slice(1).join(' '),
       city: location || '',
-      message: message || '',
     };
-
-    if (space) contactProperties.space_type = space;
-    if (collection) contactProperties.interested_collection = collection;
 
     let contactId: string;
     try {
@@ -67,18 +63,21 @@ export async function POST(request: Request) {
       ? `${name} - ${productName}`
       : `${name} - Website Inquiry`;
 
+    // Format a detailed description for the deal to store additional details
+    // without requiring custom properties in HubSpot settings.
+    let dealDescription = `Inquiry Message:\n${message || 'None'}`;
+    if (space) dealDescription += `\n\nSpace Type: ${space}`;
+    if (collection) dealDescription += `\nCollection: ${collection}`;
+    if (productName) dealDescription += `\nProduct Name: ${productName}`;
+    if (productSlug) dealDescription += `\nProduct Slug: ${productSlug}`;
+    if (pageUrl) dealDescription += `\nSource Page URL: ${pageUrl}`;
+
     const dealProperties: Record<string, string> = {
       dealname: dealName,
       pipeline: 'default',
       dealstage: 'appointmentscheduled', // adjust based on actual HubSpot pipeline stage IDs if needed
-      hs_lead_status: 'NEW',
-      inquiry_message: message || '',
+      description: dealDescription,
     };
-
-    if (pageUrl) dealProperties.source_page_url = pageUrl;
-    if (productName) dealProperties.product_name = productName;
-    if (productSlug) dealProperties.product_slug = productSlug;
-    if (collection) dealProperties.collection_name = collection;
 
     const dealResponse = await hubspotClient.crm.deals.basicApi.create({
       properties: dealProperties,
